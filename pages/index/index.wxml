@@ -1,0 +1,13 @@
+<!--index.wxml-->
+<view class="container">
+  <view id="banner">
+    <swiper>
+      <swiper-item>
+        <image src="../../image/banner1.jpg"></image>
+      </swiper-item>
+      <swiper-item>
+        <image src="../../image/banner2.jpg"></image>
+      </swiper-item>
+    </swiper>
+  </view>
+</view>
