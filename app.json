@@ -1,14 +1,49 @@
 {
   "pages": [
     "pages/index/index",
-    "pages/logs/logs"
+    "pages/logs/logs",
+    "pages/company",
+    "pages/company/company",
+    "pages/me/me",
+    "pages/issue/issue"
   ],
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#fff",
-    "navigationBarTitleText": "WeChat",
+    "navigationBarTitleText": "诚聘",
     "navigationBarTextStyle": "black"
   },
   "style": "v2",
-  "sitemapLocation": "sitemap.json"
+  "sitemapLocation": "sitemap.json",
+  "tabBar": {
+    "color": "#CCCCCC",
+    "selectedColor": "#515151",
+    "borderStyle": "white",
+    "list": [
+      {
+        "selectedIconPath": "images/job_selected.png",
+        "iconPath": "images/job.png",
+        "pagePath": "pages/index/index",
+        "text": "职位"
+      },
+      {
+        "selectedIconPath": "images/company_selected.png",
+        "iconPath": "images/company.png",
+        "pagePath": "pages/company/company",
+        "text": "公司"
+      },
+      {
+        "selectedIconPath": "images/issue_selected.png",
+        "iconPath": "images/issue.png",
+        "pagePath": "pages/issue/issue",
+        "text": "问答"
+      },
+      {
+        "selectedIconPath": "images/me_selected.png",
+        "iconPath": "images/me.png",
+        "pagePath": "pages/me/me",
+        "text": "我的"
+      }
+    ]
+  }
 }
