@@ -1,13 +1,83 @@
 <!--index.wxml-->
 <view class="container">
-  <view id="banner">
-    <swiper>
+  <!-- 轮播 -->
+  <view id="bannerBox">
+    <swiper id="banner" indicator-dots="{{true}}" indicator-active-color="#fff">
       <swiper-item>
-        <image src="../../image/banner1.jpg"></image>
+        <image src="../../images/banner1.jpg"></image>
       </swiper-item>
       <swiper-item>
-        <image src="../../image/banner2.jpg"></image>
+        <image src="../../images/banner2.jpg"></image>
       </swiper-item>
     </swiper>
+  </view>
+  <!-- 快捷入口 -->
+  <view class="card">
+    <view class="content">
+      <view class="img_box">
+        <image src="../../images/entry1.jpg"></image>
+        <image src="../../images/entry2.jpg"></image>
+      </view>
+    </view>
+  </view>
+  <!-- 最新实习 -->
+  <view class="card">
+    <view class="title">最新实习岗位</view>
+    <view class="content">
+      <view class="box" hover-class="none" hover-stop-propagation="false">
+        <view class="left" hover-class="none" hover-stop-propagation="false">
+          <view class="position" hover-class="none" hover-stop-propagation="false">
+            规划师
+          </view>
+          <view class="info">
+            <view class="location" hover-class="none" hover-stop-propagation="false">
+              漳州
+            </view>
+            <view class="people" hover-class="none" hover-stop-propagation="false">
+              招聘人数：10
+            </view>
+            <view class="companyType" hover-class="none" hover-stop-propagation="false">
+              上市
+            </view>
+          </view>
+          <view class="company">厦门银行</view>
+        </view>
+        <view class="right" hover-class="none" hover-stop-propagation="false">
+          <view class="price" hover-class="none" hover-stop-propagation="false">
+            面议
+          </view>
+          <view class="time" hover-class="none" hover-stop-propagation="false">
+            19-03-01
+          </view>
+        </view>
+      </view>
+      <view class="box" hover-class="none" hover-stop-propagation="false">
+        <view class="left" hover-class="none" hover-stop-propagation="false">
+          <view class="position" hover-class="none" hover-stop-propagation="false">
+            规划师
+          </view>
+          <view class="info">
+            <view class="location" hover-class="none" hover-stop-propagation="false">
+              漳州
+            </view>
+            <view class="people" hover-class="none" hover-stop-propagation="false">
+              招聘人数：10
+            </view>
+            <view class="companyType" hover-class="none" hover-stop-propagation="false">
+              上市
+            </view>
+          </view>
+          <view class="company">厦门银行</view>
+        </view>
+        <view class="right" hover-class="none" hover-stop-propagation="false">
+          <view class="price" hover-class="none" hover-stop-propagation="false">
+            面议
+          </view>
+          <view class="time" hover-class="none" hover-stop-propagation="false">
+            19-03-01
+          </view>
+        </view>
+      </view>
+    </view>
   </view>
 </view>

@@ -1,7 +1,101 @@
-view {
-  font-size: 20rpx;
+page {
+  background-color: #f0f3f6;
 }
-view image {
-  width: 200rpx;
-  height: 300rpx;
+.container {
+  padding: 20rpx;
+}
+.container #bannerBox {
+  font-size: 20rpx;
+  overflow: hidden;
+  border-radius: 16rpx;
+}
+.container #bannerBox image {
+  width: 100%;
+  height: 400rpx;
+  border-radius: 16rpx;
+}
+.container #bannerBox #banner {
+  height: 400rpx;
+}
+.container .card {
+  margin: 20rpx 0;
+  background-color: #fff;
+  border-radius: 16rpx;
+  padding: 24rpx;
+}
+.container .card .title {
+  font-size: 28rpx;
+  margin-bottom: 40rpx;
+}
+.container .card .content {
+  width: 100%;
+}
+.container .card .content .img_box {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+.container .card .content .img_box image {
+  width: 300rpx;
+  height: 100rpx;
+}
+.container .card .content .box {
+  display: flex;
+  margin-top: 40rpx;
+}
+.container .card .content .box:first-of-type {
+  margin-top: 0;
+}
+.container .card .content .box .left {
+  width: 80%;
+}
+.container .card .content .box .left .position {
+  margin-bottom: 16rpx;
+}
+.container .card .content .box .left .info {
+  display: flex;
+  font-size: 24rpx;
+  color: #a5a5a5;
+  margin-bottom: 22rpx;
+}
+.container .card .content .box .left .info .location {
+  padding-right: 18rpx;
+}
+.container .card .content .box .left .info .people {
+  padding: 0 18rpx;
+}
+.container .card .content .box .left .info .location,
+.container .card .content .box .left .info .people {
+  position: relative;
+}
+.container .card .content .box .left .info .location::after,
+.container .card .content .box .left .info .people::after {
+  display: block;
+  clear: both;
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1px;
+  height: 80%;
+  background: #ccc;
+}
+.container .card .content .box .left .info .companyType {
+  padding-left: 18rpx;
+}
+.container .card .content .box .left .company {
+  font-size: 24rpx;
+}
+.container .card .content .box .right {
+  text-align: right;
+  width: 20%;
+}
+.container .card .content .box .right .price {
+  font-size: 28rpx;
+  margin-bottom: 14rpx;
+}
+.container .card .content .box .right .time {
+  font-size: 24rpx;
+  color: #ccc;
 }
