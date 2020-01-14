@@ -1,7 +1,5 @@
 /**app.wxss**/
 .container {
   height: 100%;
-} 
-#banner {
-  
+  box-sizing: border-box;
 }
