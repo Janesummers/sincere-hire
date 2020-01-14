@@ -24,58 +24,30 @@
   <view class="card">
     <view class="title">最新实习岗位</view>
     <view class="content">
-      <view class="box" hover-class="none" hover-stop-propagation="false">
-        <view class="left" hover-class="none" hover-stop-propagation="false">
-          <view class="position" hover-class="none" hover-stop-propagation="false">
-            规划师
-          </view>
+      <view class="station" wx:for="{{station}}" wx:key="index">
+        <view class="left">
+          <view class="position">{{item.position}}</view>
           <view class="info">
-            <view class="location" hover-class="none" hover-stop-propagation="false">
-              漳州
-            </view>
-            <view class="people" hover-class="none" hover-stop-propagation="false">
-              招聘人数：10
-            </view>
-            <view class="companyType" hover-class="none" hover-stop-propagation="false">
-              上市
-            </view>
+            <view class="location">{{item.location}}</view>
+            <view class="people">招聘人数：{{item.people}}</view>
+            <view class="companyType">{{item.companyType}}</view>
           </view>
-          <view class="company">厦门银行</view>
+          <view class="company">{{item.company}}</view>
         </view>
-        <view class="right" hover-class="none" hover-stop-propagation="false">
-          <view class="price" hover-class="none" hover-stop-propagation="false">
-            面议
-          </view>
-          <view class="time" hover-class="none" hover-stop-propagation="false">
-            19-03-01
-          </view>
+        <view class="right">
+          <view class="price">{{item.price}}</view>
+          <view class="time">{{item.time}}</view>
         </view>
       </view>
-      <view class="box" hover-class="none" hover-stop-propagation="false">
-        <view class="left" hover-class="none" hover-stop-propagation="false">
-          <view class="position" hover-class="none" hover-stop-propagation="false">
-            规划师
-          </view>
-          <view class="info">
-            <view class="location" hover-class="none" hover-stop-propagation="false">
-              漳州
-            </view>
-            <view class="people" hover-class="none" hover-stop-propagation="false">
-              招聘人数：10
-            </view>
-            <view class="companyType" hover-class="none" hover-stop-propagation="false">
-              上市
-            </view>
-          </view>
-          <view class="company">厦门银行</view>
-        </view>
-        <view class="right" hover-class="none" hover-stop-propagation="false">
-          <view class="price" hover-class="none" hover-stop-propagation="false">
-            面议
-          </view>
-          <view class="time" hover-class="none" hover-stop-propagation="false">
-            19-03-01
-          </view>
+    </view>
+  </view>
+  <view class="card">
+    <view class="title">热门学科</view>
+    <view class="content">
+      <view class="hotSubject">
+        <view class="subject" wx:for="{{hotSubject}}" wx:key="index">
+          <view class="icon iconfont {{item.icon}}"></view>
+          <view class="text">{{item.text}}</view>
         </view>
       </view>
     </view>

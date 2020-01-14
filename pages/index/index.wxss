@@ -25,7 +25,8 @@ page {
 }
 .container .card .title {
   font-size: 28rpx;
-  margin-bottom: 40rpx;
+  padding-bottom: 20rpx;
+  border-bottom: 1px solid #f0f0f0;
 }
 .container .card .content {
   width: 100%;
@@ -39,37 +40,37 @@ page {
   width: 300rpx;
   height: 100rpx;
 }
-.container .card .content .box {
+.container .card .content .station {
   display: flex;
   margin-top: 40rpx;
 }
-.container .card .content .box:first-of-type {
-  margin-top: 0;
+.container .card .content .station:first-of-type {
+  margin-top: 20rpx;
 }
-.container .card .content .box .left {
+.container .card .content .station .left {
   width: 80%;
 }
-.container .card .content .box .left .position {
+.container .card .content .station .left .position {
   margin-bottom: 16rpx;
 }
-.container .card .content .box .left .info {
+.container .card .content .station .left .info {
   display: flex;
   font-size: 24rpx;
   color: #a5a5a5;
   margin-bottom: 22rpx;
 }
-.container .card .content .box .left .info .location {
+.container .card .content .station .left .info .location {
   padding-right: 18rpx;
 }
-.container .card .content .box .left .info .people {
+.container .card .content .station .left .info .people {
   padding: 0 18rpx;
 }
-.container .card .content .box .left .info .location,
-.container .card .content .box .left .info .people {
+.container .card .content .station .left .info .location,
+.container .card .content .station .left .info .people {
   position: relative;
 }
-.container .card .content .box .left .info .location::after,
-.container .card .content .box .left .info .people::after {
+.container .card .content .station .left .info .location::after,
+.container .card .content .station .left .info .people::after {
   display: block;
   clear: both;
   content: "";
@@ -81,21 +82,58 @@ page {
   height: 80%;
   background: #ccc;
 }
-.container .card .content .box .left .info .companyType {
+.container .card .content .station .left .info .companyType {
   padding-left: 18rpx;
 }
-.container .card .content .box .left .company {
+.container .card .content .station .left .company {
   font-size: 24rpx;
 }
-.container .card .content .box .right {
+.container .card .content .station .right {
   text-align: right;
   width: 20%;
 }
-.container .card .content .box .right .price {
+.container .card .content .station .right .price {
   font-size: 28rpx;
   margin-bottom: 14rpx;
 }
-.container .card .content .box .right .time {
-  font-size: 24rpx;
+.container .card .content .station .right .time {
+  font-size: 20rpx;
   color: #ccc;
+}
+.container .card .content .hotSubject {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 10rpx;
+}
+.container .card .content .hotSubject .subject {
+  width: 25%;
+  height: 140rpx;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-content: center;
+}
+.container .card .content .hotSubject .subject .icon {
+  font-size: 54rpx;
+  margin-bottom: 16rpx;
+}
+.container .card .content .hotSubject .subject .icon.yellow {
+  color: #f6c451;
+}
+.container .card .content .hotSubject .subject .icon.blue {
+  color: #7086f6;
+}
+.container .card .content .hotSubject .subject .icon.orange {
+  color: #ef7f57;
+}
+.container .card .content .hotSubject .subject .icon.icon-shuben,
+.container .card .content .hotSubject .subject .icon.icon-jiaoxue,
+.container .card .content .hotSubject .subject .icon.icon-yishu,
+.container .card .content .hotSubject .subject .icon.icon-gongshang {
+  font-size: 46rpx;
+}
+.container .card .content .hotSubject .subject .text {
+  font-size: 24rpx;
+  width: 100%;
+  text-align: center;
 }

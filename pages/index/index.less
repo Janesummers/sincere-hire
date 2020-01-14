@@ -23,7 +23,8 @@ page {
     padding: 24rpx;
     .title {
       font-size: 28rpx;
-      margin-bottom: 40rpx;
+      padding-bottom: 20rpx;
+      border-bottom: 1px solid #f0f0f0;
     }
     .content {
       width: 100%;
@@ -36,11 +37,11 @@ page {
           height: 100rpx;
         }
       }
-      .box {
+      .station {
         display: flex;
         margin-top: 40rpx;
         &:first-of-type {
-          margin-top: 0;
+          margin-top: 20rpx;
         }
         .left {
           width: 80%;
@@ -89,8 +90,42 @@ page {
             margin-bottom: 14rpx;
           }
           .time {
-            font-size: 24rpx;
+            font-size: 20rpx;
             color: #ccc;
+          }
+        }
+      }
+      .hotSubject {
+        display: flex;
+        flex-wrap: wrap;
+        margin-top: 10rpx;
+        .subject {
+          width: 25%;
+          height: 140rpx;
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
+          align-content: center;
+          .icon {
+            font-size: 54rpx;
+            margin-bottom: 16rpx;
+            &.yellow {
+              color: #f6c451;
+            }
+            &.blue {
+              color: #7086f6;
+            }
+            &.orange {
+              color: #ef7f57;
+            }
+            &.icon-shuben, &.icon-jiaoxue, &.icon-yishu, &.icon-gongshang {
+              font-size: 46rpx;
+            }
+          }
+          .text {
+            font-size: 24rpx;
+            width: 100%;
+            text-align: center;
           }
         }
       }
