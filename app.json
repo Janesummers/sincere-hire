@@ -1,17 +1,18 @@
 {
   "pages": [
+    "pages/company/company",
     "pages/index/index",
     "pages/logs/logs",
     "pages/company",
-    "pages/company/company",
+    
     "pages/me/me",
     "pages/issue/issue"
   ],
   "window": {
     "backgroundTextStyle": "light",
-    "navigationBarBackgroundColor": "#fff",
+    "navigationBarBackgroundColor": "#64bfba",
     "navigationBarTitleText": "诚聘",
-    "navigationBarTextStyle": "black"
+    "navigationBarTextStyle": "white"
   },
   "style": "v2",
   "sitemapLocation": "sitemap.json",
