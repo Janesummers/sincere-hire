@@ -1,1 +1,75 @@
-/* pages/company/company.wxss */
+.container #companyList .items {
+  display: flex;
+  padding: 20rpx 0 0 0;
+  border-bottom: 1px solid #ebebeb;
+  margin: 0 20rpx;
+}
+.container #companyList .items :last-of-type {
+  border-bottom: 0;
+}
+.container #companyList .items .imgBox {
+  width: 22%;
+  margin-right: 4%;
+  border-radius: 10rpx;
+  overflow: hidden;
+}
+.container #companyList .items .imgBox image {
+  width: 100%;
+  border-radius: 10rpx;
+}
+.container #companyList .items .info {
+  width: 74%;
+  color: #868686;
+}
+.container #companyList .items .info .companyName {
+  width: 100%;
+  color: #000;
+  font-size: 32rpx;
+  margin-bottom: 10rpx;
+  font-weight: 500;
+}
+.container #companyList .items .info .position {
+  font-size: 22rpx;
+  width: 100%;
+  margin-bottom: 10rpx;
+}
+.container #companyList .items .info .companyInfo {
+  font-size: 24rpx;
+  display: flex;
+}
+.container #companyList .items .info .companyInfo .companyStatus {
+  padding-right: 10rpx;
+}
+.container #companyList .items .info .companyInfo .people {
+  padding: 0 10rpx;
+  position: relative;
+}
+.container #companyList .items .info .companyInfo .people::after,
+.container #companyList .items .info .companyInfo .people::before {
+  display: block;
+  clear: both;
+  content: "";
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1px;
+  height: 60%;
+  background: #ccc;
+}
+.container #companyList .items .info .companyInfo .people::before {
+  left: 0;
+}
+.container #companyList .items .info .companyInfo .people::after {
+  right: 0;
+}
+.container #companyList .items .info .companyInfo .companyType {
+  padding-left: 10rpx;
+}
+.container #companyList .items .info .job {
+  line-height: 74rpx;
+  height: 74rpx;
+  font-size: 24rpx;
+}
+.container #companyList .items .info .job text {
+  color: #64bfba;
+}
