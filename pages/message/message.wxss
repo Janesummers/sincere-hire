@@ -1,1 +1,49 @@
-/* pages/issue/issue.wxss */
+.container #messageList {
+  padding: 0 20rpx;
+}
+.container #messageList .item {
+  display: flex;
+  padding: 34rpx 0;
+  border-bottom: 1px solid #eeeeee;
+}
+.container #messageList .item .imgBox {
+  width: 100rpx;
+  border-radius: 10rpx;
+  margin-right: 20rpx;
+  overflow: hidden;
+}
+.container #messageList .item .imgBox image {
+  width: 100%;
+  border-radius: 10rpx;
+}
+.container #messageList .item .info {
+  flex: 1;
+  width: 100rpx;
+}
+.container #messageList .item .info .top {
+  display: flex;
+  align-items: flex-end;
+  margin-bottom: 16rpx;
+  height: 50rpx;
+}
+.container #messageList .item .info .top .name {
+  margin-right: 16rpx;
+}
+.container #messageList .item .info .top .company {
+  font-size: 24rpx;
+  color: #949494;
+}
+.container #messageList .item .info .message {
+  font-size: 24rpx;
+  overflow: hidden;
+  width: 100%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #949494;
+}
+.container #messageList .item .time {
+  font-size: 20rpx;
+  height: 50rpx;
+  line-height: 70rpx;
+  color: #cfcdcd;
+}

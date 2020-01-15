@@ -1,4 +1,4 @@
-// pages/issue/issue.js
+// pages/message/message.js
 Page({
 
   /**

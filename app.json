@@ -1,10 +1,9 @@
 {
   "pages": [
-    "pages/company/company",
     "pages/index/index",
     "pages/logs/logs",
     "pages/company",
-    
+    "pages/company/company",
     "pages/me/me",
     "pages/message/message"
   ],
