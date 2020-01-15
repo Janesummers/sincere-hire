@@ -6,7 +6,7 @@
     "pages/company",
     
     "pages/me/me",
-    "pages/issue/issue"
+    "pages/message/message"
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -34,10 +34,10 @@
         "text": "公司"
       },
       {
-        "selectedIconPath": "images/issue_selected.png",
-        "iconPath": "images/issue.png",
-        "pagePath": "pages/issue/issue",
-        "text": "问答"
+        "selectedIconPath": "images/message_selected.png",
+        "iconPath": "images/message.png",
+        "pagePath": "pages/message/message",
+        "text": "消息"
       },
       {
         "selectedIconPath": "images/me_selected.png",
