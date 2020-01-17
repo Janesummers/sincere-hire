@@ -2,9 +2,9 @@
   "pages": [
     "pages/index/index",
     "pages/logs/logs",
-    "pages/company",
     "pages/company/company",
     "pages/me/me",
+    "pages/welcome/welcome",
     "pages/message/message"
   ],
   "window": {

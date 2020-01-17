@@ -1,2 +1,12 @@
 <!--pages/me/me.wxml-->
-<text>pages/me/me.wxml</text>
+<view class="container" hover-class="none" hover-stop-propagation="false">
+    <view id="me">
+        <view class="info">
+            <view class="head" hover-class="none" hover-stop-propagation="false">
+                <image class="" src="" mode="widthFix">
+                    
+                </image>
+            </view>
+        </view>
+    </view>
+</view>

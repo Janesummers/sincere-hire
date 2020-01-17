@@ -27,6 +27,7 @@
   height: 50rpx;
 }
 .container #messageList .item .info .top .name {
+  font-size: 32rpx;
   margin-right: 16rpx;
 }
 .container #messageList .item .info .top .company {
