@@ -23,7 +23,8 @@ Page({
       {icon: 'icon-jiaoxue orange', text: '教育学'},
       {icon: 'icon-yishu yellow', text: '艺术学'},
       {icon: 'icon-gongshang blue', text: '工商管理'},
-    ]
+    ],
+    impowerShow: false
   },
 
   /**
@@ -44,7 +45,17 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    
+    wx.setNavigationBarTitle({
+      title: '诚聘'
+    })
+    if (!wx.getStorageSync('user')) {
+      this.setData({
+        impowerShow: true
+      })
+    }else{
+      // this.init()
+
+    }
   },
 
   /**
@@ -80,5 +91,33 @@ Page({
    */
   onShareAppMessage: function () {
     
+  },
+
+  getUser(e) {
+    // console.log(e)
+    if ((e.detail.data.errMsg).indexOf('ok') != -1) {
+      // console.log('用户信息获取成功', JSON.parse(e.detail.data.rawData));
+      this.setData({
+        impowerShow: false
+      })
+      wx.setStorageSync('user', JSON.parse(e.detail.data.rawData))
+      // app.globalData.eventMgr.emit('user', e.detail.data );
+ 
+      this.init()
+    }else{
+      wx.setStorageSync('unionid', '')
+    }
+   
+    // console.log(e)
+    
+    // if ((e.detail.data.errMsg).indexOf('ok') == -1) {
+    //   console.log('用户信息获取失败')
+    // }
+  },
+
+  init () {
+    this.setData({
+      impowerShow: false
+    })
   }
 })

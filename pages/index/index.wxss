@@ -43,6 +43,7 @@ page {
 .container .card .content .station {
   display: flex;
   margin-top: 40rpx;
+  font-size: 32rpx;
 }
 .container .card .content .station:first-of-type {
   margin-top: 20rpx;

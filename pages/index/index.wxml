@@ -53,3 +53,5 @@
     </view>
   </view>
 </view>
+
+<impower-shadow wx:if="{{impowerShow}}" bind:getUser="getUser" ></impower-shadow>
