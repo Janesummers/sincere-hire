@@ -1,0 +1,15 @@
+<view class='impower-shadow' > 
+  <view class='impower-alter'>
+    <view class='title'>微信授权</view>
+    <view class='top'>
+      <view class='head'>
+        <image src='../../images/logo.png'></image>
+      </view>
+      <view class='text'>探极优选申请获取以下权限:</view>
+    </view>
+    <view class='content'>
+      <view class='item'>获得你的公开信息（昵称、头像等）</view>
+    </view>
+    <button open-type='getUserInfo' bindgetuserinfo='getUser'>确定</button>
+  </view>
+</view>  
