@@ -1,2 +1,21 @@
 <!--pages/welcome/welcome.wxml-->
-<text>pages/welcome/welcome.wxml</text>
+<view class="container">
+    <view class="text">请选择当前你的身份</view>
+    <view class="rule">
+        <view class="item job_seeker" bindtap="toPage" data-rule="job_seeker">
+            <view class="rule_text">求职者</view>
+            <view class="imgBox">
+                <image src="../../images/people_girl.png"></image>
+            </view>
+        </view>
+        <view class="segmentation">OR</view>
+        <view class="item recruiter">
+            <view class="rule_text">招聘者</view>
+            <view class="imgBox">
+                <image src="../../images/people_man.png"></image>
+            </view>
+        </view>
+    </view>
+</view>
+
+<impower-shadow wx:if="{{impowerShow}}" bind:getUser="getUser" ></impower-shadow>

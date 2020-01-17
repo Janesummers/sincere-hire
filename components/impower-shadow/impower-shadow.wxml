@@ -5,7 +5,7 @@
       <view class='head'>
         <image src='../../images/logo.png'></image>
       </view>
-      <view class='text'>探极优选申请获取以下权限:</view>
+      <view class='text'>诚聘申请获取以下权限:</view>
     </view>
     <view class='content'>
       <view class='item'>获得你的公开信息（昵称、头像等）</view>
