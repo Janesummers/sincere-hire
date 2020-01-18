@@ -26,7 +26,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    if (!wx.getStorageSync('user')) {
+    if (!wx.getStorageSync('unionid')) {
       this.setData({
         impowerShow: true
       })
@@ -77,7 +77,7 @@ Page({
       this.setData({
         impowerShow: false
       })
-      wx.setStorageSync('user', JSON.parse(e.detail.data.rawData))
+      // wx.setStorageSync('user', JSON.parse(e.detail.data.rawData))
       // app.globalData.eventMgr.emit('user', e.detail.data );
  
       this.init()
@@ -96,9 +96,30 @@ Page({
     this.setData({
       impowerShow: false
     })
-    wx.switchTab({
-      url: '../index/index'
-    })
+    let unionid = wx.getStorageSync('unionid');
+    let rule = wx.getStorageSync('rule');
+    // if(unionid && !rule) {
+    //   wx.request({
+    //     url: 'https://www.chiens.cn/qzApi/login',
+    //     method: 'POST',
+    //     data: {
+    //       unionid
+    //     },
+    //     header: {
+    //       "Content-Type": "application/x-www-form-urlencoded"
+    //     },
+    //     success: res => {
+    //       console.log(res)
+    //     },
+    //     fail: function() {
+    //       // fail
+    //     }
+    //   })
+    // }
+    
+    // wx.switchTab({
+    //   url: '../index/index'
+    // })
   },
 
   toPage (e) {

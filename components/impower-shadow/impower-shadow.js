@@ -25,8 +25,37 @@ Component({
    */
   methods: {
     getUser (e) {
-      console.log(e)
-      this.triggerEvent('getUser', { data: e.detail })
+      // console.log(e)
+      let encryptedData = encodeURIComponent(e.detail.encryptedData);
+      let iv = encodeURIComponent(e.detail.iv);
+      wx.login({
+        success: res => {
+          wx.request({
+            url: 'https://www.chiens.cn/qzApi/login',
+            method: 'POST',
+            data: { code: res.code, encryptedData, iv},
+            header: {
+              "Content-Type": "application/x-www-form-urlencoded"
+            },
+            success: res => {
+              console.log(res)
+              let unionid = res.data.data.unionId;
+              wx.setStorageSync('unionid', unionid)
+              this.triggerEvent('getUser', { data: res })
+            },
+            fail: function() {
+              // fail
+            }
+          })
+        },
+        fail: function() {
+          // fail
+        },
+        complete: function() {
+          // complete
+        }
+      })
+      
     }
   }
 })
