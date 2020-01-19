@@ -2,7 +2,7 @@
 <view class="container">
     <view class="text">请选择当前你的身份</view>
     <view class="rule">
-        <view class="item job_seeker" bindtap="toPage" data-rule="job_seeker">
+        <view class="item job_seeker" bindtap="showBox" data-rule="job_seeker">
             <view class="rule_text">求职者</view>
             <view class="imgBox">
                 <image src="../../images/people_girl.png"></image>
@@ -15,6 +15,26 @@
                 <image src="../../images/people_man.png"></image>
             </view>
         </view>
+    </view>
+    <view class="jobSeeker" style="top: {{top}}; height: {{height}}px"  bindtap="close" data-rule="job_seeker">
+        <view class="top">
+            <view class="close">取消</view>
+            <view class="next">下一步</view>
+        </view>
+        <view class="edit" hover-class="none" hover-stop-propagation="false">
+            <view class="head_portrait">
+                <view class="head">
+                    <open-data type="userAvatarUrl"></open-data>
+                </view>
+                <view class="text">修改头像</view>
+            </view>
+            <view class="info">
+                <view class="item"></view>
+            </view>
+        </view>
+    </view>
+    <view class="recruiters" style="top: {{rec_top}}; height: {{height}}px">
+        
     </view>
 </view>
 

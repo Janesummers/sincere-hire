@@ -46,9 +46,9 @@ Page({
    */
   onShow: function () {
     wx.setNavigationBarTitle({
-      title: '诚聘'
+      title: '易优聘'
     })
-    if (!wx.getStorageSync('user')) {
+    if (!wx.getStorageSync('unionid')) {
       this.setData({
         impowerShow: true
       })
@@ -100,7 +100,7 @@ Page({
       this.setData({
         impowerShow: false
       })
-      wx.setStorageSync('user', JSON.parse(e.detail.data.rawData))
+      wx.setStorageSync('unionid', JSON.parse(e.detail.data.rawData))
       // app.globalData.eventMgr.emit('user', e.detail.data );
  
       this.init()

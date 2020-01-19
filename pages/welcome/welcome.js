@@ -5,7 +5,10 @@ Page({
    * 页面的初始数据
    */
   data: {
-    impowerShow: false
+    impowerShow: false,
+    top: '100%',
+    height: '',
+    rec_top: '100%'
   },
 
   /**
@@ -26,13 +29,71 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    if (!wx.getStorageSync('unionid')) {
-      this.setData({
-        impowerShow: true
-      })
-    }else{
-      this.init();
-    }
+    let unionid = wx.getStorageSync('unionid');
+    wx.getSetting({
+      success: res => {
+        console.log(res.authSetting["scope.userInfo"])
+        if (res.authSetting["scope.userInfo"] && !unionid) {
+          wx.login({
+            success: user => {
+              wx.request({
+                url: 'https://www.chiens.cn/qzApi/login',
+                method: 'POST',
+                data: { code: user.code, encryptedData, iv},
+                header: {
+                  "Content-Type": "application/x-www-form-urlencoded"
+                },
+                success: uni => {
+                  console.log(uni)
+                  let unionid = uni.data.data.unionId;
+                  wx.setStorageSync('unionid', unionid)
+                  let height = wx.getSystemInfoSync().windowHeight;
+                  this.setData({
+                    height: height * 0.92
+                  })
+                  this.init();
+                },
+                fail: function() {
+                  // fail
+                }
+              })
+            },
+            fail: function() {
+              // fail
+            },
+            complete: function() {
+              // complete
+            }
+          })
+        } else if (res.authSetting["scope.userInfo"] && unionid) {
+          let height = wx.getSystemInfoSync().windowHeight;
+          this.setData({
+            height: height * 0.92
+          })
+          this.init();
+        } else {
+          this.setData({
+            impowerShow: true
+          })
+        }
+        // res.authSetting = {
+        //   "scope.userInfo": true,
+        //   "scope.userLocation": true
+        // }
+      }
+    })
+    // if (!wx.getStorageSync('unionid')) {
+    //   this.setData({
+    //     impowerShow: true
+    //   })
+    // }else{
+    //   let height = wx.getSystemInfoSync().windowHeight;
+    //   this.setData({
+    //     height: height * 0.92
+    //   })
+    //   this.init();
+    // }
+    
   },
 
   /**
@@ -98,6 +159,7 @@ Page({
     })
     let unionid = wx.getStorageSync('unionid');
     let rule = wx.getStorageSync('rule');
+    console.log(unionid)
     // if(unionid && !rule) {
     //   wx.request({
     //     url: 'https://www.chiens.cn/qzApi/login',
@@ -120,6 +182,32 @@ Page({
     // wx.switchTab({
     //   url: '../index/index'
     // })
+  },
+
+  showBox (e) {
+    let rule = e.currentTarget.dataset.rule;
+    if (rule === 'job_seeker') {
+      this.setData({
+        top: '8%'
+      })
+    } else {
+      this.setData({
+        rec_top: '8%'
+      })
+    }
+  },
+
+  close (e) {
+    let rule = e.currentTarget.dataset.rule;
+    if (rule === 'job_seeker') {
+      this.setData({
+        top: '100%'
+      })
+    } else {
+      this.setData({
+        rec_top: '100%'
+      })
+    }
   },
 
   toPage (e) {
