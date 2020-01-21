@@ -34,6 +34,49 @@ App({
     })
   },
   globalData: {
-    userInfo: null
+    userInfo: null,
+    unionid: null,
+    UrlHeadAddress: 'http://192.168.1.104:8080/qzApi',
+    selected: 0,
+    list: [
+      {
+        "selectedIconPath": "../../images/job_selected.png",
+        "iconPath": "../../images/job.png",
+        "pagePath": "pages/index/index",
+        "text": "职位"
+      },
+      {
+        "selectedIconPath": "../../images/company_selected.png",
+        "iconPath": "../../images/company.png",
+        "pagePath": "pages/company/company",
+        "text": "公司"
+      },
+      {
+        "selectedIconPath": "../../images/message_selected.png",
+        "iconPath": "../../images/message.png",
+        "pagePath": "pages/message/message",
+        "text": "消息"
+      },
+      {
+        "selectedIconPath": "../../images/me_selected.png",
+        "iconPath": "../../images/me.png",
+        "pagePath": "pages/me/me",
+        "text": "我的"
+      }
+    ],
+    list2: [
+      {
+        "selectedIconPath": "../../images/message_selected.png",
+        "iconPath": "../../images/message.png",
+        "pagePath": "pages/message/message",
+        "text": "消息"
+      },
+      {
+        "selectedIconPath": "../../images/me_selected.png",
+        "iconPath": "../../images/me.png",
+        "pagePath": "pages/me/me",
+        "text": "我的"
+      }
+    ]
   }
 })

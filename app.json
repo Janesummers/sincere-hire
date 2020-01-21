@@ -1,11 +1,11 @@
 {
   "pages": [
-    "pages/welcome/welcome",
+    
     "pages/index/index",
     "pages/logs/logs",
     "pages/company/company",
     "pages/me/me",
-    
+    "pages/welcome/welcome",
     "pages/message/message"
   ],
   "window": {
@@ -17,6 +17,7 @@
   "style": "v2",
   "sitemapLocation": "sitemap.json",
   "tabBar": {
+    "custom": true,
     "color": "#CCCCCC",
     "selectedColor": "#515151",
     "borderStyle": "white",

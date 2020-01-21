@@ -1,3 +1,6 @@
+page {
+  padding-bottom: 48px;
+}
 .container #companyList .items {
   display: flex;
   padding: 20rpx 0 0 0;

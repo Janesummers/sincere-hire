@@ -31,7 +31,7 @@ Component({
       wx.login({
         success: res => {
           wx.request({
-            url: 'https://www.chiens.cn/qzApi/login',
+            url: `${app.globalData.UrlHeadAddress}/login`,
             method: 'POST',
             data: { code: res.code, encryptedData, iv},
             header: {
@@ -39,7 +39,7 @@ Component({
             },
             success: res => {
               console.log(res)
-              let unionid = res.data.data.unionId;
+              let unionid = res.data.data;
               wx.setStorageSync('unionid', unionid)
               this.triggerEvent('getUser', { data: res })
             },
