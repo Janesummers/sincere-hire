@@ -1,41 +1,252 @@
 <!--pages/welcome/welcome.wxml-->
-<view class="container">
-    <view class="text">请选择当前你的身份</view>
-    <view class="rule">
-        <view class="item job_seeker" bindtap="showBox" data-rule="job_seeker">
-            <view class="rule_text">求职者</view>
-            <view class="imgBox">
-                <image src="../../images/people_girl.png"></image>
-            </view>
-        </view>
-        <view class="segmentation">OR</view>
-        <view class="item recruiter">
-            <view class="rule_text">招聘者</view>
-            <view class="imgBox">
-                <image src="../../images/people_man.png"></image>
-            </view>
-        </view>
+<view class="container" style="height: {{height}}px">
+  <view class="text">请选择当前你的身份</view>
+  <view class="rule">
+    <view class="item job_seeker" bindtap="showBox" data-rule="job_seeker">
+      <view class="rule_text">求职者</view>
+      <view class="imgBox">
+        <image src="../../images/people_girl.png"></image>
+      </view>
     </view>
-    <view class="jobSeeker" style="top: {{top}}; height: {{height}}px"  bindtap="close" data-rule="job_seeker">
-        <view class="top">
-            <view class="close">取消</view>
-            <view class="next">下一步</view>
+    <view class="segmentation">OR</view>
+    <view class="item recruiter" bindtap="showBox" data-rule="recruiter">
+      <view class="rule_text">招聘者</view>
+      <view class="imgBox">
+        <image src="../../images/people_man.png"></image>
+      </view>
+    </view>
+  </view>
+  <view class="jobSeeker" style="top: {{top}}; height: {{height * 0.92}}px;" wx:if="{{isShow}}">
+    <view class="top">
+      <view class="close" bindtap="close" data-rule="job_seeker">取消</view>
+      <view class="text">创建简历（{{slide_current + 1}}/3）</view>
+      <view class="next" bindtap="{{nextText == '完成' ? 'editDone' : 'nextStep'}}" data-rule="job_seeker">{{nextText}}</view>
+    </view>
+    <swiper class="slide" 
+      current="{{slide_current}}" 
+      bindanimationfinish="changeCurrent" 
+      duration="200"
+      data-rule="job_seeker"
+    >
+      <swiper-item class="" item-id="">
+        <view class="edit">
+          <view class="head_portrait">
+            <view class="head">
+              <open-data type="userAvatarUrl"></open-data>
+            </view>
+            <view class="text">修改头像</view>
+          </view>
+          <view class="list">
+            <view class="item">
+              <view class="little_title">名字</view>
+              <view class="text">
+                <input type="text" placeholder="请输入姓名" />
+              </view>
+            </view>
+            <view class="item">
+              <view class="little_title">生日</view>
+              <view class="text">
+                <input type="text" placeholder="点击选择日期" />
+              </view>
+            </view>
+            <view class="item">
+              <view class="little_title">性别</view>
+              <view class="text">
+                <input type="text" placeholder="点击选择性别" />
+              </view>
+            </view>
+            <view class="item">
+              <view class="little_title">联系邮箱</view>
+              <view class="text">
+                <input type="text" placeholder="请输入邮箱" />
+              </view>
+            </view>
+          </view>
+          <view class="list">
+            <view class="item">
+              <view class="little_title">所在城市</view>
+              <view class="text">
+                <input type="text" placeholder="点击选择城市" />
+              </view>
+            </view>
+            <view class="item">
+              <view class="little_title">当前身份</view>
+              <view class="text">
+                <input type="text" placeholder="点击选择身份" />
+              </view>
+            </view>
+          </view>
         </view>
-        <view class="edit" hover-class="none" hover-stop-propagation="false">
-            <view class="head_portrait">
+      </swiper-item>
+      <swiper-item class="" item-id="">
+        <view class="edit">
+          <view class="title">填写教育经历</view>
+          <view class="list">
+            <view class="item">
+              <view class="little_title">学校名称</view>
+              <view class="text">
+                <input type="text" placeholder="请输入" />
+              </view>
+            </view>
+            <view class="item">
+              <view class="little_title">专业名称</view>
+              <view class="text">
+                <input type="text" placeholder="请输入" />
+              </view>
+            </view>
+            <view class="item">
+              <view class="little_title">学历</view>
+              <view class="text">
+                <input type="text" placeholder="请填写" />
+              </view>
+            </view>
+          </view>
+          <view class="list">
+            <view class="item">
+              <view class="little_title">入学时间</view>
+              <view class="text">
+                <input type="text" placeholder="点击选择" />
+              </view>
+            </view>
+            <view class="item">
+              <view class="little_title">毕业时间</view>
+              <view class="text">
+                <input type="text" placeholder="点击选择" />
+              </view>
+            </view>
+          </view>
+        </view>
+      </swiper-item>
+      <swiper-item class="" item-id="">
+        <view class="edit">
+          <view class="info">
+            <view class="left" hover-class="none" hover-stop-propagation="false">
+              <view class="name">姓名</view>
+              <view class="school">闽江学院/本科</view>
+              <view class="other">应届毕业生/22岁</view>
+            </view>
+            <view class="right" hover-class="none" hover-stop-propagation="false">
+              <view class="head_portrait">
                 <view class="head">
-                    <open-data type="userAvatarUrl"></open-data>
+                  <open-data type="userAvatarUrl"></open-data>
                 </view>
-                <view class="text">修改头像</view>
+              </view>
             </view>
-            <view class="info">
-                <view class="item"></view>
+          </view>
+          <view class="list">
+            <view class="item">
+              <view class="little_title">个人优势</view>
+              <view class="text">
+                <input type="text" placeholder="请填写" />
+              </view>
             </view>
+            <view class="item">
+              <view class="little_title">综合能力</view>
+              <view class="text">
+                <input type="text" placeholder="请填写" />
+              </view>
+            </view>
+          </view>
         </view>
+      </swiper-item>
+    </swiper>
+  </view>
+  <view class="recruiters" style="top: {{rec_top}}; height: {{height}}px" wx:if="{{isShow2}}">
+    <view class="top">
+      <view class="close" bindtap="close" data-rule="recruiter">取消</view>
+      <view class="text">基本信息</view>
+      <view class="next" bindtap="{{nextText2 == '创建' ? 'editDone' : 'nextStep'}}" data-rule="recruiter">{{nextText2}}</view>
     </view>
-    <view class="recruiters" style="top: {{rec_top}}; height: {{height}}px">
-        
-    </view>
+    <swiper class="slide" 
+      current="{{slide_current2}}" 
+      bindanimationfinish="changeCurrent" 
+      duration="200" 
+      data-rule="recruiter"
+    >
+      <swiper-item class="" item-id="">
+        <view class="edit">
+          <view class="head_portrait">
+            <view class="head">
+              <open-data type="userAvatarUrl"></open-data>
+            </view>
+            <view class="text">修改头像</view>
+          </view>
+          <view class="list">
+            <view class="item">
+              <view class="little_title">名字</view>
+              <view class="text">
+                <input type="text" placeholder="请输入姓名" />
+              </view>
+            </view>
+            <view class="item">
+              <view class="little_title">接收简历邮箱</view>
+              <view class="text">
+                <input type="text" placeholder="请输入邮箱" />
+              </view>
+            </view>
+          </view>
+          <view class="list">
+            <view class="item">
+              <view class="little_title">职位</view>
+              <view class="text">
+                <input type="text" placeholder="请填写" />
+              </view>
+            </view>
+            <view class="item">
+              <view class="little_title">公司全称</view>
+              <view class="text">
+                <input type="text" placeholder="请填写" />
+              </view>
+            </view>
+          </view>
+        </view>
+      </swiper-item>
+      <swiper-item class="" item-id="">
+        <view class="edit">
+          <view class="info">
+            <view class="left" hover-class="none" hover-stop-propagation="false">
+              <view class="name">姓名</view>
+              <!-- <view class="school">闽江学院/本科</view> -->
+              <view class="profession">职业</view>
+            </view>
+            <view class="right" hover-class="none" hover-stop-propagation="false">
+              <view class="head_portrait">
+                <view class="head">
+                  <open-data type="userAvatarUrl"></open-data>
+                </view>
+              </view>
+            </view>
+          </view>
+          <view class="list">
+            <view class="item">
+              <view class="little_title">公司全称</view>
+              <view class="text">
+                <input type="text" value="名称" />
+              </view>
+            </view>
+            <view class="item">
+              <view class="little_title">行业领域</view>
+              <view class="text">
+                <input type="text" placeholder="请填写" />
+              </view>
+            </view>
+            <view class="item">
+              <view class="little_title">公司规模</view>
+              <view class="text">
+                <input type="text" placeholder="请填写" />
+              </view>
+            </view>
+            <view class="item">
+              <view class="little_title">发展阶段</view>
+              <view class="text">
+                <input type="text" placeholder="请填写" />
+              </view>
+            </view>
+          </view>
+        </view>
+      </swiper-item>
+    </swiper>
+  </view>
 </view>
 
 <impower-shadow wx:if="{{impowerShow}}" bind:getUser="getUser" ></impower-shadow>

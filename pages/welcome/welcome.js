@@ -1,4 +1,6 @@
 // pages/welcome/welcome.js
+const app = getApp()
+
 Page({
 
   /**
@@ -8,14 +10,24 @@ Page({
     impowerShow: false,
     top: '100%',
     height: '',
-    rec_top: '100%'
+    rec_top: '100%',
+    isShow: false,
+    slide_current: 0,
+    isShow2: false,
+    slide_current2: 0,
+    nextText: '下一步',
+    nextText2: '下一步'
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-
+    // this.init();
+    let height = wx.getSystemInfoSync().windowHeight;
+    this.setData({
+      height
+    })
   },
 
   /**
@@ -30,69 +42,49 @@ Page({
    */
   onShow: function () {
     let unionid = wx.getStorageSync('unionid');
-    wx.getSetting({
-      success: res => {
-        console.log(res.authSetting["scope.userInfo"])
-        if (res.authSetting["scope.userInfo"] && !unionid) {
-          wx.login({
-            success: user => {
-              wx.request({
-                url: 'https://www.chiens.cn/qzApi/login',
-                method: 'POST',
-                data: { code: user.code, encryptedData, iv},
-                header: {
-                  "Content-Type": "application/x-www-form-urlencoded"
-                },
-                success: uni => {
-                  console.log(uni)
-                  let unionid = uni.data.data.unionId;
-                  wx.setStorageSync('unionid', unionid)
-                  let height = wx.getSystemInfoSync().windowHeight;
-                  this.setData({
-                    height: height * 0.92
-                  })
-                  this.init();
-                },
-                fail: function() {
-                  // fail
-                }
-              })
+    let isUserInfo = () => {
+      wx.getSetting({
+        success: res => {
+          if (res.authSetting["scope.userInfo"] && !unionid) {
+            getUnionid();
+          } else if (res.authSetting["scope.userInfo"] && unionid) {
+            this.init();
+          } else {
+            this.setData({
+              impowerShow: true
+            })
+          }
+        }
+      })
+    }
+
+    isUserInfo();
+
+    var getUnionid = () => {
+      wx.login({
+        success: logs => {
+          wx.request({
+            url: `${app.globalData.UrlHeadAddress}/login`,
+            method: 'POST',
+            data: { code: logs.code},
+            header: {
+              "Content-Type": "application/x-www-form-urlencoded"
+            },
+            success: uni => {
+              let unionid = uni.data.data[0].unionid;
+              wx.setStorageSync('unionid', unionid);
+              this.init();
             },
             fail: function() {
               // fail
-            },
-            complete: function() {
-              // complete
             }
           })
-        } else if (res.authSetting["scope.userInfo"] && unionid) {
-          let height = wx.getSystemInfoSync().windowHeight;
-          this.setData({
-            height: height * 0.92
-          })
-          this.init();
-        } else {
-          this.setData({
-            impowerShow: true
-          })
+        },
+        fail: function() {
+          // fail
         }
-        // res.authSetting = {
-        //   "scope.userInfo": true,
-        //   "scope.userLocation": true
-        // }
-      }
-    })
-    // if (!wx.getStorageSync('unionid')) {
-    //   this.setData({
-    //     impowerShow: true
-    //   })
-    // }else{
-    //   let height = wx.getSystemInfoSync().windowHeight;
-    //   this.setData({
-    //     height: height * 0.92
-    //   })
-    //   this.init();
-    // }
+      })
+    }
     
   },
 
@@ -132,7 +124,6 @@ Page({
   },
 
   getUser(e) {
-    // console.log(e)
     if ((e.detail.data.errMsg).indexOf('ok') != -1) {
       // console.log('用户信息获取成功', JSON.parse(e.detail.data.rawData));
       this.setData({
@@ -145,12 +136,6 @@ Page({
     }else{
       wx.setStorageSync('unionid', '')
     }
-   
-    // console.log(e)
-    
-    // if ((e.detail.data.errMsg).indexOf('ok') == -1) {
-    //   console.log('用户信息获取失败')
-    // }
   },
 
   init () {
@@ -159,41 +144,29 @@ Page({
     })
     let unionid = wx.getStorageSync('unionid');
     let rule = wx.getStorageSync('rule');
-    console.log(unionid)
-    // if(unionid && !rule) {
-    //   wx.request({
-    //     url: 'https://www.chiens.cn/qzApi/login',
-    //     method: 'POST',
-    //     data: {
-    //       unionid
-    //     },
-    //     header: {
-    //       "Content-Type": "application/x-www-form-urlencoded"
-    //     },
-    //     success: res => {
-    //       console.log(res)
-    //     },
-    //     fail: function() {
-    //       // fail
-    //     }
-    //   })
-    // }
-    
-    // wx.switchTab({
-    //   url: '../index/index'
-    // })
+    console.log(unionid, rule)
   },
 
   showBox (e) {
     let rule = e.currentTarget.dataset.rule;
     if (rule === 'job_seeker') {
       this.setData({
-        top: '8%'
+        isShow: true
       })
+      setTimeout(() => {
+        this.setData({
+          top: '0%'
+        })
+      }, 200);
     } else {
       this.setData({
-        rec_top: '8%'
+        isShow2: true
       })
+      setTimeout(() => {
+        this.setData({
+          rec_top: '0%'
+        })
+      }, 200);
     }
   },
 
@@ -203,10 +176,20 @@ Page({
       this.setData({
         top: '100%'
       })
+      setTimeout(() => {
+        this.setData({
+          isShow: false
+        })
+      }, 200);
     } else {
       this.setData({
         rec_top: '100%'
       })
+      setTimeout(() => {
+        this.setData({
+          isShow2: false
+        })
+      }, 200);
     }
   },
 
@@ -215,6 +198,82 @@ Page({
     if (rule === 'job_seeker') {
       wx.switchTab({
         url: '../index/index'
+      })
+    }
+  },
+
+  nextStep (e) {
+    if (e.currentTarget.dataset.rule == 'job_seeker') {
+      let slide_current = parseInt(this.data.slide_current);
+      slide_current < 2 ? slide_current += 1 : slide_current;
+      this.setData({
+        slide_current
+      })
+    } else {
+      let slide_current2 = parseInt(this.data.slide_current2);
+      slide_current2 < 1 ? slide_current2 += 1 : slide_current2;
+      this.setData({
+        slide_current2
+      })
+    }
+  },
+
+  changeCurrent (e) {
+    if (e.target.dataset.rule == 'job_seeker') {
+      this.setData({
+        slide_current: e.detail.current
+      })
+      if (e.detail.current == 2) {
+        this.setData({
+          nextText: '完成'
+        })
+      } else {
+        this.setData({
+          nextText: '下一步'
+        })
+      }
+    } else {
+      this.setData({
+        slide_current2: e.detail.current
+      })
+      if (e.detail.current == 1) {
+        this.setData({
+          nextText2: '创建'
+        })
+      } else {
+        this.setData({
+          nextText2: '下一步'
+        })
+      }
+    }
+  },
+
+  editDone (e) {
+    if (e.currentTarget.dataset.rule == 'job_seeker') {
+      wx.showToast({
+        title: '载入中...',
+        icon: 'loading',
+        duration: 3000,
+        success: () => {
+          setTimeout(() => {
+            wx.switchTab({
+              url: '../index/index'
+            })
+          }, 3000);
+        }
+      })
+    } else {
+      wx.showToast({
+        title: '载入中...',
+        icon: 'loading',
+        duration: 3000,
+        success: () => {
+          setTimeout(() => {
+            wx.switchTab({
+              url: '../index/index'
+            })
+          }, 3000);
+        }
       })
     }
   }

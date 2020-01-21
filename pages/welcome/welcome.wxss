@@ -1,3 +1,6 @@
+.container {
+  overflow: hidden;
+}
 .container > .text {
   font-size: 40rpx;
   padding: 100rpx 0;
@@ -83,23 +86,52 @@
   left: 0;
   width: 100%;
   background: #fff;
-  border-radius: 40rpx 40rpx 0 0;
-  box-shadow: 0 0 20rpx rgba(0, 0, 0, 0.4);
-  transition: 0.6s;
+  transition: 0.2s;
   padding: 0 30rpx;
   box-sizing: border-box;
+  z-index: 1000;
+  overflow: hidden;
+  display: block;
 }
 .container .jobSeeker .top,
 .container .recruiters .top {
-  display: flex;
   height: 80rpx;
   line-height: 80rpx;
-  justify-content: space-between;
+  font-size: 28rpx;
+  position: relative;
+}
+.container .jobSeeker .top .close,
+.container .recruiters .top .close {
+  position: absolute;
+  left: 0;
+}
+.container .jobSeeker .top .text,
+.container .recruiters .top .text {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.container .jobSeeker .top .next,
+.container .recruiters .top .next {
+  color: #64bfba;
+  position: absolute;
+  right: 0;
+  transition: 0.4s;
+}
+.container .jobSeeker .slide,
+.container .recruiters .slide {
+  height: 100%;
+}
+.container .jobSeeker .edit .title,
+.container .recruiters .edit .title {
+  font-size: 36rpx;
+  padding: 30rpx 0;
 }
 .container .jobSeeker .edit .head_portrait,
 .container .recruiters .edit .head_portrait {
   width: 100%;
   margin-top: 10rpx;
+  margin-bottom: 30rpx;
 }
 .container .jobSeeker .edit .head_portrait .head,
 .container .recruiters .edit .head_portrait .head {
@@ -116,7 +148,58 @@
   font-size: 26rpx;
   margin-top: 20rpx;
 }
-.container .jobSeeker .edit .info .little_title,
-.container .recruiters .edit .info .little_title {
+.container .jobSeeker .edit .info,
+.container .recruiters .edit .info {
+  display: flex;
+  justify-content: space-between;
+  padding: 30rpx 0;
+}
+.container .jobSeeker .edit .info .head_portrait,
+.container .recruiters .edit .info .head_portrait {
+  width: 120rpx;
+}
+.container .jobSeeker .edit .info .left .name,
+.container .recruiters .edit .info .left .name {
+  font-size: 42rpx;
+  margin-bottom: 4rpx;
+}
+.container .jobSeeker .edit .info .left .school,
+.container .recruiters .edit .info .left .school {
+  font-size: 24rpx;
+  color: #838383;
+  margin-bottom: 24rpx;
+}
+.container .jobSeeker .edit .info .left .other,
+.container .recruiters .edit .info .left .other,
+.container .jobSeeker .edit .info .left .profession,
+.container .recruiters .edit .info .left .profession {
+  font-size: 24rpx;
+  color: #838383;
+}
+.container .jobSeeker .edit .info .left .profession,
+.container .recruiters .edit .info .left .profession {
+  font-size: 28rpx;
+  margin-top: 30rpx;
+}
+.container .jobSeeker .edit .list,
+.container .recruiters .edit .list {
+  margin-bottom: 50rpx;
+}
+.container .jobSeeker .edit .list:last-of-type,
+.container .recruiters .edit .list:last-of-type {
+  margin-bottom: 0;
+}
+.container .jobSeeker .edit .list .item,
+.container .recruiters .edit .list .item {
+  padding: 20rpx 0;
+}
+.container .jobSeeker .edit .list .item .little_title,
+.container .recruiters .edit .list .item .little_title {
   font-size: 22rpx;
+  color: #2b2b2b;
+}
+.container .jobSeeker .edit .list .item .text,
+.container .recruiters .edit .list .item .text {
+  font-size: 32rpx;
+  font-weight: 500;
 }

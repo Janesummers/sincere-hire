@@ -1,4 +1,5 @@
 .container {
+  overflow: hidden;
   >.text {
     font-size: 40rpx;
     padding: 100rpx 0;
@@ -83,21 +84,47 @@
     left: 0;
     width: 100%;
     background: #fff;
-    border-radius: 40rpx 40rpx 0 0;
-    box-shadow: 0 0 20rpx rgba(0, 0, 0, 0.4);
-    transition: 0.6s;
+    // border-radius: 40rpx 40rpx 0 0;
+    // box-shadow: 0 0 40rpx rgba(0, 0, 0, 0.2);
+    transition: 0.2s;
     padding: 0 30rpx;
     box-sizing: border-box;
+    z-index: 1000;
+    overflow: hidden;
+    display: block;
     .top {
-      display: flex;
       height: 80rpx;
       line-height: 80rpx;
-      justify-content: space-between;
+      font-size: 28rpx;
+      position: relative;
+      .close {
+        position: absolute;
+        left: 0;
+      }
+      .text {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+      .next {
+        color: #64bfba;
+        position: absolute;
+        right: 0;
+        transition: 0.4s;
+      }
+    }
+    .slide {
+      height: 100%;
     }
     .edit {
+      .title {
+        font-size: 36rpx;
+        padding: 30rpx 0;
+      }
       .head_portrait {
         width: 100%;
         margin-top: 10rpx;
+        margin-bottom: 30rpx;
         .head {
           width: 120rpx;
           margin: 0 auto;
@@ -113,8 +140,47 @@
         }
       }
       .info {
-        .little_title {
-          font-size: 22rpx;
+        display: flex;
+        justify-content: space-between;
+        padding: 30rpx 0;
+        .head_portrait {
+          width: 120rpx;
+        }
+        .left {
+          .name {
+            font-size: 42rpx;
+            margin-bottom: 4rpx;
+          }
+          .school {
+            font-size: 24rpx;
+            color: #838383;
+            margin-bottom: 24rpx;
+          }
+          .other, .profession {
+            font-size: 24rpx;
+            color: #838383;
+          }
+          .profession {
+            font-size: 28rpx;
+            margin-top: 30rpx;
+          }
+        }
+      }
+      .list {
+        margin-bottom: 50rpx;
+        &:last-of-type {
+          margin-bottom: 0;
+        }
+        .item {
+          padding: 20rpx 0;
+          .little_title {
+            font-size: 22rpx;
+            color: #2b2b2b;
+          }
+          .text {
+            font-size: 32rpx;
+            font-weight: 500;
+          }
         }
       }
     }
