@@ -101,7 +101,7 @@ Page({
       this.setData({
         impowerShow: false
       })
-      // wx.setStorageSync('unionid', JSON.parse(e.detail.data.rawData))
+      wx.setStorageSync('unionid', JSON.parse(e.detail.data.rawData))
       // app.globalData.eventMgr.emit('user', e.detail.data );
  
       this.init()

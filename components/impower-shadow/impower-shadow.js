@@ -39,7 +39,7 @@ Component({
             },
             success: res => {
               console.log(res)
-              let unionid = res.data.data;
+              let unionid = res.data.data[0].unionid || res.data.data;
               wx.setStorageSync('unionid', unionid)
               this.triggerEvent('getUser', { data: res })
             },
