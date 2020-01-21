@@ -1,2 +1,86 @@
-<!--pages/job-detail/job-detail.wxml-->
-<text>pages/job-detail/job-detail.wxml</text>
+<view class="container" hover-class="none" hover-stop-propagation="false">
+    <view class="job_type" hover-class="none" hover-stop-propagation="false">
+        <view class="job_title">理财规划师</view>
+        <view class="demand">
+            <view class="position" hover-class="none" hover-stop-propagation="false">
+                漳州-龙文区
+            </view>
+            <view class="require" hover-class="none" hover-stop-propagation="false">
+                <view class="item" hover-class="none" hover-stop-propagation="false">
+                    经验不限
+                </view>
+                <view class="item" hover-class="none" hover-stop-propagation="false">
+                    本科
+                </view>
+            </view>
+        </view>
+        <view class="info" hover-class="none" hover-stop-propagation="false">
+            <view class="salary">面议</view>
+            <view class="create_time" hover-class="none" hover-stop-propagation="false">
+                9月30日
+            </view>
+        </view>
+    </view>
+    <view class="job_describe card" hover-class="none" hover-stop-propagation="false">
+        <view class="title" hover-class="none" hover-stop-propagation="false">
+            职位描述
+        </view>
+        <view class="text" hover-class="none" hover-stop-propagation="false">
+            <view class="line_text" hover-class="none" hover-stop-propagation="false">
+                [岗位职责] :
+            </view>
+
+            <view class="line_text" hover-class="none" hover-stop-propagation="false">
+                1、负责客户市场的开发及维护;
+            </view>
+
+            <view class="line_text" hover-class="none" hover-stop-propagation="false">
+                2、负责公司产品的销售和推广;
+            </view>
+
+            <view class="line_text" hover-class="none" hover-stop-propagation="false">
+                3、为客户提供投资咨询服务;
+            </view>
+
+            <view class="line_text" hover-class="none" hover-stop-propagation="false">
+                4、为客户制订资产配置方案，提供投资建议，满足客户的理财需求。
+            </view>
+
+            <view class="line_text" hover-class="none" hover-stop-propagation="false">
+                [任职资格] :
+            </view>
+
+            <view class="line_text" hover-class="none" hover-stop-propagation="false">
+                1、学历水平:全日制大学本科及以上学历;
+            </view>
+
+            <view class="line_text" hover-class="none" hover-stop-propagation="false">
+                2、能力要求:有较强的沟通能力和客户开发能力，具备团队协作精神;
+            </view>
+
+            <view class="line_text" hover-class="none" hover-stop-propagation="false">
+                3、专业要求:金融、财会、经济、法律、市场营销等专业优先;
+            </view>
+
+            <view class="line_text" hover-class="none" hover-stop-propagation="false">
+                4、资格技能:通过期货从业资格考试、证券从业资格考试者优先。
+            </view>
+        </view>
+    </view>
+    <view class="company_info card" hover-class="none" hover-stop-propagation="false">
+        <view class="title" hover-class="none" hover-stop-propagation="false">
+            公司信息
+        </view>
+    </view>
+    <view class="hit" hover-class="none" hover-stop-propagation="false">
+        <view class="title" hover-class="none" hover-stop-propagation="false">
+            <text class="iconfont icon-jinggao"></text>友情提醒
+        </view>
+        <view class="text" hover-class="none" hover-stop-propagation="false">
+            以担保或任何理由索取财物，抵押证照，均涉嫌违法，请提高警惕！
+        </view>
+    </view>
+    <view class="bottom" hover-class="none" hover-stop-propagation="false">
+        <view class="btn">投递简历</view>
+    </view>
+</view>
