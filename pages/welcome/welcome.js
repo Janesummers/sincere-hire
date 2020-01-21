@@ -56,7 +56,7 @@ Page({
           }
         }
       })
-    }
+    } 
 
     isUserInfo();
 
@@ -145,6 +145,9 @@ Page({
     let unionid = wx.getStorageSync('unionid');
     let rule = wx.getStorageSync('rule');
     console.log(unionid, rule)
+    wx.switchTab({
+      url: '/pages/index/index'
+    })
   },
 
   showBox (e) {

@@ -1,12 +1,12 @@
 {
   "pages": [
-    
     "pages/index/index",
     "pages/logs/logs",
     "pages/company/company",
     "pages/me/me",
     "pages/welcome/welcome",
-    "pages/message/message"
+    "pages/message/message",
+    "pages/job-detail/job-detail"
   ],
   "window": {
     "backgroundTextStyle": "light",
