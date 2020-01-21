@@ -24,7 +24,7 @@
   <view class="card">
     <view class="title">最新实习岗位</view>
     <view class="content">
-      <view class="station" wx:for="{{station}}" wx:key="index">
+      <view class="station" wx:for="{{station}}" wx:key="index" bindtap="toJobDetail">
         <view class="left">
           <view class="position">{{item.position}}</view>
           <view class="info">

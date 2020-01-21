@@ -120,5 +120,11 @@ Page({
     this.setData({
       impowerShow: false
     })
+  },
+
+  toJobDetail () {
+    wx.navigateTo({
+      url: '/pages/job-detail/job-detail'
+    })
   }
 })
