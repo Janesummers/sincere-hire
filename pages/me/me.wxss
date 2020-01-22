@@ -1,3 +1,92 @@
 page {
   padding-bottom: 48px;
 }
+.container #me .info {
+  color: #fff;
+  display: flex;
+  padding: 30rpx;
+  background: #64bfba;
+}
+.container #me .info .head {
+  width: 140rpx;
+  height: 140rpx;
+  overflow: hidden;
+  border-radius: 16rpx;
+  margin-right: 40rpx;
+}
+.container #me .info .right .top {
+  display: flex;
+  font-size: 36rpx;
+  align-items: flex-end;
+  margin-bottom: 10rpx;
+}
+.container #me .info .right .top .name {
+  margin-right: 20rpx;
+}
+.container #me .info .right .top .appellation {
+  font-size: 24rpx;
+}
+.container #me .info .right .middle {
+  display: flex;
+  font-size: 26rpx;
+  margin-bottom: 10rpx;
+}
+.container #me .info .right .bottom {
+  display: flex;
+  font-size: 24rpx;
+}
+.container #me .info .right .middle .item,
+.container #me .info .right .bottom .item {
+  margin: 0 16rpx;
+  position: relative;
+}
+.container #me .info .right .middle .item::after,
+.container #me .info .right .bottom .item::after {
+  display: block;
+  content: "";
+  position: absolute;
+  right: -16rpx;
+  top: 50%;
+  height: 60%;
+  width: 1px;
+  background: #ebeaea;
+  transform: translateY(-50%);
+}
+.container #me .info .right .middle .item:first-of-type,
+.container #me .info .right .bottom .item:first-of-type {
+  margin-left: 0;
+}
+.container #me .info .right .middle .item:last-of-type::after,
+.container #me .info .right .bottom .item:last-of-type::after {
+  display: none;
+}
+.container #me .list {
+  border-bottom: 1px solid #eeeeee;
+  padding: 20rpx 0;
+  margin: 0 30rpx;
+}
+.container #me .list .item {
+  font-size: 32rpx;
+  padding: 30rpx 0;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+.container #me .list .item .ico {
+  font-size: 40rpx;
+  margin-right: 20rpx;
+}
+.container #me .list .item .icon-goutongjiaoliu {
+  font-size: 44rpx;
+}
+.container #me .list .item .icon-shoucang {
+  font-size: 44rpx;
+}
+.container #me .list .item .icon-iconfonti {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 48rpx;
+  color: #cac9c9;
+}

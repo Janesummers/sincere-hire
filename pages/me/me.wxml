@@ -1,13 +1,50 @@
 <!--pages/me/me.wxml-->
-<view class="container" hover-class="none" hover-stop-propagation="false">
-    <view id="me">
-        <view class="info">
-            <view class="head" hover-class="none" hover-stop-propagation="false">
-                <image class="" src="" mode="widthFix">
-                    
-                </image>
-            </view>
+<view class="container">
+  <view id="me">
+    <view class="info">
+      <view class="head">
+        <open-data type="userAvatarUrl"></open-data>
+      </view>
+      <view class="right">
+        <view class="top">
+          <view class="name">陈立权</view>
+          <view class="appellation"> / 先生</view>
         </view>
+        <view class="middle">
+          <view  class="major item">软件工程</view>
+          <view class="school item">闽江学院</view>
+        </view>
+        <view class="bottom">
+          <view class="item">23岁</view>
+          <view class="item">工作0年</view>
+          <view class="item">漳州</view>
+        </view>
+      </view>
     </view>
+    <view class="list">
+      <view class="item">
+        <text class="ico iconfont icon-wenjian"></text>
+        <text class="text">在线简历</text>
+        <text class="iconfont icon-iconfonti"></text>
+      </view>
+    </view>
+    <view class="list">
+      <view class="item">
+        <text class="ico iconfont icon-wenjian1"></text>
+        <text class="text">附件简历</text>
+        <text class="iconfont icon-iconfonti"></text>
+      </view>
+      <view class="item">
+        <text class="ico iconfont icon-goutongjiaoliu"></text>
+        <text class="text">我的面试</text>
+        <text class="iconfont icon-iconfonti"></text>
+      </view>
+      <view class="item">
+        <text class="ico iconfont icon-shoucang"></text>
+        <text class="text">我的收藏</text>
+        <text class="iconfont icon-iconfonti"></text>
+      </view>
+    </view>
+  </view>
 </view>
 <index-tabbar></index-tabbar>
