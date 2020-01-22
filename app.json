@@ -6,7 +6,8 @@
     "pages/me/me",
     "pages/welcome/welcome",
     "pages/message/message",
-    "pages/job-detail/job-detail"
+    "pages/job-detail/job-detail",
+    "pages/job-list/job-list"
   ],
   "window": {
     "backgroundTextStyle": "light",

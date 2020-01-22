@@ -7,7 +7,8 @@ Component({
     list: []
   },
   attached() {
-    let rule = wx.getStorageSync('rule');
+    // let rule = wx.getStorageSync('rule');
+    let rule = 'job_seeker';
     if (rule == 'job_seeker') {
       this.setData({
         list: app.globalData.list,
