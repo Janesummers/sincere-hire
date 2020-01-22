@@ -46,12 +46,6 @@ App({
         "text": "职位"
       },
       {
-        "selectedIconPath": "../../images/company_selected.png",
-        "iconPath": "../../images/company.png",
-        "pagePath": "pages/company/company",
-        "text": "公司"
-      },
-      {
         "selectedIconPath": "../../images/message_selected.png",
         "iconPath": "../../images/message.png",
         "pagePath": "pages/message/message",
