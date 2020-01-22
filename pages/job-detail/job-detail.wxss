@@ -57,6 +57,7 @@ page {
   display: flex;
   justify-content: space-between;
   font-size: 28rpx;
+  color: #64bfba;
 }
 .container .job_type .info .create_time {
   font-size: 24rpx;
@@ -79,6 +80,42 @@ page {
   font-size: 26rpx;
   color: #7c7c7c;
   padding: 10rpx 0;
+}
+.container .company_info .info .name {
+  font-size: 32rpx;
+}
+.container .company_info .info .company_type {
+  display: flex;
+  font-size: 24rpx;
+  margin: 10rpx 0;
+}
+.container .company_info .info .company_type .item {
+  margin: 0 16rpx;
+  position: relative;
+}
+.container .company_info .info .company_type .item::after {
+  display: block;
+  content: "";
+  position: absolute;
+  right: -16rpx;
+  top: 50%;
+  height: 60%;
+  width: 1px;
+  background: #ebeaea;
+  transform: translateY(-50%);
+}
+.container .company_info .info .company_type .item:first-of-type {
+  margin-left: 0;
+}
+.container .company_info .info .company_type .item:last-of-type::after {
+  display: none;
+}
+.container .company_info .info .in_recruit {
+  font-size: 24rpx;
+}
+.container .company_info .info .in_recruit text {
+  color: #64bfba;
+  margin: 0 6rpx;
 }
 .container .hit {
   margin: 30rpx 0;

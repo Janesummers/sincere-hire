@@ -71,6 +71,23 @@
         <view class="title" hover-class="none" hover-stop-propagation="false">
             公司信息
         </view>
+        <view class="info" hover-class="none" hover-stop-propagation="false">
+            <view class="name">网龙网络公司</view>
+            <view class="company_type" hover-class="none" hover-stop-propagation="false">
+                <view class="item" hover-class="none" hover-stop-propagation="false">
+                    1000-9999人
+                </view>
+                <view class="item" hover-class="none" hover-stop-propagation="false">
+                    上市公司
+                </view>
+                <view class="item" hover-class="none" hover-stop-propagation="false">
+                    互联网
+                </view>
+            </view>
+            <view class="in_recruit" hover-class="none" hover-stop-propagation="false">
+                在招职位<text>1</text>个
+            </view>
+        </view>
     </view>
     <view class="hit" hover-class="none" hover-stop-propagation="false">
         <view class="title" hover-class="none" hover-stop-propagation="false">
