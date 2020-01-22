@@ -1,0 +1,92 @@
+page {
+  background: rgb(241, 241, 241);
+  padding-bottom: 100rpx;
+}
+.container {
+  .list {
+    padding: 26rpx;
+    .item {
+      display: flex;
+      margin: 40rpx 0;
+      &:first-of-type {
+        margin-top: 0;
+      }
+      .img_box {
+        min-width: 80rpx;
+        max-width: 80rpx;
+        overflow: hidden;
+        height: 80rpx;
+        image {
+          width: 100%;
+          border-radius: 16rpx;
+        }
+      }
+      .bubble {
+        background: #fff;
+        border-radius: 16rpx;
+        padding: 20rpx;
+        box-sizing: border-box;
+        font-size: 28rpx;
+        position: relative;
+        &::before {
+          content: "";
+          display: block;
+          position: absolute;
+          top: 38%;
+          border-radius: 6rpx;
+          border-style: solid;
+          border-width: 0 20rpx 20rpx;
+          border-color: transparent transparent #fff;
+          width: 0;
+          height: 0;
+        }
+      }
+      &.left {
+        .bubble {
+          margin-right: 0;
+          margin-left: 22rpx;
+          &::before {
+            left: -24rpx;
+            transform: translateY(-50%) rotate(-90deg);
+          }
+        }
+      }
+      &.right {
+        flex-direction: row-reverse;
+        .bubble {
+          margin-left: 0;
+          margin-right: 22rpx;
+          &::before {
+            right: -24rpx;
+            transform: translateY(-50%) rotate(90deg);
+          }
+        }
+      }
+    }
+  }
+  .put_box {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    background: #fff;
+    width: 100%;
+    height: 100rpx;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    padding: 0 20rpx;
+    .put {
+      width: 90%;
+      input {
+        border-radius: 30px;
+        height: 60rpx;
+        background: #f1f1f1;
+        width: 100%;
+        font-size: 24rpx;
+        padding: 10rpx;
+        text-indent: 1rem;
+        box-sizing: border-box;
+      }
+    }
+  }
+}
