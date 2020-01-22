@@ -1,2 +1,22 @@
-<!--pages/job-list/job-list.wxml-->
-<text>pages/job-list/job-list.wxml</text>
+<view class="container">
+  <view class="list">
+    <view class="title">最新实习岗位</view>
+    <view class="content">
+      <view class="station" wx:for="{{station}}" wx:key="index" bindtap="toJobDetail">
+        <view class="left">
+          <view class="position">{{item.position}}</view>
+          <view class="info">
+            <view class="location">{{item.location}}</view>
+            <view class="people">招聘人数：{{item.people}}</view>
+            <view class="companyType">{{item.companyType}}</view>
+          </view>
+          <view class="company">{{item.company}}</view>
+        </view>
+        <view class="right">
+          <view class="price">{{item.price}}</view>
+          <view class="time">{{item.time}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

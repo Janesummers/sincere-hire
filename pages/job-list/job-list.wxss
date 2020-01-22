@@ -1,1 +1,81 @@
-/* pages/job-list/job-list.wxss */
+.container {
+  padding: 20rpx;
+}
+.container .list {
+  background-color: #fff;
+  border-radius: 16rpx;
+}
+.container .list .title {
+  font-size: 36rpx;
+  padding-bottom: 20rpx;
+  border-bottom: 1px solid #f0f0f0;
+}
+.container .list .content {
+  width: 100%;
+}
+.container .list .content .station {
+  display: flex;
+  font-size: 32rpx;
+  border-bottom: 1px solid #f0f0f0;
+  margin-bottom: 20rpx;
+  padding-bottom: 20rpx;
+}
+.container .list .content .station:last-of-type {
+  border: 0;
+}
+.container .list .content .station:first-of-type {
+  margin-top: 20rpx;
+}
+.container .list .content .station .left {
+  width: 80%;
+}
+.container .list .content .station .left .position {
+  margin-bottom: 16rpx;
+}
+.container .list .content .station .left .info {
+  display: flex;
+  font-size: 24rpx;
+  color: #a5a5a5;
+  margin-bottom: 22rpx;
+}
+.container .list .content .station .left .info .location {
+  padding-right: 18rpx;
+}
+.container .list .content .station .left .info .people {
+  padding: 0 18rpx;
+}
+.container .list .content .station .left .info .location,
+.container .list .content .station .left .info .people {
+  position: relative;
+}
+.container .list .content .station .left .info .location::after,
+.container .list .content .station .left .info .people::after {
+  display: block;
+  clear: both;
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1px;
+  height: 80%;
+  background: #ccc;
+}
+.container .list .content .station .left .info .companyType {
+  padding-left: 18rpx;
+}
+.container .list .content .station .left .company {
+  font-size: 24rpx;
+}
+.container .list .content .station .right {
+  text-align: right;
+  width: 20%;
+}
+.container .list .content .station .right .price {
+  font-size: 28rpx;
+  margin-bottom: 14rpx;
+}
+.container .list .content .station .right .time {
+  font-size: 20rpx;
+  color: #ccc;
+}
