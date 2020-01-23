@@ -1,0 +1,43 @@
+<view class="container">
+  <view class="list">
+    <view class="item">
+      <view class="little_title">姓名</view>
+      <view class="text">
+        <input type="text" placeholder="请填写" />
+      </view>
+    </view>
+    <view class="item">
+      <view class="little_title">性别</view>
+      <view class="text">
+        <input type="text" placeholder="请填写" />
+      </view>
+    </view>
+    <view class="item">
+      <view class="little_title">出生年月</view>
+      <view class="text">
+        <input type="text" placeholder="请填写" />
+      </view>
+    </view>
+    <view class="item">
+      <view class="little_title">参加工作时间</view>
+      <view class="text">
+        <input type="text" placeholder="请填写" />
+      </view>
+    </view>
+    <view class="item">
+      <view class="little_title">现居住城市</view>
+      <view class="text">
+        <input type="text" placeholder="请填写" />
+      </view>
+    </view>
+    <view class="item">
+      <view class="little_title">电子邮箱</view>
+      <view class="text">
+        <input type="text" placeholder="请填写" />
+      </view>
+    </view>
+  </view>
+  <view class="bottom">
+    <view class="btn">保存</view>
+  </view>
+</view>
