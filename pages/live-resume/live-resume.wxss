@@ -1,0 +1,105 @@
+.container .list {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 30rpx;
+}
+.container .list .items {
+  margin-bottom: 80rpx;
+}
+.container .list .items .top {
+  margin-bottom: 40rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.container .list .items .top .add {
+  font-size: 28rpx;
+  display: flex;
+  align-items: center;
+  height: 32rpx;
+  color: #64bfba;
+}
+.container .list .items .top .add .iconfont {
+  margin-right: 6rpx;
+  font-size: 28rpx;
+  height: 32rpx;
+  line-height: 32rpx;
+}
+.container .list .items .title {
+  font-size: 36rpx;
+  font-weight: 500;
+}
+.container .list .items .time {
+  margin-bottom: 16rpx;
+  font-size: 24rpx;
+  color: #a7a5a5;
+}
+.container .list .items .name {
+  font-size: 32rpx;
+  font-weight: 500;
+  margin-bottom: 16rpx;
+  align-items: center;
+  justify-content: space-between;
+  display: flex;
+}
+.container .list .items .name > .iconfont {
+  font-size: 28rpx;
+  color: #64bfba;
+}
+.container .list .items .name .school_name,
+.container .list .items .name .company_name {
+  display: flex;
+  align-items: center;
+}
+.container .list .items .name .school_name > .iconfont,
+.container .list .items .name .company_name > .iconfont {
+  margin-right: 10rpx;
+  font-size: 36rpx;
+}
+.container .list .items .work_experience {
+  font-size: 32rpx;
+  font-weight: 500;
+  margin-bottom: 16rpx;
+}
+.container .list .items .work_experience .job {
+  display: flex;
+  font-size: 28rpx;
+  justify-content: space-between;
+  margin-bottom: 20rpx;
+}
+.container .list .items .work_experience .responsibility {
+  font-size: 28rpx;
+  color: #797676;
+  line-height: 50rpx;
+  margin-bottom: 40rpx;
+}
+.container .list .items .edu_experience .level {
+  display: flex;
+  font-size: 28rpx;
+}
+.container .list .items .edu_experience .level .item {
+  margin: 0 16rpx;
+  position: relative;
+}
+.container .list .items .edu_experience .level .item::after {
+  display: block;
+  content: "";
+  position: absolute;
+  right: -16rpx;
+  top: 50%;
+  height: 60%;
+  width: 1px;
+  background: #ebeaea;
+  transform: translateY(-50%);
+}
+.container .list .items .edu_experience .level .item:first-of-type {
+  margin-left: 0;
+}
+.container .list .items .edu_experience .level .item:last-of-type::after {
+  display: none;
+}
+.container .list .items .self_appraisal {
+  font-size: 28rpx;
+  line-height: 50rpx;
+  color: #797676;
+}
