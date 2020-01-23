@@ -6,9 +6,11 @@
 }
 .container .list .item {
   padding: 20rpx 0;
+  margin-bottom: 20rpx;
 }
 .container .list .item .little_title {
   font-size: 24rpx;
+  margin-bottom: 10rpx;
   color: #2b2b2b;
 }
 .container .list .item .text {
