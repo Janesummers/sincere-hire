@@ -8,7 +8,7 @@
       <view class="right">
         <view class="top">
           <view class="name">陈立权</view>
-          <view class="appellation"> / 先生</view>
+          <!-- <view class="appellation"> / 先生</view> -->
         </view>
         <view class="middle">
           <view  class="major item">软件工程</view>
@@ -22,7 +22,12 @@
       </view>
     </view>
     <view class="list">
-      <view class="item">
+      <view class="item" bindtap="toPage" data-path="/pages/info/info">
+        <text class="ico iconfont icon-wenjian"></text>
+        <text class="text">个人信息</text>
+        <text class="iconfont icon-iconfonti"></text>
+      </view>
+      <view class="item" bindtap="toPage" data-path="/pages/live-resume/live-resume">
         <text class="ico iconfont icon-wenjian"></text>
         <text class="text">在线简历</text>
         <text class="iconfont icon-iconfonti"></text>
@@ -30,16 +35,11 @@
     </view>
     <view class="list">
       <view class="item">
-        <text class="ico iconfont icon-wenjian1"></text>
-        <text class="text">附件简历</text>
-        <text class="iconfont icon-iconfonti"></text>
-      </view>
-      <view class="item">
         <text class="ico iconfont icon-goutongjiaoliu"></text>
         <text class="text">我的面试</text>
         <text class="iconfont icon-iconfonti"></text>
       </view>
-      <view class="item">
+      <view class="item" bindtap="toPage" data-path="/pages/job-list/job-list">
         <text class="ico iconfont icon-shoucang"></text>
         <text class="text">我的收藏</text>
         <text class="iconfont icon-iconfonti"></text>

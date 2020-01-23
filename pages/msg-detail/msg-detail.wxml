@@ -1,79 +1,87 @@
-<view class="container" hover-class="none" hover-stop-propagation="false">
-  <view class="list" hover-class="none" hover-stop-propagation="false">
+<view class="container">
+  <view class="list">
     <view class="item left">
-      <view class="img_box" hover-class="none" hover-stop-propagation="false">
+      <view class="img_box">
         <image src="../../images/people_girl.png" mode="widthFix"></image>
       </view>
-      <view class="bubble" hover-class="none" hover-stop-propagation="false">
+      <view class="bubble">
         您的简历已放入我公司人才库，若有需要我们会与您联系，感谢关注。
       </view>
     </view>
     <view class="item right">
-      <view class="img_box" hover-class="none" hover-stop-propagation="false">
+      <view class="img_box">
         <image src="../../images/people_girl.png" mode="widthFix"></image>
       </view>
-      <view class="bubble" hover-class="none" hover-stop-propagation="false">
+      <view class="bubble">
         您的简历
       </view>
     </view>
     <view class="item right">
-      <view class="img_box" hover-class="none" hover-stop-propagation="false">
+      <view class="img_box">
         <image src="../../images/people_girl.png" mode="widthFix"></image>
       </view>
-      <view class="bubble" hover-class="none" hover-stop-propagation="false">
+      <view class="bubble">
         您的简历已放入我公司
       </view>
     </view>
     <view class="item right">
-      <view class="img_box" hover-class="none" hover-stop-propagation="false">
+      <view class="img_box">
         <image src="../../images/people_girl.png" mode="widthFix"></image>
       </view>
-      <view class="bubble" hover-class="none" hover-stop-propagation="false">
+      <view class="bubble">
         您的简历已放入我公司人才库，若有需要
       </view>
     </view>
     <view class="item left">
-      <view class="img_box" hover-class="none" hover-stop-propagation="false">
+      <view class="img_box">
         <image src="../../images/people_girl.png" mode="widthFix"></image>
       </view>
-      <view class="bubble" hover-class="none" hover-stop-propagation="false">
+      <view class="bubble">
         您的简历已放入我公司人才库，若有需要若有需要我们会与您联系，感谢关注。
       </view>
     </view>
     <view class="item left">
-      <view class="img_box" hover-class="none" hover-stop-propagation="false">
+      <view class="img_box">
         <image src="../../images/people_girl.png" mode="widthFix"></image>
       </view>
-      <view class="bubble" hover-class="none" hover-stop-propagation="false">
+      <view class="bubble">
         您的简历已放入我公司人才库，若有需要我们会与您联系，感谢关注。
       </view>
     </view>
     <view class="item right">
-      <view class="img_box" hover-class="none" hover-stop-propagation="false">
+      <view class="img_box">
         <image src="../../images/people_girl.png" mode="widthFix"></image>
       </view>
-      <view class="bubble" hover-class="none" hover-stop-propagation="false">
+      <view class="bubble">
         您的简历已放入我公司人才库，若有需要我们会与您联系，感谢关注。
       </view>
     </view>
     <view class="item left">
-      <view class="img_box" hover-class="none" hover-stop-propagation="false">
+      <view class="img_box">
         <image src="../../images/people_girl.png" mode="widthFix"></image>
       </view>
-      <view class="bubble" hover-class="none" hover-stop-propagation="false">
+      <view class="bubble">
         您的简历已放入我公司人才库，若有需要
       </view>
     </view>
     <view class="item right">
-      <view class="img_box" hover-class="none" hover-stop-propagation="false">
+      <view class="img_box">
         <image src="../../images/people_girl.png" mode="widthFix"></image>
       </view>
-      <view class="bubble" hover-class="none" hover-stop-propagation="false">
+      <view class="bubble">
         您的简历已放入我公司人才库，若有需要
       </view>
     </view>
+    <view class="item right">
+      <view class="img_box">
+        <image src="../../images/people_girl.png" mode="widthFix"></image>
+      </view>
+      <view class="bubble">
+        底部
+      </view>
+    </view>
   </view>
-  <view class="put_box" hover-class="none" hover-stop-propagation="false">
+  <view class="put_box">
     <view class="put">
       <input type="text" placeholder="和 Ta 聊聊" />
     </view>

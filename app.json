@@ -7,7 +7,10 @@
     "pages/welcome/welcome",
     "pages/message/message",
     "pages/job-detail/job-detail",
-    "pages/job-list/job-list"
+    "pages/job-list/job-list",
+    "pages/msg-detail/msg-detail",
+    "pages/live-resume/live-resume",
+    "pages/info/info"
   ],
   "window": {
     "backgroundTextStyle": "light",
