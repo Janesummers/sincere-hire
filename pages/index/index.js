@@ -126,5 +126,11 @@ Page({
     wx.navigateTo({
       url: '/pages/job-detail/job-detail'
     })
+  },
+
+  toList () {
+    wx.navigateTo({
+      url: '/pages/job-list/job-list'
+    })
   }
 })

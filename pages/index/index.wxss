@@ -45,6 +45,12 @@ page {
   display: flex;
   margin-top: 40rpx;
   font-size: 32rpx;
+  border-bottom: 1px solid #f0f0f0;
+  margin-bottom: 20rpx;
+  padding-bottom: 20rpx;
+}
+.container .card .content .station:last-of-type {
+  border: 0;
 }
 .container .card .content .station:first-of-type {
   margin-top: 20rpx;

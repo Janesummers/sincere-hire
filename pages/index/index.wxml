@@ -15,8 +15,8 @@
   <view class="card">
     <view class="content">
       <view class="img_box">
-        <image src="../../images/entry1.jpg"></image>
-        <image src="../../images/entry2.jpg"></image>
+        <image bindtap="toList" src="../../images/entry1.jpg"></image>
+        <image bindtap="toList" src="../../images/entry2.jpg"></image>
       </view>
     </view>
   </view>
