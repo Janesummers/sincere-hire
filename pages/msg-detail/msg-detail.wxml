@@ -1,89 +1,37 @@
 <view class="container">
-  <view class="list">
-    <view class="item left">
+  <scroll-view 
+    class="list" 
+    style="height: {{height}}px;" 
+    scroll-y="{{true}}" 
+    scroll-into-view="{{toLast}}" 
+    scroll-with-animation="{{true}}"
+  >
+    <view 
+      class="item {{item.origin == 'self' ? 'right' : 'left'}}" 
+      wx:for="{{list}}" 
+      wx:key="{{index}}"
+      id="item{{index}}"
+    >
       <view class="img_box">
         <image src="../../images/people_girl.png" mode="widthFix"></image>
       </view>
-      <view class="bubble">
-        您的简历已放入我公司人才库，若有需要我们会与您联系，感谢关注。
-      </view>
+      <view class="bubble">{{item.text}}</view>
     </view>
-    <view class="item right">
-      <view class="img_box">
-        <image src="../../images/people_girl.png" mode="widthFix"></image>
-      </view>
-      <view class="bubble">
-        您的简历
-      </view>
-    </view>
-    <view class="item right">
-      <view class="img_box">
-        <image src="../../images/people_girl.png" mode="widthFix"></image>
-      </view>
-      <view class="bubble">
-        您的简历已放入我公司
-      </view>
-    </view>
-    <view class="item right">
-      <view class="img_box">
-        <image src="../../images/people_girl.png" mode="widthFix"></image>
-      </view>
-      <view class="bubble">
-        您的简历已放入我公司人才库，若有需要
-      </view>
-    </view>
-    <view class="item left">
-      <view class="img_box">
-        <image src="../../images/people_girl.png" mode="widthFix"></image>
-      </view>
-      <view class="bubble">
-        您的简历已放入我公司人才库，若有需要若有需要我们会与您联系，感谢关注。
-      </view>
-    </view>
-    <view class="item left">
-      <view class="img_box">
-        <image src="../../images/people_girl.png" mode="widthFix"></image>
-      </view>
-      <view class="bubble">
-        您的简历已放入我公司人才库，若有需要我们会与您联系，感谢关注。
-      </view>
-    </view>
-    <view class="item right">
-      <view class="img_box">
-        <image src="../../images/people_girl.png" mode="widthFix"></image>
-      </view>
-      <view class="bubble">
-        您的简历已放入我公司人才库，若有需要我们会与您联系，感谢关注。
-      </view>
-    </view>
-    <view class="item left">
-      <view class="img_box">
-        <image src="../../images/people_girl.png" mode="widthFix"></image>
-      </view>
-      <view class="bubble">
-        您的简历已放入我公司人才库，若有需要
-      </view>
-    </view>
-    <view class="item right">
-      <view class="img_box">
-        <image src="../../images/people_girl.png" mode="widthFix"></image>
-      </view>
-      <view class="bubble">
-        您的简历已放入我公司人才库，若有需要
-      </view>
-    </view>
-    <view class="item right">
-      <view class="img_box">
-        <image src="../../images/people_girl.png" mode="widthFix"></image>
-      </view>
-      <view class="bubble">
-        底部
-      </view>
-    </view>
-  </view>
-  <view class="put_box">
+  </scroll-view>
+  <view class="put_box" style="bottom: {{top}}px">
     <view class="put">
-      <input type="text" placeholder="和 Ta 聊聊" />
+      <input 
+        type="text" 
+        placeholder="和 Ta 聊聊" 
+        value="{{sendText}}"
+        bindinput="adInputChange"
+        bindconfirm="bindconfirm"
+        confirm-hold="{{true}}"
+        confirm-type="send"
+        bindfocus="test"
+        bindblur="end"
+        adjust-position="{{false}}"
+      />
     </view>
   </view>
 </view>

@@ -4,6 +4,8 @@ page {
 }
 .container .list {
   padding: 26rpx;
+  box-sizing: border-box;
+  transition: 0.3s;
 }
 .container .list .item {
   display: flex;
@@ -64,6 +66,7 @@ page {
 .container .put_box {
   position: fixed;
   bottom: 0;
+  transition: 0.3s;
   left: 0;
   background: #fff;
   width: 100%;
@@ -82,7 +85,6 @@ page {
   background: #f1f1f1;
   width: 100%;
   font-size: 24rpx;
-  padding: 10rpx;
-  text-indent: 1rem;
+  padding-left: 26rpx;
   box-sizing: border-box;
 }
