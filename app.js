@@ -1,4 +1,5 @@
 //app.js
+const base64 = require('./utils/base64').Base64;
 App({
   onLaunch: function () {
     // 展示本地存储能力
@@ -32,6 +33,21 @@ App({
         }
       }
     })
+    let unionid = wx.getStorageSync('unionid');
+    unionid = base64.encode(unionid);
+    wx.connectSocket({
+      url: 'ws://192.168.1.104:8085', //app.appData.socket
+      header:{
+        'content-type': 'application/json',
+        'unionid': unionid
+      },
+    })
+    //监听WebSocket连接打开事件。
+    wx.onSocketOpen(function(res) {
+      console.log('WebSocket连接已打开！');
+    });
+
+
   },
   globalData: {
     userInfo: null,

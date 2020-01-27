@@ -1,7 +1,7 @@
 <!--pages/message/message.wxml-->
 <view class="container">
     <view id="messageList">
-        <view class="item" bindtap="toDetail">
+        <view class="item" bindtap="toDetail" data-id="onmaV07KFbndEt5JwBXCuIlc-cvo">
             <view class="imgBox">
                 <image class="" src="../../images/people_man.png" mode="widthFix"></image>
             </view>
@@ -14,7 +14,7 @@
             </view>
             <view class="time">昨天 13:22</view>
         </view>
-        <view class="item" bindtap="toDetail">
+        <view class="item" bindtap="toDetail" data-id="onmaV0zqVcbRWLuWPylTFqpgbYk8">
             <view class="imgBox">
                 <image class="" src="../../images/people_girl.png" mode="widthFix"></image>
             </view>

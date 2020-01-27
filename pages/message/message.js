@@ -64,9 +64,10 @@ Page({
 
   },
 
-  toDetail () {
+  toDetail (e) {
+    let id = e.currentTarget.dataset.id;
     wx.navigateTo({
-      url: '/pages/msg-detail/msg-detail'
+      url: `/pages/msg-detail/msg-detail?id=${id}`
     })
   }
 })
