@@ -3,8 +3,12 @@ page {
   padding-bottom: 100rpx;
 }
 .container {
+  // overflow: hidden;
   .list {
     padding: 26rpx;
+    // padding-bottom: 0;
+    box-sizing: border-box;
+    transition: 0.3s;
     .item {
       display: flex;
       margin: 40rpx 0;
@@ -67,6 +71,7 @@ page {
   .put_box {
     position: fixed;
     bottom: 0;
+    transition: 0.3s;
     left: 0;
     background: #fff;
     width: 100%;
@@ -83,8 +88,7 @@ page {
         background: #f1f1f1;
         width: 100%;
         font-size: 24rpx;
-        padding: 10rpx;
-        text-indent: 1rem;
+        padding-left: 26rpx;
         box-sizing: border-box;
       }
     }
