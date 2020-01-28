@@ -7,7 +7,7 @@
     scroll-with-animation="{{true}}"
   >
     <view 
-      class="item {{item.origin == 'self' ? 'right' : 'left'}}" 
+      class="item {{item.sendId === otherEncrypt ? 'left' : 'right'}}" 
       wx:for="{{list}}" 
       wx:key="{{index}}"
       id="item{{index}}"
@@ -15,7 +15,7 @@
       <view class="img_box">
         <image src="../../images/people_girl.png" mode="widthFix"></image>
       </view>
-      <view class="bubble">{{item.text}}</view>
+      <view class="bubble">{{item.data}}</view>
     </view>
   </scroll-view>
   <view class="put_box" style="bottom: {{top}}px">

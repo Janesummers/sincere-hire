@@ -13,7 +13,8 @@ Page({
     toLast: 'item',
     list: [],
     sendText: '',
-    other: ''
+    other: '',
+    otherEncrypt: ''
   },
 
   /**
@@ -26,6 +27,12 @@ Page({
     let height = wx.getSystemInfoSync().windowHeight - 50;
     console.log(height)
 
+    if (wx.getStorageSync(`to_${base64.encode(options.id)}`)) {
+      this.setData({
+        list: wx.getStorageSync(`to_${base64.encode(options.id)}`)
+      })
+    }
+
     if (!this.data.socket_open) {
       this.wssInit();
     }
@@ -33,7 +40,8 @@ Page({
     this.setData({
       height,
       originHeight: height,
-      other: options.id
+      other: options.id,
+      otherEncrypt: base64.encode(options.id)
     }, () => {
       this.setData({
         toLast: `item${this.data.list.length - 1}`
@@ -65,15 +73,36 @@ Page({
   onReady: function () {
     wx.onSocketMessage(data => {
       // data
-      console.log(data)
+      var chatList = wx.getStorageSync(`to_${this.data.otherEncrypt}`);
+      var unionid = wx.getStorageSync('unionid');
+      data = JSON.parse(data.data)
+      console.log(data.all)
+      if (chatList) {
+        chatList.push({
+          data: data.msg,
+          sendId: base64.encode(this.data.other),
+          acceptId: base64.encode(unionid),
+          time: ''
+        });
+        wx.setStorageSync(`to_${this.data.otherEncrypt}`, chatList);
+      } else {
+        wx.setStorageSync(`to_${this.data.otherEncrypt}`, [
+          JSON.parse(data.all)
+        ]);
+      }
       let list = this.data.list;
       list.push({
-        img: '',
-        text: data.data,
-        origin: 'other'
+        data: data.msg,
+        sendId: base64.encode(this.data.other),
+        acceptId: base64.encode(unionid),
+        time: ''
       })
       this.setData({
         list
+      }, () => {
+        this.setData({
+          toLast: `item${this.data.list.length - 1}`
+        })
       })
     })
   },
@@ -156,6 +185,19 @@ Page({
   bindconfirm (e) {
     let list = this.data.list;
     let unionid = wx.getStorageSync('unionid');
+    var chatList = wx.getStorageSync(`to_${this.data.otherEncrypt}`);
+    var all = {
+      data: e.detail.value,
+      sendId: base64.encode(unionid),
+      acceptId: base64.encode(this.data.other),
+      time: ''
+    };
+    if (chatList) {
+      chatList.push(all);
+      wx.setStorageSync(`to_${this.data.otherEncrypt}`, chatList);
+    } else {
+      wx.setStorageSync(`to_${this.data.otherEncrypt}`, [all]);
+    }
     let data = JSON.stringify({
       msg: e.detail.value,
       client: base64.encode(unionid),
@@ -165,9 +207,10 @@ Page({
       data
     })
     list.push({
-      img: '',
-      text: e.detail.value,
-      origin: 'self'
+      data: e.detail.value,
+      sendId: base64.encode(unionid),
+      acceptId: base64.encode(this.data.other),
+      time: ''
     })
     this.setData({
       list
