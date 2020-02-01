@@ -60,7 +60,7 @@
   box-shadow: 0 10rpx 50rpx #36b3f0;
 }
 .container .rule .item .rule_text {
-  line-height: 132px;
+  line-height: 240rpx;
   font-size: 40rpx;
   color: #fff;
   margin-left: 60rpx;

@@ -1,18 +1,38 @@
 // pages/message/message.js
+const base64 = require('../../utils/base64').Base64;
+const app = getApp();
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-
+    list: []
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-
+    let unionid = wx.getStorageSync('unionid');
+    wx.request({
+      url: `${app.globalData.UrlHeadAddress}/getMessageList`,
+      method: 'POST',
+      data: { id: base64.encode(unionid)},
+      header: {
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+      success: res => {
+        console.log(res.data.data)
+        let list = res.data.data;
+        this.setData({
+          list
+        })
+      },
+      fail: function() {
+        // fail
+      }
+    })
   },
 
   /**

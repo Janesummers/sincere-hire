@@ -1,27 +1,14 @@
 <!--pages/message/message.wxml-->
 <view class="container">
     <view id="messageList">
-        <view class="item" bindtap="toDetail" data-id="onmaV07KFbndEt5JwBXCuIlc-cvo">
+        <view class="item" bindtap="toDetail" data-id="{{item.unionid}}" wx:for="{{list}}" wx:key="index">
             <view class="imgBox">
                 <image class="" src="../../images/people_man.png" mode="widthFix"></image>
             </view>
             <view class="info">
                 <view class="top">
-                    <view class="name">陈立权</view>
-                    <view class="company">福建探极贸易有限公司</view>
-                </view>
-                <view class="message">我觉得你很适合我们的这个岗位，可以来谈一谈吗</view>
-            </view>
-            <view class="time">昨天 13:22</view>
-        </view>
-        <view class="item" bindtap="toDetail" data-id="onmaV0zqVcbRWLuWPylTFqpgbYk8">
-            <view class="imgBox">
-                <image class="" src="../../images/people_girl.png" mode="widthFix"></image>
-            </view>
-            <view class="info">
-                <view class="top">
-                    <view class="name">喻小姐</view>
-                    <view class="company">漳州有时网络科技有限公司</view>
+                    <view class="name">{{item.nickname}}</view>
+                    <view class="company">{{item.company}}</view>
                 </view>
                 <view class="message">我觉得你很适合我们的这个岗位，可以来谈一谈吗</view>
             </view>

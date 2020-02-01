@@ -1,11 +1,19 @@
 page {
   background: #f1f1f1;
   padding-bottom: 100rpx;
+  overflow: hidden;
+  height: 100%;
 }
 .container .list {
   padding: 26rpx;
+  padding-bottom: 0;
   box-sizing: border-box;
   transition: 0.3s;
+  position: absolute;
+  margin-bottom: 20px;
+}
+.container .list .line {
+  height: 1px;
 }
 .container .list .item {
   display: flex;
@@ -77,7 +85,7 @@ page {
   padding: 0 20rpx;
 }
 .container .put_box .put {
-  width: 90%;
+  width: 100%;
 }
 .container .put_box .put input {
   border-radius: 30px;

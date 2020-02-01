@@ -14,44 +14,44 @@ Page({
     list: [],
     sendText: '',
     other: '',
-    otherEncrypt: ''
+    otherEncrypt: '',
+    listTop: 50
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    console.log(options)
-
-    // console.log(height = wx.getSystemInfoSync().windowHeight)
-    let height = wx.getSystemInfoSync().windowHeight - 50;
-    console.log(height)
-
-    if (wx.getStorageSync(`to_${base64.encode(options.id)}`)) {
+    let height = wx.getSystemInfoSync().windowHeight - 55;
+    let data = wx.getStorageSync('chat');
+    let id = base64.encode(options.id);
+    if (data) {
       this.setData({
-        list: wx.getStorageSync(`to_${base64.encode(options.id)}`)
+        list: data[id]
       })
     }
 
-    if (!this.data.socket_open) {
-      this.wssInit();
+    if (this.data.list.length * 66 > height) {
+      this.setData({
+        listTop: 0
+      })
     }
 
     this.setData({
       height,
       originHeight: height,
       other: options.id,
-      otherEncrypt: base64.encode(options.id)
+      otherEncrypt: id
     }, () => {
       this.setData({
         toLast: `item${this.data.list.length - 1}`
       })
     })
+    
     wx.onKeyboardHeightChange(res => {
       if (res.height != 0 && res.height > parseInt(this.data.keyHeight)) {
-        console.log(res)
         let height = parseInt(this.data.height);
-        height = height - parseInt(res.height) - 50
+        height = height - parseInt(res.height) - 55
         this.setData({
           height,
           keyHeight: res.height,
@@ -61,42 +61,45 @@ Page({
     })
   },
 
-  wssInit() {
-    var that = this;
-    //建立连接
-    
-  },
-
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
     wx.onSocketMessage(data => {
       // data
-      var chatList = wx.getStorageSync(`to_${this.data.otherEncrypt}`);
+      var chatList = wx.getStorageSync('chat');
       var unionid = wx.getStorageSync('unionid');
-      data = JSON.parse(data.data)
-      console.log(data.all)
+      data = JSON.parse(data.data);
+      let sendId = this.data.otherEncrypt;
       if (chatList) {
-        chatList.push({
+        chatList[sendId].push({
           data: data.msg,
-          sendId: base64.encode(this.data.other),
+          sendId: sendId,
           acceptId: base64.encode(unionid),
-          time: ''
+          time: new Date(Number(data.all.time))
         });
-        wx.setStorageSync(`to_${this.data.otherEncrypt}`, chatList);
+        wx.setStorageSync('chat', chatList);
       } else {
-        wx.setStorageSync(`to_${this.data.otherEncrypt}`, [
-          JSON.parse(data.all)
-        ]);
+        let obj = {};
+        obj[sendId] = [JSON.parse(data.all)]
+        wx.setStorageSync('chat', obj);
       }
+
+      
+
+      
       let list = this.data.list;
       list.push({
         data: data.msg,
-        sendId: base64.encode(this.data.other),
+        sendId: sendId,
         acceptId: base64.encode(unionid),
-        time: ''
+        time: new Date(Number(data.all.time))
       })
+      if (list.length * 66 > this.data.originHeight) {
+        this.setData({
+          listTop: 0
+        })
+      }
       this.setData({
         list
       }, () => {
@@ -107,50 +110,11 @@ Page({
     })
   },
 
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-
+  getTime () {
+    return new Date().getTime().toString();
   },
 
   test () {
-    console.log("唤起")
     let top = this.data.keyHeight
     let height = parseInt(this.data.height);
     height = height - parseInt(top)
@@ -163,13 +127,11 @@ Page({
         this.setData({
           toLast: `item${this.data.list.length - 1}`
         })
-      }, 50);
+      }, 100);
     })
-    
   },
 
   end () {
-    console.log("收")
     let height = parseInt(this.data.originHeight);
     this.setData({
       height,
@@ -185,23 +147,38 @@ Page({
   bindconfirm (e) {
     let list = this.data.list;
     let unionid = wx.getStorageSync('unionid');
-    var chatList = wx.getStorageSync(`to_${this.data.otherEncrypt}`);
-    var all = {
+    let chatList = wx.getStorageSync('chat');
+    let time = this.getTime();
+    let acceptId = this.data.otherEncrypt;
+    let all = {
       data: e.detail.value,
       sendId: base64.encode(unionid),
-      acceptId: base64.encode(this.data.other),
-      time: ''
+      acceptId,
+      time
     };
+
+    this.setData({
+      sendText: ''
+    })
+
     if (chatList) {
-      chatList.push(all);
-      wx.setStorageSync(`to_${this.data.otherEncrypt}`, chatList);
+      chatList[acceptId].push({
+        data: e.detail.value,
+        sendId: base64.encode(unionid),
+        acceptId,
+        time: new Date(Number(time))
+      });
+      wx.setStorageSync('chat', chatList);
     } else {
-      wx.setStorageSync(`to_${this.data.otherEncrypt}`, [all]);
+      let obj = {};
+      obj[acceptId] = [all]
+      wx.setStorageSync('chat', obj);
     }
     let data = JSON.stringify({
       msg: e.detail.value,
       client: base64.encode(unionid),
-      to: base64.encode(this.data.other)
+      to: acceptId,
+      time: all.time
     })
     wx.sendSocketMessage({
       data
@@ -209,17 +186,20 @@ Page({
     list.push({
       data: e.detail.value,
       sendId: base64.encode(unionid),
-      acceptId: base64.encode(this.data.other),
-      time: ''
+      acceptId,
+      time: all.time
     })
     this.setData({
       list
     }, () => {
       this.setData({
-        toLast: `item${this.data.list.length - 1}`,
-        sendText: ''
+        toLast: `item${this.data.list.length - 1}`
       })
     })
+  },
+
+  clear () {
+    wx.removeStorageSync('chat')
   },
 
   adInputChange (e) {

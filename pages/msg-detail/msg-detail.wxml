@@ -1,7 +1,7 @@
 <view class="container">
   <scroll-view 
     class="list" 
-    style="height: {{height}}px;" 
+    style="height: {{originHeight - 20}}px;top: {{list.length * 55 > keyHeight ? 0 : top}}px;"
     scroll-y="{{true}}" 
     scroll-into-view="{{toLast}}" 
     scroll-with-animation="{{true}}"
@@ -10,15 +10,16 @@
       class="item {{item.sendId === otherEncrypt ? 'left' : 'right'}}" 
       wx:for="{{list}}" 
       wx:key="{{index}}"
-      id="item{{index}}"
+      
     >
       <view class="img_box">
         <image src="../../images/people_girl.png" mode="widthFix"></image>
       </view>
       <view class="bubble">{{item.data}}</view>
     </view>
+    <view class="line" id="item{{list.length - 1}}"></view>
   </scroll-view>
-  <view class="put_box" style="bottom: {{top}}px">
+  <view class="put_box">
     <view class="put">
       <input 
         type="text" 
@@ -30,8 +31,10 @@
         confirm-type="send"
         bindfocus="test"
         bindblur="end"
-        adjust-position="{{false}}"
       />
     </view>
+    <view class="clear" bindtap="clear">
+        清理本地
+      </view>
   </view>
 </view>

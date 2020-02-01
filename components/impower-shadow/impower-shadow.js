@@ -25,37 +25,38 @@ Component({
    */
   methods: {
     getUser (e) {
-      // console.log(e)
-      let encryptedData = encodeURIComponent(e.detail.encryptedData);
-      let iv = encodeURIComponent(e.detail.iv);
-      wx.login({
-        success: res => {
-          wx.request({
-            url: `${app.globalData.UrlHeadAddress}/login`,
-            method: 'POST',
-            data: { code: res.code, encryptedData, iv},
-            header: {
-              "Content-Type": "application/x-www-form-urlencoded"
-            },
-            success: res => {
-              console.log(res)
-              let unionid = res.data.data[0].unionid || res.data.data;
-              wx.setStorageSync('unionid', unionid)
-              this.triggerEvent('getUser', { data: res })
-            },
-            fail: function() {
-              // fail
-            }
-          })
-        },
-        fail: function() {
-          // fail
-        },
-        complete: function() {
-          // complete
-        }
-      })
-      
+      console.log(e)
+      if (e.detail.errMsg.indexOf("fail") == -1) {
+        let encryptedData = encodeURIComponent(e.detail.encryptedData);
+        let iv = encodeURIComponent(e.detail.iv);
+        wx.login({
+          success: res => {
+            wx.request({
+              url: `${app.globalData.UrlHeadAddress}/login`,
+              method: 'POST',
+              data: { code: res.code, encryptedData, iv},
+              header: {
+                "Content-Type": "application/x-www-form-urlencoded"
+              },
+              success: res => {
+                console.log(res)
+                let unionid = res.data.data[0].unionid || res.data.data;
+                wx.setStorageSync('unionid', unionid)
+                this.triggerEvent('getUser', { data: res })
+              },
+              fail: function() {
+                // fail
+              }
+            })
+          },
+          fail: function() {
+            // fail
+          },
+          complete: function() {
+            // complete
+          }
+        })
+      }
     }
   }
 })

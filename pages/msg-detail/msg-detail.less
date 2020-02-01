@@ -1,14 +1,23 @@
 page {
   background: rgb(241, 241, 241);
+  // padding-top: 50px;
   padding-bottom: 100rpx;
+  overflow: hidden;
+  // position: relative;
+  height: 100%;
 }
 .container {
   // overflow: hidden;
   .list {
     padding: 26rpx;
-    // padding-bottom: 0;
+    padding-bottom: 0;
     box-sizing: border-box;
     transition: 0.3s;
+    position: absolute;
+    margin-bottom: 20px;
+    .line {
+      height: 1px;
+    }
     .item {
       display: flex;
       margin: 40rpx 0;
@@ -81,7 +90,7 @@ page {
     box-sizing: border-box;
     padding: 0 20rpx;
     .put {
-      width: 90%;
+      width: 100%;
       input {
         border-radius: 30px;
         height: 60rpx;
