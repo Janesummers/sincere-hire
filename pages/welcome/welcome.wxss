@@ -6,6 +6,13 @@
   padding: 100rpx 0;
   text-align: center;
   color: #313131;
+  font-weight: 500;
+}
+.container .picker {
+  color: #737373;
+}
+.container .pickerActive {
+  color: #1d1d1d;
 }
 .container .rule {
   display: flex;
@@ -202,4 +209,37 @@
 .container .recruiters .edit .list .item .text {
   font-size: 32rpx;
   font-weight: 500;
+  position: relative;
+}
+.container .jobSeeker .edit .list .item .text textarea,
+.container .recruiters .edit .list .item .text textarea {
+  margin-top: 20rpx;
+  border: 1px solid #eee;
+  box-sizing: border-box;
+  width: 100%;
+  border-radius: 20rpx;
+  padding: 10rpx;
+  height: 260rpx;
+}
+.container .jobSeeker .edit .list .item .text .keyword,
+.container .recruiters .edit .list .item .text .keyword {
+  position: absolute;
+  z-index: 1000;
+  width: 100%;
+  transition: 0.5s;
+  max-height: 170px;
+  background: #f3f3f3;
+  overflow-y: scroll;
+}
+.container .jobSeeker .edit .list .item .text .keyword .word,
+.container .recruiters .edit .list .item .text .keyword .word {
+  height: 80rpx;
+  line-height: 80rpx;
+  box-sizing: border-box;
+  border-bottom: 1px solid #dbdada;
+  margin: 0 30rpx;
+}
+.container .jobSeeker .edit .list .item .text .keyword .word:last-of-type,
+.container .recruiters .edit .list .item .text .keyword .word:last-of-type {
+  border-bottom: 0;
 }

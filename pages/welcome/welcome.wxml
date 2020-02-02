@@ -18,17 +18,17 @@
   </view>
   <view class="jobSeeker" style="top: {{top}}; height: {{height * 0.92}}px;" wx:if="{{isShow}}">
     <view class="top">
-      <view class="close" bindtap="close" data-rule="job_seeker">取消</view>
+      <view class="close" bindtap="{{slide_current != 0 ? 'prev' : 'close'}}" data-rule="job_seeker">{{slide_current != 0 ? '上一步' : '取消'}}</view>
       <view class="text">创建简历（{{slide_current + 1}}/3）</view>
       <view class="next" bindtap="{{nextText == '完成' ? 'editDone' : 'nextStep'}}" data-rule="job_seeker">{{nextText}}</view>
     </view>
     <swiper class="slide" 
       current="{{slide_current}}" 
-      bindanimationfinish="changeCurrent" 
+      bindanimationfinish="changeCurrent"
       duration="200"
       data-rule="job_seeker"
     >
-      <swiper-item class="" item-id="">
+      <swiper-item class="" item-id="" catchtouchmove='catchTouchMove'>
         <view class="edit">
           <view class="head_portrait">
             <view class="head">
@@ -40,25 +40,54 @@
             <view class="item">
               <view class="little_title">名字</view>
               <view class="text">
-                <input type="text" placeholder="请输入姓名" />
+                <input 
+                  type="text" 
+                  placeholder="请输入姓名"
+                  value="{{job_seeker.name}}"
+                  bindinput="jobSeekerPut"
+                  data-key="name"
+                />
               </view>
             </view>
             <view class="item">
               <view class="little_title">生日</view>
               <view class="text">
-                <input type="text" placeholder="点击选择日期" />
+                <picker 
+                  mode="multiSelector"
+                  value="{{job_seeker.birthday}}"
+                  bindchange="jobSeekerPut" 
+                  data-key="birthday"
+                  value="{{birthIndex}}" 
+                  range="{{selectBirthday}}"
+                >
+                  <view class="{{job_seeker.birthday == '' ? 'picker' : 'pickerActive'}}">
+                    <view wx:if="{{job_seeker.birthday == ''}}">点击选择日期</view>
+                    {{job_seeker.birthday}}
+                  </view>
+                </picker>
               </view>
             </view>
             <view class="item">
               <view class="little_title">性别</view>
               <view class="text">
-                <input type="text" placeholder="点击选择性别" />
+                <picker mode="selector" bindchange="jobSeekerPut" data-key="sex" range="{{sex}}" value="{{sexIndex}}">
+                  <view class="{{job_seeker.sex == '' ? 'picker' : 'pickerActive'}}">
+                    <view wx:if="{{job_seeker.sex == ''}}">点击选择性别</view>
+                    {{job_seeker.sex}}
+                  </view>
+                </picker>
               </view>
             </view>
             <view class="item">
               <view class="little_title">联系邮箱</view>
               <view class="text">
-                <input type="text" placeholder="请输入邮箱" />
+                <input 
+                  type="text" 
+                  placeholder="请输入邮箱" 
+                  value="{{job_seeker.email}}"
+                  bindinput="jobSeekerPut"
+                  data-key="email"
+                />
               </view>
             </view>
           </view>
@@ -66,38 +95,103 @@
             <view class="item">
               <view class="little_title">所在城市</view>
               <view class="text">
-                <input type="text" placeholder="点击选择城市" />
+                <picker 
+                  mode="multiSelector" 
+                  value="{{cityIndex}}" 
+                  range="{{selectCity}}"
+                  bindchange="cityChange"
+                  bindcolumnchange="cityColumnChange"
+                >
+                  <view class="{{job_seeker.city == '' ? 'picker' : 'pickerActive'}}">
+                    <view wx:if="{{job_seeker.city == ''}}">点击选择城市</view>
+                    {{job_seeker.city}}
+                  </view>
+                </picker>
               </view>
             </view>
             <view class="item">
               <view class="little_title">当前身份</view>
               <view class="text">
-                <input type="text" placeholder="点击选择身份" />
+                <picker mode="selector" bindchange="jobSeekerPut" data-key="identity" range="{{identity}}" value="{{identityIndex}}">
+                  <view class="{{job_seeker.identity == '' ? 'picker' : 'pickerActive'}}">
+                    <view wx:if="{{job_seeker.identity == ''}}">点击选择身份</view>
+                    {{job_seeker.identity}}
+                  </view>
+                </picker>
               </view>
             </view>
           </view>
         </view>
       </swiper-item>
-      <swiper-item class="" item-id="">
+      <swiper-item class="" item-id="" catchtouchmove='catchTouchMove'>
         <view class="edit">
           <view class="title">填写教育经历</view>
           <view class="list">
             <view class="item">
               <view class="little_title">学校名称</view>
               <view class="text">
-                <input type="text" placeholder="请输入" />
+                <input 
+                  type="text" 
+                  placeholder="请输入"
+                  value="{{job_seeker.school}}"
+                  bindinput="schoolFilterFn"
+                  data-key="school"
+                  bindfocus="schoolPutFocus"
+                />
+                <scroll-view 
+                  class="keyword" 
+                  scroll-y="{{true}}"
+                  scroll-with-animation="{{true}}"
+                  wx:if="{{chooseSchool}}"
+                >
+                  <view 
+                    class="word" 
+                    wx:for="{{schoolFilter}}" 
+                    wx:key="index"
+                    bindtap="chooseWord"
+                    data-word="{{item}}"
+                    data-key="school"
+                  >{{item}}</view>
+                </scroll-view>
               </view>
             </view>
             <view class="item">
               <view class="little_title">专业名称</view>
               <view class="text">
-                <input type="text" placeholder="请输入" />
+                <input 
+                  type="text" 
+                  placeholder="请输入"
+                  value="{{job_seeker.major}}"
+                  bindinput="majorFilterFn"
+                  data-key="major"
+                  bindfocus="majorPutFocus" 
+                />
+                <scroll-view 
+                  class="keyword" 
+                  scroll-y="{{true}}"
+                  scroll-with-animation="{{true}}"
+                  wx:if="{{chooseMajor}}"
+                >
+                  <view 
+                    class="word" 
+                    wx:for="{{majorFilter}}" 
+                    wx:key="index"
+                    bindtap="chooseWord"
+                    data-word="{{item}}"
+                    data-key="major"
+                  >{{item}}</view>
+                </scroll-view>
               </view>
             </view>
             <view class="item">
               <view class="little_title">学历</view>
               <view class="text">
-                <input type="text" placeholder="请填写" />
+                <picker mode="selector" bindchange="jobSeekerPut" data-key="education" range="{{education}}" value="{{educationIndex}}">
+                  <view class="{{job_seeker.education == '' ? 'picker' : 'pickerActive'}}">
+                    <view wx:if="{{job_seeker.education == ''}}">点击选择学历</view>
+                    {{job_seeker.education}}
+                  </view>
+                </picker>
               </view>
             </view>
           </view>
@@ -105,25 +199,49 @@
             <view class="item">
               <view class="little_title">入学时间</view>
               <view class="text">
-                <input type="text" placeholder="点击选择" />
+                <picker 
+                  mode="multiSelector"
+                  value="{{job_seeker.time_enrollment}}"
+                  bindchange="enrollmentChange" 
+                  data-key="time_enrollment"
+                  value="{{enrollmentIndex}}" 
+                  range="{{selectEnrollment}}"
+                >
+                  <view class="{{job_seeker.time_enrollment == '' ? 'picker' : 'pickerActive'}}">
+                    <view wx:if="{{job_seeker.time_enrollment == ''}}">点击选择日期</view>
+                    {{job_seeker.time_enrollment}}
+                  </view>
+                </picker>
               </view>
             </view>
-            <view class="item">
+            <view class="item" wx:if="{{job_seeker.time_enrollment != ''}}">
               <view class="little_title">毕业时间</view>
               <view class="text">
-                <input type="text" placeholder="点击选择" />
+                <picker 
+                  mode="multiSelector"
+                  value="{{job_seeker.time_graduation}}"
+                  bindchange="jobSeekerPut" 
+                  data-key="time_graduation"
+                  value="{{graduationIndex}}" 
+                  range="{{selectGraduation}}"
+                >
+                  <view class="{{job_seeker.time_graduation == '' ? 'picker' : 'pickerActive'}}">
+                    <view wx:if="{{job_seeker.time_graduation == ''}}">点击选择日期</view>
+                    {{job_seeker.time_graduation}}
+                  </view>
+                </picker>
               </view>
             </view>
           </view>
         </view>
       </swiper-item>
-      <swiper-item class="" item-id="">
+      <swiper-item class="" item-id="" catchtouchmove='catchTouchMove'>
         <view class="edit">
           <view class="info">
             <view class="left" hover-class="none" hover-stop-propagation="false">
-              <view class="name">姓名</view>
-              <view class="school">闽江学院/本科</view>
-              <view class="other">应届毕业生/22岁</view>
+              <view class="name">{{job_seeker.name}}</view>
+              <view class="school">{{job_seeker.school}}/{{job_seeker.major}}</view>
+              <view class="other">{{status}}/{{age}}岁</view>
             </view>
             <view class="right" hover-class="none" hover-stop-propagation="false">
               <view class="head_portrait">
@@ -137,15 +255,25 @@
             <view class="item">
               <view class="little_title">个人优势</view>
               <view class="text">
-                <input type="text" placeholder="请填写" />
+                <textarea
+                  placeholder="请填写"
+                  value="{{job_seeker.advantage}}"
+                  bindinput="jobSeekerPut"
+                  data-key="advantage"
+                ></textarea>
               </view>
             </view>
-            <view class="item">
+            <!-- <view class="item">
               <view class="little_title">综合能力</view>
               <view class="text">
-                <input type="text" placeholder="请填写" />
+                <textarea 
+                  placeholder="请填写"
+                  value="{{job_seeker.synthetic_ability}}"
+                  bindinput="jobSeekerPut"
+                  data-key="synthetic_ability"
+                ></textarea>
               </view>
-            </view>
+            </view> -->
           </view>
         </view>
       </swiper-item>
@@ -153,7 +281,7 @@
   </view>
   <view class="recruiters" style="top: {{rec_top}}; height: {{height}}px" wx:if="{{isShow2}}">
     <view class="top">
-      <view class="close" bindtap="close" data-rule="recruiter">取消</view>
+      <view class="close" bindtap="{{slide_current2 != 0 ? 'prev' : 'close'}}" data-rule="recruiter">{{slide_current2 != 0 ? '上一步' : '取消'}}</view>
       <view class="text">基本信息</view>
       <view class="next" bindtap="{{nextText2 == '创建' ? 'editDone' : 'nextStep'}}" data-rule="recruiter">{{nextText2}}</view>
     </view>
@@ -163,7 +291,7 @@
       duration="200" 
       data-rule="recruiter"
     >
-      <swiper-item class="" item-id="">
+      <swiper-item class="" item-id="" catchtouchmove='catchTouchMove'>
         <view class="edit">
           <view class="head_portrait">
             <view class="head">
@@ -201,7 +329,7 @@
           </view>
         </view>
       </swiper-item>
-      <swiper-item class="" item-id="">
+      <swiper-item class="" item-id="" catchtouchmove='catchTouchMove'>
         <view class="edit">
           <view class="info">
             <view class="left" hover-class="none" hover-stop-propagation="false">

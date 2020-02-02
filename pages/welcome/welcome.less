@@ -5,6 +5,13 @@
     padding: 100rpx 0;
     text-align: center;
     color: rgb(49, 49, 49);
+    font-weight: 500;
+  }
+  .picker {
+    color: #737373;
+  }
+  .pickerActive {
+    color: #1d1d1d;
   }
   .rule {
     display: flex;
@@ -180,6 +187,35 @@
           .text {
             font-size: 32rpx;
             font-weight: 500;
+            position: relative;
+            textarea {
+              margin-top: 20rpx;
+              border: 1px solid #eee;
+              box-sizing: border-box;
+              width: 100%;
+              border-radius: 20rpx;
+              padding: 10rpx;
+              height: 260rpx;
+            }
+            .keyword {
+              position: absolute;
+              z-index: 1000;
+              width: 100%;
+              transition: 0.5s;
+              max-height: 170px;
+              background: #f3f3f3;
+              overflow-y: scroll;
+              .word {
+                height: 80rpx;
+                line-height: 80rpx;
+                box-sizing: border-box;
+                border-bottom: 1px solid #dbdada;
+                margin: 0 30rpx;
+                &:last-of-type {
+                  border-bottom: 0;
+                }
+              }
+            }
           }
         }
       }
