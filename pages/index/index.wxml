@@ -4,10 +4,10 @@
   <view id="bannerBox">
     <swiper id="banner" indicator-dots="{{true}}" indicator-active-color="#fff">
       <swiper-item>
-        <image src="../../images/banner1.jpg"></image>
+        <image src="../../images/banner1.png"></image>
       </swiper-item>
       <swiper-item>
-        <image src="../../images/banner2.jpg"></image>
+        <image src="../../images/banner2.png"></image>
       </swiper-item>
     </swiper>
   </view>
