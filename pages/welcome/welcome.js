@@ -15,7 +15,7 @@ Page({
     height: '',
     rec_top: '100%',
     isShow: false,
-    slide_current: 1,
+    slide_current: 0,
     isShow2: false,
     slide_current2: 0,
     nextText: '下一步',
@@ -35,7 +35,21 @@ Page({
       advantage: '',
       synthetic_ability: ''
     },
-    emailCheck: true,
+    recruiter: {
+      name: '陈立权',
+      email: '1752321720@qq.com',
+      position: '经理',
+      company: '福建探极贸易有限公司',
+      industry: '电子商务',
+      scale: '15-50人',
+      progress: '天使轮',
+      industryArr: ['不限', '移动互联网', '电子商务', '金融', '企业服务', '文化娱乐', '游戏', '招聘', '信息安全', '其他'],
+      industryIndex: 0,
+      scaleArr: ['少于15人', '15-50人', '50-150人', '150-500人', '500-2000人', '2000人以上'],
+      scaleIndex: 0,
+      progressArr: ['未融资', '天使轮', 'A轮', 'B轮', 'C轮', 'D轮及以上', '上市公司', '不需要融资'],
+      progressIndex: 0
+    },
     sexIndex: 0,
     identityIndex: 0,
     cityIndex: [0, 0],
@@ -287,8 +301,8 @@ Page({
   nextStep (e) {
     if (e.currentTarget.dataset.rule == 'job_seeker') {
       let slide_current = parseInt(this.data.slide_current);
-      let emailCheck = this.data.emailCheck;
       if (slide_current == 0) {
+        let emailCheck = false;
         let {name, birthday, sex, email, city, identity} = this.data.job_seeker
         let notPut = this.checkNotPut('job_seeker', {name, birthday, sex, email, city, identity})
         if (notPut) {
@@ -315,10 +329,18 @@ Page({
       }
     } else {
       let slide_current2 = parseInt(this.data.slide_current2);
-      slide_current2 < 1 ? slide_current2 += 1 : slide_current2;
-      this.setData({
-        slide_current2
-      })
+      let emailCheck = false;
+      let {name, email, position, company} = this.data.recruiter
+      let notPut = this.checkNotPut('job_seeker', {name, email, position, company})
+      if (notPut) {
+        emailCheck = this.checkEmail(email);
+        if (emailCheck) {
+          slide_current2 < 1 ? slide_current2 += 1 : slide_current2;
+          this.setData({
+            slide_current2
+          })
+        }
+      }
     }
   },
 
@@ -406,13 +428,13 @@ Page({
     let value = e.detail.value;
     let key = e.target.dataset.key;
     if (key == 'sex' || key == 'identity' || key == 'education') {
-      job_seeker[`${key}`] = this.data[key][value];
+      job_seeker[key] = this.data[key][value];
     } else if (key == 'birthday') {
       let age = 0;
       let selectBirthday = this.data.selectBirthday;
       let year = parseInt(selectBirthday[0][value[0]]);
       let month = selectBirthday[1][value[1]].replace('月', '');
-      job_seeker[`${key}`] = `${year}.${month}`;
+      job_seeker[key] = `${year}.${month}`;
       let date = new Date();
       if (parseInt(month) < date.getMonth() + 1) {
         age = new Date().getFullYear() - year;
@@ -432,12 +454,12 @@ Page({
       } else {
         status = `${year}.${month} 毕业`;
       }
-      job_seeker[`${key}`] = `${year}.${month}`;
+      job_seeker[key] = `${year}.${month}`;
       this.setData({
         status
       })
     } else {
-      job_seeker[`${key}`] = value;
+      job_seeker[key] = value;
     }
     this.setData({
       job_seeker
@@ -512,6 +534,21 @@ Page({
       case 'time_graduation': 
         hint = '请选择毕业时间';
         break;
+      case 'position': 
+        hint = '请输入职位';
+        break;
+      case 'company': 
+        hint = '请输入公司名称';
+        break;
+      case 'industry_field': 
+        hint = '请输入行业领域';
+        break;
+      case 'scale': 
+        hint = '请输入公司规模';
+        break;
+      case 'progress': 
+        hint = '请输入发展阶段';
+        break;
     }
     wx.showToast({
       title: hint,
@@ -558,7 +595,7 @@ Page({
     let key = e.target.dataset.key;
     let year = parseInt(selectEnrollment[0][value[0]]);
     let month = selectEnrollment[1][value[1]].replace('月', '');
-    job_seeker[`${key}`] = `${year}.${month}`;
+    job_seeker[key] = `${year}.${month}`;
     let time = new Date().getFullYear() + 5;
 
     for (let i = year; i <= time; i++) {
@@ -575,7 +612,7 @@ Page({
     let value = e.detail.value;
     let key = e.target.dataset.key;
     let job_seeker = this.data.job_seeker;
-    job_seeker[`${key}`] = value;
+    job_seeker[key] = value;
     this.setData({
       job_seeker
     })
@@ -603,7 +640,7 @@ Page({
     let value = e.detail.value;
     let key = e.target.dataset.key;
     let job_seeker = this.data.job_seeker;
-    job_seeker[`${key}`] = value;
+    job_seeker[key] = value;
     this.setData({
       job_seeker
     })
@@ -622,7 +659,7 @@ Page({
   chooseWord (e) {
     let {word, key} = e.target.dataset;
     let job_seeker = this.data.job_seeker;
-    job_seeker[`${key}`] = word;
+    job_seeker[key] = word;
     this.setData({
       job_seeker
     })
@@ -644,4 +681,19 @@ Page({
       })
     }
   },
+
+  recruiterPut (e) {
+    let value = e.detail.value;
+    let key = e.target.dataset.key;
+    let recruiter = this.data.recruiter;
+    if (key == 'industry' || key == 'scale' || key == 'progress') {
+      recruiter[key] = recruiter[`${key}Arr`][value];
+      recruiter[`${key}Index`] = value;
+    } else {
+      recruiter[key] = value;
+    }
+    this.setData({
+      recruiter
+    })
+  }
 })

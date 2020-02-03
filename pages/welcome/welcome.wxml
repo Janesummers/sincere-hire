@@ -303,13 +303,25 @@
             <view class="item">
               <view class="little_title">名字</view>
               <view class="text">
-                <input type="text" placeholder="请输入姓名" />
+                <input 
+                  type="text" 
+                  placeholder="请输入姓名" 
+                  value="{{recruiter.name}}"
+                  bindinput="recruiterPut"
+                  data-key="name"
+                />
               </view>
             </view>
             <view class="item">
               <view class="little_title">接收简历邮箱</view>
               <view class="text">
-                <input type="text" placeholder="请输入邮箱" />
+                <input 
+                  type="text" 
+                  placeholder="请输入邮箱" 
+                  value="{{recruiter.email}}"
+                  bindinput="recruiterPut"
+                  data-key="email"
+                />
               </view>
             </view>
           </view>
@@ -317,13 +329,25 @@
             <view class="item">
               <view class="little_title">职位</view>
               <view class="text">
-                <input type="text" placeholder="请填写" />
+                <input 
+                  type="text" 
+                  placeholder="请填写" 
+                  value="{{recruiter.position}}"
+                  bindinput="recruiterPut"
+                  data-key="position"
+                />
               </view>
             </view>
             <view class="item">
               <view class="little_title">公司全称</view>
               <view class="text">
-                <input type="text" placeholder="请填写" />
+                <input 
+                  type="text" 
+                  placeholder="请填写" 
+                  value="{{recruiter.company}}"
+                  bindinput="recruiterPut"
+                  data-key="company"
+                />
               </view>
             </view>
           </view>
@@ -333,9 +357,9 @@
         <view class="edit">
           <view class="info">
             <view class="left" hover-class="none" hover-stop-propagation="false">
-              <view class="name">姓名</view>
+              <view class="name">{{recruiter.name}}</view>
               <!-- <view class="school">闽江学院/本科</view> -->
-              <view class="profession">职业</view>
+              <view class="profession">{{recruiter.position}}</view>
             </view>
             <view class="right" hover-class="none" hover-stop-propagation="false">
               <view class="head_portrait">
@@ -349,25 +373,58 @@
             <view class="item">
               <view class="little_title">公司全称</view>
               <view class="text">
-                <input type="text" value="名称" />
+                <input type="text" value="{{recruiter.company}}" disabled="{{true}}" />
               </view>
             </view>
             <view class="item">
               <view class="little_title">行业领域</view>
               <view class="text">
-                <input type="text" placeholder="请填写" />
+                <picker 
+                  mode="selector" 
+                  bindchange="recruiterPut" 
+                  data-key="industry" 
+                  range="{{recruiter.industryArr}}" 
+                  value="{{recruiter.industryIndex}}"
+                >
+                  <view class="{{recruiter.industry == '' ? 'picker' : 'pickerActive'}}">
+                    <view wx:if="{{recruiter.industry == ''}}">点击选择行业领域</view>
+                    {{recruiter.industry}}
+                  </view>
+                </picker>
               </view>
             </view>
             <view class="item">
               <view class="little_title">公司规模</view>
               <view class="text">
-                <input type="text" placeholder="请填写" />
+                <picker 
+                  mode="selector" 
+                  bindchange="recruiterPut" 
+                  data-key="scale" 
+                  range="{{recruiter.scaleArr}}" 
+                  value="{{recruiter.scaleIndex}}"
+                >
+                  <view class="{{recruiter.scale == '' ? 'picker' : 'pickerActive'}}">
+                    <view wx:if="{{recruiter.scale == ''}}">点击选择公司规模</view>
+                    {{recruiter.scale}}
+                  </view>
+                </picker>
               </view>
             </view>
             <view class="item">
               <view class="little_title">发展阶段</view>
               <view class="text">
-                <input type="text" placeholder="请填写" />
+                <picker 
+                  mode="selector" 
+                  bindchange="recruiterPut" 
+                  data-key="progress" 
+                  range="{{recruiter.progressArr}}" 
+                  value="{{recruiter.progressIndex}}"
+                >
+                  <view class="{{recruiter.progress == '' ? 'picker' : 'pickerActive'}}">
+                    <view wx:if="{{recruiter.progress == ''}}">点击选择发展阶段</view>
+                    {{recruiter.progress}}
+                  </view>
+                </picker>
               </view>
             </view>
           </view>
