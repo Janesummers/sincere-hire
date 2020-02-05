@@ -9,30 +9,28 @@ try {
   }
 } catch (e) {
 }
-try {
-  var value = wx.getStorageSync('userInfo')
-  if (value) {
-    console.log(value)
-    app.globalData.userInfo = value
-  }
-} catch (e) {
-}
-function login(loginCallback, actions, datas, methods){
-  
-  var that = this
+// try {
+//   var value = wx.getStorageSync('userInfo')
+//   if (value) {
+//     console.log(value)
+//     app.globalData.userInfo = value
+//   }
+// } catch (e) {
+// }
+function login(loginCallback){
+
   const ep = new EventProxy()
 
   ep.all('code', 'unionid', (code, unionid) => {
     loginCallback();
-    wx.request({
-      url: `${app.globalData.UrlHeadAddress}api/user/keep-alive?unionid=${unionid}`,
-    })
+    // wx.request({
+    //   url: `${app.globalData.UrlHeadAddress}/api/user/keep-alive?unionid=${unionid}`,
+    // })
   })
 
   ep.fail(function(err){
     console.error(err)
-
-    login(loginCallback, actions, datas, methods)
+    login(loginCallback)
   })
 
 
@@ -40,7 +38,6 @@ function login(loginCallback, actions, datas, methods){
     success: function (res){
       if (res.code) {
         ep.emit('code', res.code)
-       
       } else {
         console.log('登录失败！' + res.errMsg)
         ep.emit('error', res.errMsg);
@@ -54,11 +51,14 @@ function login(loginCallback, actions, datas, methods){
 
 
   ep.all('code', (code) => {
-    console.log(app.globalData.user)
-    var user = wx.getStorageSync('user')
+    console.log(app.globalData.user);
+    var user = wx.getStorageSync('user');
     wx.request({
-      url: `${app.globalData.UrlHeadAddress}api/site/login`,
+      url: `${app.globalData.UrlHeadAddress}/qzApi/login`,
       method: 'post',
+      header: {
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
       data: {
         code: code,
         rawData: app.globalData.user.rawData ? app.globalData.user.rawData : user.rawData,
@@ -67,17 +67,24 @@ function login(loginCallback, actions, datas, methods){
         iv: app.globalData.user.iv ? app.globalData.user.iv : user.iv
       },
       success(res) {
-        app.globalData.unionid = res.data.unionid
-        console.log(res.data.unionid)
+        console.log(res)
+        let unionid = res.data.data.unionid || res.data.data[0].unionid;
+        if (res.data.data[0].unionid) {
+          try {
+            wx.setStorageSync('userInfo', res.data.data[0]);
+          } catch (e) {
+          }
+        }
+        app.globalData.unionid = unionid;
         try {
-          wx.setStorageSync('unionid', res.data.unionid)
+          wx.setStorageSync('unionid', unionid);
         } catch (e) {
         }
-        console.log('set', wx.getStorageSync('unionid'))
-        ep.emit('unionid', res.data.unionid)
+        console.log('set', wx.getStorageSync('unionid'));
+        ep.emit('unionid', unionid);
       },
       fail() {
-        ep.emit('error', '获取用户信息失败')
+        ep.emit('error', '获取用户信息失败');
       }
     })
 
@@ -90,26 +97,26 @@ function login(loginCallback, actions, datas, methods){
 
 }
 
-function request(action, query, data, method = 'get', reqesutCallback){
+function request(action, data, method, reqesutCallback){
   
-  if ( !app.globalData.unionid ){
-    console.log('暂无')
+  if (!app.globalData.unionid ){  // 调用请求时候查看用户unionid是否已获取
+    console.log('暂无 unionid')
     login(function(){
-      _request(action, query, data, method, reqesutCallback )
+      _request(action, data, method, reqesutCallback )
     }, action, data, method)
   }else{
-    console.log('已在')
+    console.log('unionid 已存在')
 
-    _request(action, query, data, method, reqesutCallback);
+    _request(action, data, method, reqesutCallback);
   }
 
 }
 
-function _request(action, query, data, method , reqesutCallback){
+function _request(action, data, method, reqesutCallback){
   wx.request({
-    url: `${app.globalData.UrlHeadAddress}api/${action}?unionid=${app.globalData.unionid}`,
-    headler: {
-      'content-type': 'application/json'
+    url: `${app.globalData.UrlHeadAddress}/qzApi/${action}?unionid=${app.globalData.unionid}`,
+    header: {
+      "Content-Type": "application/x-www-form-urlencoded"
     },
     method,
     success: function (res) {
@@ -118,7 +125,7 @@ function _request(action, query, data, method , reqesutCallback){
     data,
     fail: function () {
       console.log("失败")
-      request(ction, query, data, method, reqesutCallback)
+      request(action, data, method, reqesutCallback)
     }
   })
 }
