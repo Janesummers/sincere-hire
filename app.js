@@ -37,7 +37,7 @@ App({
     let unionid = wx.getStorageSync('unionid');
     unionid = base64.encode(unionid);
     wx.connectSocket({
-      url: 'ws://192.168.1.104:8085', //wss://www.chiens.cn/wss
+      url: 'ws://192.168.1.104:8085', //wss://www.chiens.cn/wss  ws://192.168.1.104:8085
       header:{
         'content-type': 'application/json',
         'unionid': unionid
@@ -50,9 +50,10 @@ App({
 
   },
   globalData: {
+    user: null,
     userInfo: null,
     unionid: null,
-    UrlHeadAddress: 'http://192.168.1.104/qzApi', // https://www.chiens.cn/qzApi
+    UrlHeadAddress: 'http://192.168.1.104', //https://www.chiens.cn/qzApi  http://192.168.1.104/
     selected: 0,
     list: [
       {
