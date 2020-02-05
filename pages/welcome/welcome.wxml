@@ -32,9 +32,9 @@
         <view class="edit">
           <view class="head_portrait">
             <view class="head">
-              <open-data type="userAvatarUrl"></open-data>
+              <image src="{{job_seeker.avatarUrl || '../../images/default.png'}}" mode="widthFix" bindtap="changeAvatarUrl" data-rule="job_seeker"></image>
             </view>
-            <view class="text">修改头像</view>
+            <view class="text" bindtap="changeAvatarUrl" data-rule="job_seeker">修改头像</view>
           </view>
           <view class="list">
             <view class="item">
@@ -246,7 +246,7 @@
             <view class="right" hover-class="none" hover-stop-propagation="false">
               <view class="head_portrait">
                 <view class="head">
-                  <open-data type="userAvatarUrl"></open-data>
+                  <image src="{{job_seeker.avatarUrl || '../../images/default.png'}}" mode="widthFix"></image>
                 </view>
               </view>
             </view>
@@ -295,9 +295,9 @@
         <view class="edit">
           <view class="head_portrait">
             <view class="head">
-              <open-data type="userAvatarUrl"></open-data>
+              <image src="{{recruiter.avatarUrl || '../../images/default.png'}}" mode="widthFix" bindtap="changeAvatarUrl" data-rule="recruiter"></image>
             </view>
-            <view class="text">修改头像</view>
+            <view class="text" bindtap="changeAvatarUrl" data-rule="recruiter">修改头像</view>
           </view>
           <view class="list">
             <view class="item">
@@ -364,7 +364,7 @@
             <view class="right" hover-class="none" hover-stop-propagation="false">
               <view class="head_portrait">
                 <view class="head">
-                  <open-data type="userAvatarUrl"></open-data>
+                  <image src="{{recruiter.avatarUrl || '../../images/default.png'}}" mode="widthFix"></image>
                 </view>
               </view>
             </view>
@@ -433,5 +433,7 @@
     </swiper>
   </view>
 </view>
-
+<view class="shadowBox" wx:if="{{isUserLogin}}">
+  <text class='loading'></text>载入中
+</view>
 <impower-shadow wx:if="{{impowerShow}}" bind:getUser="getUser" ></impower-shadow>

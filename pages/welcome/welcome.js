@@ -1,8 +1,11 @@
 // pages/welcome/welcome.js
-const citys = require('../../utils/city.js').city;
-const school = require('../../utils/school.js');
-const major = require('../../utils/major.js');
-const app = getApp()
+const base64 = require('../../utils/base64').Base64;
+const request = require('../../utils/request');
+const EventProxy = require('../../utils/eventproxy');
+let citys = [];
+let school = [];
+let major = [];
+const app = getApp();
 
 Page({
 
@@ -11,6 +14,7 @@ Page({
    */
   data: {
     impowerShow: false,
+    isUserLogin: true,
     top: '100%',
     height: '',
     rec_top: '100%',
@@ -22,6 +26,7 @@ Page({
     nextText2: '下一步',
     job_seeker: {
       name: '',
+      avatarUrl: '',
       birthday: '',
       sex: '',
       email: '',
@@ -33,11 +38,12 @@ Page({
       time_enrollment: '',
       time_graduation: '',
       advantage: '',
-      synthetic_ability: ''
+      rule: 0
     },
     recruiter: {
       name: '陈立权',
       email: '1752321720@qq.com',
+      avatarUrl: '',
       position: '经理',
       company: '福建探极贸易有限公司',
       industry: '电子商务',
@@ -48,7 +54,8 @@ Page({
       scaleArr: ['少于15人', '15-50人', '50-150人', '150-500人', '500-2000人', '2000人以上'],
       scaleIndex: 0,
       progressArr: ['未融资', '天使轮', 'A轮', 'B轮', 'C轮', 'D轮及以上', '上市公司', '不需要融资'],
-      progressIndex: 0
+      progressIndex: 0,
+      rule: 1
     },
     sexIndex: 0,
     identityIndex: 0,
@@ -82,45 +89,24 @@ Page({
     this.setData({
       height
     })
-    let time = new Date().getFullYear();
 
-    // let citys = this.data.citys;
-    let {
-      selectCity, 
-      selectBirthday, 
-      birthIndex, 
-      selectEnrollment,
-      enrollmentIndex,
-      selectGraduation
-    } = this.data;
-    for (let i = 1950; i <= time; i++) {
-      selectBirthday[0].push(`${i} 年`);
-      selectEnrollment[0].push(`${i} 年`)
+    if (wx.getStorageSync('user')) {
+      let userInfo = wx.getStorageSync('userInfo');
+      if (!userInfo) {
+        this.getData();
+      } else {
+        app.globalData.userInfo = userInfo;
+        if (userInfo.rule == 'job_seeker') {
+          wx.switchTab({
+            url: '../index/index'
+          })
+        } else {
+          wx.switchTab({
+            url: '../message/message'
+          })
+        }
+      }
     }
-    selectBirthday[0].splice(-16);
-    birthIndex = [selectBirthday[0].length - 1, 0];
-    enrollmentIndex = [selectEnrollment[0].length - 1, 0];
-    for (let i = 1; i <= 12; i++) {
-      selectBirthday[1].push(i < 10 ? `0${i} 月` : `${i} 月`)
-      selectEnrollment[1].push(i < 10 ? `0${i} 月` : `${i} 月`)
-      selectGraduation[1].push(i < 10 ? `0${i} 月` : `${i} 月`)
-    }
-    for (let i = 0, l = citys.length; i < l; i++) {
-      selectCity[0].push(citys[i].name);
-    }
-    for (let j = 0, l = citys[0].city.length; j < l; j++) {
-      selectCity[1].push(citys[0].city[j].name);
-    }
-    
-    this.setData({
-      selectCity,
-      selectBirthday,
-      birthIndex,
-      selectEnrollment,
-      enrollmentIndex,
-      selectGraduation
-    });
-
   },
 
   /**
@@ -134,51 +120,11 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    let unionid = wx.getStorageSync('unionid');
-    let isUserInfo = () => {
-      wx.getSetting({
-        success: res => {
-          if (res.authSetting["scope.userInfo"] && !unionid) {
-            getUnionid();
-          } else if (res.authSetting["scope.userInfo"] && unionid) {
-            this.init();
-          } else {
-            this.setData({
-              impowerShow: true
-            })
-          }
-        }
-      })
-    } 
-
-    isUserInfo();
-
-    var getUnionid = () => {
-      wx.login({
-        success: logs => {
-          wx.request({
-            url: `${app.globalData.UrlHeadAddress}/login`,
-            method: 'POST',
-            data: { code: logs.code},
-            header: {
-              "Content-Type": "application/x-www-form-urlencoded"
-            },
-            success: uni => {
-              let unionid = uni.data.data[0].unionid;
-              wx.setStorageSync('unionid', unionid);
-              this.init();
-            },
-            fail: function() {
-              // fail
-            }
-          })
-        },
-        fail: function() {
-          // fail
-        }
+    if (!wx.getStorageSync('user')) {
+      this.setData({
+        impowerShow: true
       })
     }
-    
   },
 
   /**
@@ -218,23 +164,102 @@ Page({
 
   getUser(e) {
     if ((e.detail.data.errMsg).indexOf('ok') != -1) {
-      // console.log('用户信息获取成功', JSON.parse(e.detail.data.rawData));
+      console.log('用户信息获取成功', JSON.parse(e.detail.data.rawData));
       this.setData({
         impowerShow: false
       })
-      // wx.setStorageSync('user', JSON.parse(e.detail.data.rawData))
-      // app.globalData.eventMgr.emit('user', e.detail.data );
- 
-      this.init()
-    }else{
-      wx.setStorageSync('unionid', '')
+      let user = e.detail.data;
+      app.globalData.user = user;
+      wx.setStorageSync('user', user);
+      request.login(() => {
+        console.log('用户登录成功');
+        this.getData();
+      })
+    } else {
+      wx.setStorageSync('unionid', '');
     }
   },
 
-  init () {
-    this.setData({
-      impowerShow: false
+  getData () {
+    const ep = new EventProxy();
+    request.request('/getCity', null, 'GET', (res) => {
+      if (res.data.code == 'error') {
+        ep.emit('error', '获取城市信息失败');
+      } else {
+        ep.emit('city', res);
+      }
     })
+
+    request.request('/getSchool', null, 'GET', (res) => {
+      if (res.data.code == 'error') {
+        ep.emit('error', '获取学校信息失败');
+      } else {
+        ep.emit('school', res);
+      }
+    })
+
+    request.request('/getMajor', null, 'GET', (res) => {
+      if (res.data.code == 'error') {
+        ep.emit('error', '获取专业信息失败');
+      } else {
+        ep.emit('major', res);
+      }
+    })
+
+    ep.all('city', 'school', 'major', (city, school, major) => {
+      citys = city.data.data;
+      school = school.data.data;
+      major = major.data.data;
+      this.setData({
+        isUserLogin: false
+      })
+      this.init()
+    })
+  },
+
+  init () {
+    let time = new Date().getFullYear();
+    // let citys = this.data.citys;
+    let {
+      selectCity, 
+      selectBirthday, 
+      birthIndex, 
+      selectEnrollment,
+      enrollmentIndex,
+      selectGraduation
+    } = this.data;
+    for (let i = 1950; i <= time; i++) {
+      selectBirthday[0].push(`${i} 年`);
+      selectEnrollment[0].push(`${i} 年`)
+    }
+    selectBirthday[0].splice(-16);
+    birthIndex = [selectBirthday[0].length - 1, 0];
+    enrollmentIndex = [selectEnrollment[0].length - 1, 0];
+    for (let i = 1; i <= 12; i++) {
+      selectBirthday[1].push(i < 10 ? `0${i} 月` : `${i} 月`)
+      selectEnrollment[1].push(i < 10 ? `0${i} 月` : `${i} 月`)
+      selectGraduation[1].push(i < 10 ? `0${i} 月` : `${i} 月`)
+    }
+    for (let i = 0, l = citys.length; i < l; i++) {
+      selectCity[0].push(citys[i].name);
+    }
+    for (let j = 0, l = citys[0].city.length; j < l; j++) {
+      let name = citys[0].city[j].name == '市辖区' ? citys[0].name : citys[0].city[j].name
+      selectCity[1].push(name);
+    }
+    
+    this.setData({
+      selectCity,
+      selectBirthday,
+      birthIndex,
+      selectEnrollment,
+      enrollmentIndex,
+      selectGraduation
+    });
+
+    // this.setData({
+    //   isUserLogin: false
+    // })
     // let unionid = wx.getStorageSync('unionid');
     // let rule = wx.getStorageSync('rule');
     // console.log(unionid, rule)
@@ -394,31 +419,62 @@ Page({
   },
 
   editDone (e) {
+    wx.showLoading({
+      title: '载入中...'
+    })
     if (e.currentTarget.dataset.rule == 'job_seeker') {
-      wx.showToast({
-        title: '载入中...',
-        icon: 'loading',
-        duration: 3000,
-        success: () => {
-          setTimeout(() => {
-            wx.switchTab({
-              url: '../index/index'
+      request.request('saveJobSeeker', this.data.job_seeker, 'POST', (res) => {
+        console.log(res)
+        let userInfo = res.data.data;
+        userInfo.avatarUrl = this.data.job_seeker.avatarUrl;
+        userInfo.rule = 'job_seeker';
+        wx.setStorageSync('userInfo', userInfo);
+        app.globalData.userInfo = userInfo;
+        wx.hideLoading({
+          success: () => {
+            wx.showToast({
+              title: '信息保存成功',
+              icon: 'success',
+              duration: 3000,
+              success: () => {
+                setTimeout(() => {
+                  wx.hideToast();
+                  wx.switchTab({
+                    url: '../index/index'
+                  })
+                }, 3000);
+              }
             })
-          }, 3000);
-        }
+            console.log("信息保存成功")
+          }
+        })
       })
     } else {
-      wx.showToast({
-        title: '载入中...',
-        icon: 'loading',
-        duration: 3000,
-        success: () => {
-          setTimeout(() => {
-            wx.switchTab({
-              url: '../index/index'
+      request.request('/saveRecruiter', this.data.recruiter, 'POST', (res) => {
+        console.log(res)
+        let userInfo = res.data.data;
+        userInfo.avatarUrl = this.data.recruiter.avatarUrl;
+        userInfo.rule = 'recruiter';
+        wx.setStorageSync('userInfo', userInfo);
+        app.globalData.userInfo = userInfo;
+        wx.hideLoading({
+          success: () => {
+            wx.showToast({
+              title: '信息保存成功',
+              icon: 'success',
+              duration: 3000,
+              success: () => {
+                setTimeout(() => {
+                  wx.hideToast();
+                  wx.switchTab({
+                    url: '../message/message'
+                  })
+                }, 3000);
+              }
             })
-          }, 3000);
-        }
+            console.log("信息保存成功")
+          }
+        })
       })
     }
   },
@@ -433,7 +489,7 @@ Page({
       let age = 0;
       let selectBirthday = this.data.selectBirthday;
       let year = parseInt(selectBirthday[0][value[0]]);
-      let month = selectBirthday[1][value[1]].replace('月', '');
+      let month = selectBirthday[1][value[1]].replace('月', '').trim();
       job_seeker[key] = `${year}.${month}`;
       let date = new Date();
       if (parseInt(month) < date.getMonth() + 1) {
@@ -448,7 +504,7 @@ Page({
       let status = "";
       let selectGraduation = this.data.selectGraduation;
       let year = parseInt(selectGraduation[0][value[0]]);
-      let month = selectGraduation[1][value[1]].replace('月', '');
+      let month = selectGraduation[1][value[1]].replace('月', '').trim();
       if (year == new Date().getFullYear()) {
         status = "应届毕业生"
       } else {
@@ -576,7 +632,8 @@ Page({
     if (column == 0) {
       selectCity[1] = [];
       for (let i = 0, l = citys[value].city.length; i < l; i++) {
-        selectCity[1].push(citys[value].city[i].name);
+        let name = citys[value].city[i].name == '市辖区' ? citys[value].name : citys[value].city[i].name
+        selectCity[1].push(name);
       }
       this.setData({
         selectCity,
@@ -594,7 +651,7 @@ Page({
     let value = e.detail.value;
     let key = e.target.dataset.key;
     let year = parseInt(selectEnrollment[0][value[0]]);
-    let month = selectEnrollment[1][value[1]].replace('月', '');
+    let month = selectEnrollment[1][value[1]].replace('月', '').trim();
     job_seeker[key] = `${year}.${month}`;
     let time = new Date().getFullYear() + 5;
 
@@ -694,6 +751,45 @@ Page({
     }
     this.setData({
       recruiter
+    })
+  },
+
+  changeAvatarUrl (e) {
+    let rule = {};
+    if (e.target.dataset.rule == "job_seeker") {
+      rule = this.data.job_seeker;
+    } else {
+      rule = this.data.recruiter;
+    }
+    wx.chooseImage({
+      count: 1,
+      sizeType: ['compressed'],
+      success: (res) => {
+        console.log(res)
+        rule.avatarUrl = res.tempFilePaths;
+        this.setData({
+          [e.target.dataset.rule]: rule
+        })
+        console.log(`${app.globalData.UrlHeadAddress}qzApi/userAvatarUrl`)
+        wx.uploadFile({
+          url: `${app.globalData.UrlHeadAddress}/qzApi/userAvatarUrl`,
+          filePath: res.tempFilePaths[0],
+          name: 'file',
+          header: {
+            'content-type': 'multipart/form-data'
+          },
+          formData: {
+            unionid: base64.encode(app.globalData.unionid)
+          },
+          success: (res) => {
+            let data = JSON.parse(res.data);
+            rule.avatarUrl = `${app.globalData.UrlHeadAddress}/qzApi/userAvatar/${data.data.img}`;
+            this.setData({
+              [e.target.dataset.rule]: rule
+            })
+          }
+        })
+      }
     })
   }
 })
