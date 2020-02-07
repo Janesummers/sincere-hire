@@ -1,5 +1,6 @@
 // pages/message/message.js
 const base64 = require('../../utils/base64').Base64;
+const request = require('../../utils/request');
 const app = getApp();
 Page({
 
@@ -15,23 +16,12 @@ Page({
    */
   onLoad: function (options) {
     let unionid = wx.getStorageSync('unionid');
-    wx.request({
-      url: `${app.globalData.UrlHeadAddress}/getMessageList`,
-      method: 'POST',
-      data: { id: base64.encode(unionid)},
-      header: {
-        "Content-Type": "application/x-www-form-urlencoded"
-      },
-      success: res => {
-        console.log(res.data.data)
-        let list = res.data.data;
-        this.setData({
-          list
-        })
-      },
-      fail: function() {
-        // fail
-      }
+    request.request('/getMessageList', { id: base64.encode(unionid)}, 'POST', (res) => {
+      console.log(res.data.data)
+      let list = res.data.data;
+      this.setData({
+        list
+      })
     })
   },
 
