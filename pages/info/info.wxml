@@ -3,41 +3,92 @@
     <view class="item">
       <view class="little_title">姓名</view>
       <view class="text">
-        <input type="text" placeholder="请填写" />
+        <input type="text" placeholder="请填写" value="{{userInfo.name}}" />
       </view>
     </view>
     <view class="item">
       <view class="little_title">性别</view>
       <view class="text">
-        <input type="text" placeholder="请填写" />
+        <picker 
+          mode="selector" 
+          bindchange="changeInfo" 
+          data-key="sex" 
+          range="{{sex}}" 
+          value="{{sexIndex}}"
+        >
+          <view>
+            {{userInfo.sex}}
+          </view>
+        </picker>
       </view>
     </view>
     <view class="item">
       <view class="little_title">出生年月</view>
       <view class="text">
-        <input type="text" placeholder="请填写" />
+        <picker 
+          mode="multiSelector"
+          bindchange="changeInfo" 
+          bindcancel="cancelChange"
+          data-key="birth"
+          value="{{birthIndex}}" 
+          range="{{selectBirthday}}"
+        >
+          <view>
+            {{userInfo.birthday}}
+          </view>
+        </picker>
       </view>
     </view>
     <view class="item">
       <view class="little_title">参加工作时间</view>
       <view class="text">
-        <input type="text" placeholder="请填写" />
+        <picker 
+          mode="multiSelector" 
+          bindchange="changeInfo" 
+          data-key="jobTime" 
+          range="{{jobTime}}" 
+          value="{{jobTimeIndex}}"
+          bindcolumnchange="JobColumnChange"
+          bindcancel="cancelChange"
+        >
+          <view>
+            {{userInfo.jobTime}}
+          </view>
+        </picker>
       </view>
     </view>
     <view class="item">
       <view class="little_title">现居住城市</view>
       <view class="text">
-        <input type="text" placeholder="请填写" />
+        <picker 
+          mode="multiSelector" 
+          data-key="city"
+          value="{{cityIndex}}" 
+          range="{{selectCity}}"
+          bindchange="cityChange"
+          bindcolumnchange="cityColumnChange"
+          bindcancel="cancelChange"
+        >
+          <view>
+            {{userInfo.city}}
+          </view>
+        </picker>
       </view>
     </view>
     <view class="item">
       <view class="little_title">电子邮箱</view>
       <view class="text">
-        <input type="text" placeholder="请填写" />
+        <input 
+          type="text" 
+          placeholder="请填写" 
+          bindinput="changeInfo" 
+          value="{{userInfo.email}}" 
+          data-key="email"
+        />
       </view>
     </view>
   </view>
   <view class="bottom">
-    <view class="btn">保存</view>
+    <view class="btn" bindtap="save">保存</view>
   </view>
 </view>
