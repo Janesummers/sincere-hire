@@ -5,14 +5,33 @@ Page({
    * 页面的初始数据
    */
   data: {
-
+    userInfo: null
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    
+    try {
+      let userInfo = wx.getStorageSync('userInfo');
+      let birth = userInfo.birthday;
+      birth = birth.match(/[^\.]+/g);
+      let year = parseInt(birth[0]);
+      let month = parseInt(birth[1]);
+      let date = new Date();
+      let age = 0;
+      if (month < date.getMonth() + 1) {
+        age = date.getFullYear() - year
+      } else {
+        age = date.getFullYear() - year - 1
+      }
+      userInfo.age = age
+      this.setData({
+        userInfo
+      });
+    } catch(e) {
+
+    }
   },
 
   /**

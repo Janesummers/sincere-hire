@@ -3,21 +3,21 @@
   <view id="me">
     <view class="info">
       <view class="head">
-        <open-data type="userAvatarUrl"></open-data>
+        <image src="{{userInfo.avatarUrl}}" mode="widthFix"></image>
       </view>
       <view class="right">
         <view class="top">
-          <view class="name">陈立权</view>
+          <view class="name">{{userInfo.name}}</view>
           <!-- <view class="appellation"> / 先生</view> -->
         </view>
         <view class="middle">
-          <view  class="major item">软件工程</view>
-          <view class="school item">闽江学院</view>
+          <view  class="major item">{{userInfo.major}}</view>
+          <view class="school item">{{userInfo.school}}</view>
         </view>
         <view class="bottom">
-          <view class="item">23岁</view>
+          <view class="item">{{userInfo.age}}岁</view>
           <view class="item">工作0年</view>
-          <view class="item">漳州</view>
+          <view class="item">{{userInfo.city}}</view>
         </view>
       </view>
     </view>

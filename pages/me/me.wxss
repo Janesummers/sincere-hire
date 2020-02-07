@@ -14,6 +14,11 @@ page {
   border-radius: 16rpx;
   margin-right: 40rpx;
 }
+.container #me .info .head image {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
 .container #me .info .right .top {
   display: flex;
   font-size: 36rpx;
