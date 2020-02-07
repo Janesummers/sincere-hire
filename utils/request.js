@@ -9,14 +9,14 @@ try {
   }
 } catch (e) {
 }
-// try {
-//   var value = wx.getStorageSync('userInfo')
-//   if (value) {
-//     console.log(value)
-//     app.globalData.userInfo = value
-//   }
-// } catch (e) {
-// }
+try {
+  var value = wx.getStorageSync('userInfo')
+  if (value) {
+    console.log(value)
+    app.globalData.userInfo = value
+  }
+} catch (e) {
+}
 function login(loginCallback){
 
   const ep = new EventProxy()
@@ -69,11 +69,14 @@ function login(loginCallback){
       success(res) {
         console.log(res)
         let unionid = res.data.data.unionid || res.data.data[0].unionid;
-        if (res.data.data[0].unionid) {
-          try {
-            wx.setStorageSync('userInfo', res.data.data[0]);
-          } catch (e) {
+        try {
+          if (res.data.data[0].unionid) {
+            try {
+              wx.setStorageSync('userInfo', res.data.data[0]);
+            } catch (e) {
+            }
           }
+        } catch (e) {
         }
         app.globalData.unionid = unionid;
         try {
@@ -90,9 +93,9 @@ function login(loginCallback){
 
   })
 
-  if (!app.globalData.user){
-    console.error('Userinfo is not ready!!!');
-  }
+  // if (!app.globalData.user){
+  //   console.error('Userinfo is not ready!!!');
+  // }
 
 
 }
