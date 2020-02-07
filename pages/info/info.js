@@ -1,5 +1,5 @@
 // pages/info/info.js
-const request = require('../../utils/request');
+const req = require('../../utils/request');
 let citys;
 
 Page({
@@ -39,7 +39,7 @@ Page({
   },
 
   getData () {
-    request.request('/getCity', null, 'GET', (res) => {
+    req.request('/getCity', null, 'GET', (res) => {
       if (res.data.code == 'error') {
         console.log('获取城市信息失败')
       } else {
@@ -293,6 +293,43 @@ Page({
   },
 
   save () {
-    
+    wx.showLoading({
+      title: '提交中...'
+    })
+    let userInfo = this.data.userInfo;
+    let {name, sex, birthday, jobTime, city, email} = userInfo;
+    req.request('/saveUserInfo', {name, sex, birthday, jobTime, city, email}, 'POST', (res) => {
+      let {
+        sexIndex,
+        jobTimeIndex,
+        birthIndex,
+        cityIndex,
+        defaultCityIndex,
+        defaultSexIndex,
+        defaultBirthIndex,
+        defaultJobTimeIndex
+      } = this.data;
+      if (res.data.data == "更新成功") {
+        defaultCityIndex = cityIndex.concat();
+        defaultSexIndex = sexIndex;
+        defaultBirthIndex = birthIndex.concat();
+        defaultJobTimeIndex = jobTimeIndex.concat();
+        wx.hideLoading({
+          success: () => {
+            wx.showToast({
+              title: '保存成功',
+              duration: 2000
+            })
+          }
+        })
+        wx.setStorageSync('userInfo', userInfo);
+        this.setData({
+          defaultCityIndex,
+          defaultSexIndex,
+          defaultBirthIndex,
+          defaultJobTimeIndex
+        })
+      }
+    })
   }
 })
