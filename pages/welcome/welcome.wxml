@@ -54,7 +54,6 @@
               <view class="text">
                 <picker 
                   mode="multiSelector"
-                  value="{{job_seeker.birthday}}"
                   bindchange="jobSeekerPut" 
                   data-key="birthday"
                   value="{{birthIndex}}" 
@@ -252,6 +251,23 @@
             </view>
           </view>
           <view class="list">
+            <view class="item">
+              <view class="little_title">参加工作时间</view>
+              <view class="text">
+                <picker 
+                  mode="multiSelector"
+                  bindchange="jobSeekerPut" 
+                  data-key="jobTime"
+                  value="{{jobTimeIndex}}" 
+                  range="{{jobTime}}"
+                  bindcolumnchange="JobColumnChange"
+                >
+                  <view class="pickerActive">
+                    {{job_seeker.jobTime}}
+                  </view>
+                </picker>
+              </view>
+            </view>
             <view class="item">
               <view class="little_title">个人优势</view>
               <view class="text">

@@ -38,6 +38,7 @@ Page({
       time_enrollment: '',
       time_graduation: '',
       advantage: '',
+      jobTime: '无工作经验',
       rule: 0
     },
     recruiter: {
@@ -77,7 +78,9 @@ Page({
     chooseMajor: true,
     majorFilter: [],
     age: 0,
-    status: ''
+    status: '',
+    jobTime: [[], []],
+    jobTimeIndex: [0, 0]
   },
 
   /**
@@ -97,8 +100,11 @@ Page({
       } else {
         app.globalData.userInfo = userInfo;
         if (userInfo.rule == 'job_seeker') {
-          wx.switchTab({
-            url: '../index/index'
+          // wx.switchTab({
+          //   url: '../index/index'
+          // })
+          wx.redirectTo({
+            url: '../info/info'
           })
         } else {
           wx.switchTab({
@@ -206,10 +212,10 @@ Page({
       }
     })
 
-    ep.all('city', 'school', 'major', (city, school, major) => {
+    ep.all('city', 'school', 'major', (city, schools, majors) => {
       citys = city.data.data;
-      school = school.data.data;
-      major = major.data.data;
+      school = schools.data.data;
+      major = majors.data.data;
       this.setData({
         isUserLogin: false
       })
@@ -226,19 +232,24 @@ Page({
       birthIndex, 
       selectEnrollment,
       enrollmentIndex,
-      selectGraduation
+      selectGraduation,
+      jobTime,
+      jobTimeIndex
     } = this.data;
     for (let i = 1950; i <= time; i++) {
       selectBirthday[0].push(`${i} 年`);
-      selectEnrollment[0].push(`${i} 年`)
+      selectEnrollment[0].push(`${i} 年`);
+      jobTime[0].push(`${i} 年`);
     }
     selectBirthday[0].splice(-16);
+    jobTime[0].push("无工作经验");
     birthIndex = [selectBirthday[0].length - 1, 0];
     enrollmentIndex = [selectEnrollment[0].length - 1, 0];
+    jobTimeIndex = [jobTime[0].length - 1, 0];
     for (let i = 1; i <= 12; i++) {
-      selectBirthday[1].push(i < 10 ? `0${i} 月` : `${i} 月`)
-      selectEnrollment[1].push(i < 10 ? `0${i} 月` : `${i} 月`)
-      selectGraduation[1].push(i < 10 ? `0${i} 月` : `${i} 月`)
+      selectBirthday[1].push(i < 10 ? `0${i} 月` : `${i} 月`);
+      selectEnrollment[1].push(i < 10 ? `0${i} 月` : `${i} 月`);
+      selectGraduation[1].push(i < 10 ? `0${i} 月` : `${i} 月`);
     }
     for (let i = 0, l = citys.length; i < l; i++) {
       selectCity[0].push(citys[i].name);
@@ -254,18 +265,10 @@ Page({
       birthIndex,
       selectEnrollment,
       enrollmentIndex,
-      selectGraduation
+      selectGraduation,
+      jobTime,
+      jobTimeIndex
     });
-
-    // this.setData({
-    //   isUserLogin: false
-    // })
-    // let unionid = wx.getStorageSync('unionid');
-    // let rule = wx.getStorageSync('rule');
-    // console.log(unionid, rule)
-    // wx.switchTab({
-    //   url: '/pages/index/index'
-    // })
   },
 
   showBox (e) {
@@ -311,15 +314,6 @@ Page({
           isShow2: false
         })
       }, 200);
-    }
-  },
-
-  toPage (e) {
-    let rule = e.currentTarget.dataset.rule;
-    if (rule === 'job_seeker') {
-      wx.switchTab({
-        url: '../index/index'
-      })
     }
   },
 
@@ -483,39 +477,55 @@ Page({
     let job_seeker = this.data.job_seeker;
     let value = e.detail.value;
     let key = e.target.dataset.key;
-    if (key == 'sex' || key == 'identity' || key == 'education') {
-      job_seeker[key] = this.data[key][value];
-    } else if (key == 'birthday') {
-      let age = 0;
-      let selectBirthday = this.data.selectBirthday;
-      let year = parseInt(selectBirthday[0][value[0]]);
-      let month = selectBirthday[1][value[1]].replace('月', '').trim();
-      job_seeker[key] = `${year}.${month}`;
-      let date = new Date();
-      if (parseInt(month) < date.getMonth() + 1) {
-        age = new Date().getFullYear() - year;
-      } else {
-        age = new Date().getFullYear() - year - 1;
-      }
-      this.setData({
-        age
-      })
-    } else if (key == 'time_graduation') {
-      let status = "";
-      let selectGraduation = this.data.selectGraduation;
-      let year = parseInt(selectGraduation[0][value[0]]);
-      let month = selectGraduation[1][value[1]].replace('月', '').trim();
-      if (year == new Date().getFullYear()) {
-        status = "应届毕业生"
-      } else {
-        status = `${year}.${month} 毕业`;
-      }
-      job_seeker[key] = `${year}.${month}`;
-      this.setData({
-        status
-      })
-    } else {
-      job_seeker[key] = value;
+    switch (key) {
+      case 'sex':
+      case 'identity':
+      case 'education':
+        job_seeker[key] = this.data[key][value];
+        break;
+      case 'birthday': 
+        let age = 0;
+        let selectBirthday = this.data.selectBirthday;
+        var year = parseInt(selectBirthday[0][value[0]]);
+        var month = selectBirthday[1][value[1]].replace('月', '').trim();
+        job_seeker[key] = `${year}.${month}`;
+        let date = new Date();
+        if (parseInt(month) < date.getMonth() + 1) {
+          age = new Date().getFullYear() - year;
+        } else {
+          age = new Date().getFullYear() - year - 1;
+        }
+        this.setData({
+          age
+        })
+        break;
+      case 'time_graduation':
+        let status = "";
+        let selectGraduation = this.data.selectGraduation;
+        var year = parseInt(selectGraduation[0][value[0]]);
+        var month = selectGraduation[1][value[1]].replace('月', '').trim();
+        if (year == new Date().getFullYear()) {
+          status = "应届毕业生"
+        } else {
+          status = `${year}.${month} 毕业`;
+        }
+        job_seeker[key] = `${year}.${month}`;
+        this.setData({
+          status
+        })
+        break;
+      case 'jobTime':
+        let jobTime = this.data.jobTime;
+        var year = jobTime[0][value[0]].replace(' 年', '');
+        var month = jobTime[1][value[1]].replace(' 月', '');
+        
+        job_seeker[key] = `${year}.${month}`;
+        this.setData({
+          jobTimeIndex: value.concat()
+        })
+        break;
+      default:
+        job_seeker[key] = value.concat();
     }
     this.setData({
       job_seeker
@@ -747,7 +757,7 @@ Page({
       recruiter[key] = recruiter[`${key}Arr`][value];
       recruiter[`${key}Index`] = value;
     } else {
-      recruiter[key] = value;
+      recruiter[key] = value.concat();
     }
     this.setData({
       recruiter
@@ -770,7 +780,7 @@ Page({
         this.setData({
           [e.target.dataset.rule]: rule
         })
-        console.log(`${app.globalData.UrlHeadAddress}qzApi/userAvatarUrl`)
+        console.log(`${app.globalData.UrlHeadAddress}/qzApi/userAvatarUrl`)
         wx.uploadFile({
           url: `${app.globalData.UrlHeadAddress}/qzApi/userAvatarUrl`,
           filePath: res.tempFilePaths[0],
@@ -791,5 +801,25 @@ Page({
         })
       }
     })
+  },
+
+  JobColumnChange (e) {
+    let {column, value} = e.detail;
+    let {jobTime, jobTimeIndex} = this.data;
+    if (column == 0) {
+      if (jobTime[0][value] != "无工作经验") {
+        for (let i = 1; i <= 12; i++) {
+          jobTime[1].push(i < 10 ? `0${i} 月` : `${i} 月`);
+        }
+      } else {
+        jobTime[1] = [];
+      }
+      jobTimeIndex[0] = value;
+      
+      this.setData({
+        jobTime, 
+        jobTimeIndex
+      })
+    }
   }
 })
