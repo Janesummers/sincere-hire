@@ -1,0 +1,118 @@
+<view class="container">
+  <view class="list">
+    <view class="item">
+      <view class="little_title">学校名称</view>
+      <view class="text">
+        <input 
+          type="text" 
+          placeholder="请输入"
+          value="{{education.school}}"
+          bindinput="schoolFilterFn"
+          data-key="school"
+          bindfocus="schoolPutFocus"
+        />
+        <scroll-view 
+          class="keyword" 
+          scroll-y="{{true}}"
+          scroll-with-animation="{{true}}"
+          wx:if="{{chooseSchool}}"
+        >
+        <view 
+          class="word" 
+          wx:for="{{schoolFilter}}" 
+          wx:key="index"
+          bindtap="chooseWord"
+          data-word="{{item}}"
+          data-key="school"
+        >{{item}}</view>
+        </scroll-view>
+      </view>
+    </view>
+    <view class="item">
+      <view class="little_title">学历</view>
+      <view class="text">
+        <picker 
+          mode="selector" 
+          bindchange="changeData" 
+          data-key="edu" 
+          range="{{edu}}" 
+          value="{{eduIndex}}"
+        >
+          <view class="{{education.edu == '' ? 'picker' : 'pickerActive'}}">
+            <view wx:if="{{education.edu == ''}}">点击选择学历</view>
+            {{education.edu}}
+          </view>
+        </picker>
+      </view>
+    </view>
+    <view class="item">
+      <view class="little_title">所学专业</view>
+      <view class="text">
+        <input 
+          type="text" 
+          placeholder="请输入"
+          value="{{education.major}}"
+          bindinput="majorFilterFn"
+          data-key="major"
+          bindfocus="majorPutFocus" 
+        />
+        <scroll-view 
+          class="keyword" 
+          scroll-y="{{true}}"
+          scroll-with-animation="{{true}}"
+          wx:if="{{chooseMajor}}"
+        >
+          <view 
+            class="word" 
+            wx:for="{{majorFilter}}" 
+            wx:key="index"
+            bindtap="chooseWord"
+            data-word="{{item}}"
+            data-key="major"
+          >{{item}}</view>
+        </scroll-view>
+      </view>
+    </view>
+    <view class="item">
+      <view class="little_title">入学时间</view>
+      <view class="text">
+        <picker 
+          mode="multiSelector"
+          bindchange="enrollmentChange" 
+          data-key="time_enrollment"
+          value="{{enrollmentIndex}}" 
+          range="{{selectEnrollment}}"
+        >
+          <view class="{{education.time_enrollment == '' ? 'picker' : 'pickerActive'}}">
+            <view wx:if="{{education.time_enrollment == ''}}">点击选择日期</view>
+            {{education.time_enrollment}}
+          </view>
+        </picker>
+      </view>
+    </view>
+    <view class="item">
+      <view class="little_title">毕业时间</view>
+      <view class="text">
+        <picker 
+          mode="multiSelector"
+          bindchange="changeData" 
+          data-key="time_graduation"
+          value="{{graduationIndex}}" 
+          range="{{selectGraduation}}"
+        >
+          <view class="{{education.time_graduation == '' ? 'picker' : 'pickerActive'}}">
+            <view wx:if="{{education.time_graduation == ''}}">点击选择日期</view>
+            {{education.time_graduation}}
+          </view>
+        </picker>
+      </view>
+    </view>
+  </view>
+  <view class="bottom">
+    <view class="btn" bindtap="save">保存</view>
+  </view>
+</view>
+
+<view class="shadowBox" wx:if="{{!isDone}}">
+  <text class='loading'></text>载入中
+</view>
