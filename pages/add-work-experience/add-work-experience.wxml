@@ -1,0 +1,113 @@
+<view class="container">
+  <view class="list">
+    <view class="item">
+      <view class="little_title">公司名称</view>
+      <view class="text">
+        <input 
+          type="text" 
+          placeholder="请输入"
+          value="{{company.name}}"
+          bindinput="changeData"
+          data-key="name"
+        />
+      </view>
+    </view>
+    <view class="item">
+      <view class="little_title">职位名称</view>
+      <view class="text">
+        <input 
+          type="text" 
+          placeholder="如：前端工程师"
+          value="{{company.position}}"
+          bindinput="changeData"
+          data-key="position"
+        />
+      </view>
+    </view>
+    <view class="item">
+      <view class="little_title">入职时间</view>
+      <view class="text">
+        <picker 
+          mode="multiSelector"
+          bindchange="hiredateChange" 
+          data-key="hiredate"
+          value="{{hiredateIndex}}" 
+          range="{{hiredate}}"
+          bindcolumnchange="hiredateColumnChange"
+          bindcancel="changeCancel"
+        >
+          <view class="{{company.hiredate == '' ? 'picker' : 'pickerActive'}}">
+            <view wx:if="{{company.hiredate == ''}}">点击选择日期</view>
+            {{company.hiredate}}
+          </view>
+        </picker>
+      </view>
+    </view>
+    <view class="item">
+      <view class="little_title">离职时间</view>
+      <view class="text">
+        <picker 
+          mode="multiSelector"
+          bindchange="changeData" 
+          data-key="leavedate"
+          value="{{leavedateIndex}}" 
+          range="{{leavedate}}"
+          bindcolumnchange="leavedateColumnChange"
+        >
+          <view class="{{company.leavedate == '' ? 'picker' : 'pickerActive'}}">
+            <view wx:if="{{company.leavedate == ''}}">点击选择日期</view>
+            {{company.leavedate}}
+          </view>
+        </picker>
+      </view>
+    </view>
+    <view class="item">
+      <view class="little_title">所属行业</view>
+      <view class="text">
+        <picker 
+          mode="multiSelector"
+          bindchange="changeData" 
+          data-key="industry"
+          value="{{industry}}" 
+          range="{{industryIndex}}"
+        >
+          <view class="{{company.industry == '' ? 'picker' : 'pickerActive'}}">
+            <view wx:if="{{company.industry == ''}}">点击选择日期</view>
+            {{company.industry}}
+          </view>
+        </picker>
+      </view>
+    </view>
+    <view class="item">
+      <view class="little_title">月薪</view>
+      <view class="text">
+        <input 
+          type="text" 
+          placeholder="请输入"
+          value="{{company.monthly_salary}}"
+          bindinput="changeData"
+          data-key="monthly_salary"
+          cursor="{{cursorIndex}}"
+        />
+      </view>
+    </view>
+    <view class="item">
+      <view class="little_title">工作描述</view>
+      <view class="text">
+        <textarea
+          placeholder="请填写"
+          value="{{company.job_description}}"
+          bindinput="changeData"
+          data-key="job_description"
+        ></textarea>
+      </view>
+    </view>
+  </view>
+  <view class="bottom">
+    <view class="btn" bindtap="save">保存</view>
+  </view>
+</view>
+
+<view class="shadowBox" wx:if="{{!isDone}}">
+  <text class='loading'></text>载入中
+</view>
