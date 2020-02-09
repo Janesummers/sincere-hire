@@ -1,66 +1,54 @@
 // pages/live-resume/live-resume.js
+const app = getApp();
+const req = require('../../utils/request');
+
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-
+    userInfo: null,
+    userEducation: null,
+    isBack: false
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    try {
+      let userInfo = wx.getStorageSync('userInfo');
+      this.setData({
+        userInfo
+      });
+      this.getData()
+    } catch(e) {
 
+    }
   },
 
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-
+  onShow () {
+    let isBack = this.data.isBack;
+    if (isBack) {
+      this.getData();
+    }
   },
 
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-
+  getData () {
+    req.request('/getUserEducation', null, 'POST', (res) => {
+      let education = res.data.data;
+      this.setData({
+        userEducation: education,
+        isBack: false
+      })
+    })
   },
 
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-
+  toPage (e) {
+    let path = e.target.dataset.path;
+    wx.navigateTo({
+      url: `../${path}/${path}`
+    })
   }
 })

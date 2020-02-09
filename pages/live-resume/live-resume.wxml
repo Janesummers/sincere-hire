@@ -5,7 +5,7 @@
         <view class="title">工作/实习经历</view>
         <view class="add">
           <view class="iconfont icon-jia"></view>
-          <view class="">添加</view>
+          <view class="" bindtap="toPage" data-path="add-work-experience">添加</view>
         </view>
       </view>
       <view class="work_experience">
@@ -29,20 +29,20 @@
         <view class="title">教育经历</view>
         <view class="add">
           <view class="iconfont icon-jia"></view>
-          <view class="">添加</view>
+          <view class="" bindtap="toPage" data-path="add-education">添加</view>
         </view>
       </view>
-      <view class="edu_experience">
+      <view class="edu_experience" wx:for="{{userEducation}}" wx:key="id">
         <view class="name">
           <view class="school_name">
-            <view class="iconfont icon-xuexiaohuaxiang"></view>闽江学院
+            <view class="iconfont icon-xuexiaohuaxiang"></view>{{item.school}}
           </view>
           <view class="iconfont icon-bianji1"></view>
         </view>
-        <view class="time">2018.3 - 2018.6</view>
+        <view class="time">{{item.time_enrollment}} - {{item.time_graduation}}</view>
         <view class="level">
-          <view class="item">本科</view>
-          <view class="item">软件工程</view>
+          <view class="item">{{item.education}}</view>
+          <view class="item">{{item.major}}</view>
         </view>
       </view>
     </view>
@@ -54,7 +54,7 @@
         </view>
       </view>
       <view class="self_appraisal">
-          自学能力强，对新的框架有足够的自学能力，自我问题解决能力，对项目有深度优化和追求完美的理念，吃苦耐劳，积极上进，能不断充实和完善自己。有良好的团队合作能力和团队沟通能力。
+        {{userInfo.advantage}}
       </view>
     </view>
   </view>

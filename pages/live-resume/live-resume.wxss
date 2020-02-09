@@ -73,6 +73,9 @@
   line-height: 50rpx;
   margin-bottom: 40rpx;
 }
+.container .list .items .edu_experience {
+  margin-bottom: 30rpx;
+}
 .container .list .items .edu_experience .level {
   display: flex;
   font-size: 28rpx;
