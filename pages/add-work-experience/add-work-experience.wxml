@@ -65,14 +65,14 @@
       <view class="little_title">所属行业</view>
       <view class="text">
         <picker 
-          mode="multiSelector"
+          mode="selector"
           bindchange="changeData" 
           data-key="industry"
-          value="{{industry}}" 
-          range="{{industryIndex}}"
+          value="{{industryIndex}}" 
+          range="{{industry}}"
         >
           <view class="{{company.industry == '' ? 'picker' : 'pickerActive'}}">
-            <view wx:if="{{company.industry == ''}}">点击选择日期</view>
+            <view wx:if="{{company.industry == ''}}">点击选择</view>
             {{company.industry}}
           </view>
         </picker>
@@ -82,12 +82,13 @@
       <view class="little_title">月薪</view>
       <view class="text">
         <input 
-          type="text" 
+          type="number" 
           placeholder="请输入"
           value="{{company.monthly_salary}}"
           bindinput="changeData"
           data-key="monthly_salary"
           cursor="{{cursorIndex}}"
+          maxlength="10"
         />
       </view>
     </view>

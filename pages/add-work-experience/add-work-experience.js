@@ -25,7 +25,7 @@ Page({
     leavedate: [[], []],
     leavedateIndex: [0, 0],
     olderLeavedataIndex: [0, 0],
-    cursorIndex: 0
+    cursorIndex: 1
   },
 
   /**
@@ -74,7 +74,8 @@ Page({
     let {
       company,
       hiredate,
-      hiredateIndex
+      hiredateIndex,
+      olderHiredateIndex
     } = this.data;
     hiredateIndex = value.concat();
     olderHiredateIndex = value.concat();
@@ -241,9 +242,14 @@ Page({
         company.industry = selected;
         break;
       case 'monthly_salary':
-        cursorIndex = value.length;
-        var val = value + ' 元/月';
-        company.monthly_salary = val;
+        company.monthly_salary = value;
+        break;
+      case 'leavedate':
+        leavedateIndex = value.concat();
+        olderLeavedataIndex = value.concat();
+        let year = parseInt(leavedate[0][value[0]]);
+        let month = leavedate[1][value[1]].replace(' 月', '');
+        company.leavedate = `${year}.${month}`;
         break;
       default:
         company[key] = value;
@@ -255,8 +261,63 @@ Page({
       industryIndex,
       leavedate,
       leavedateIndex,
-      olderLeavedataIndex,
-      cursorIndex
+      olderLeavedataIndex
+    }, () => {
+      this.setData({
+        cursorIndex
+      })
+    })
+  },
+
+  save () {
+    wx.showLoading({
+      title: "保存中。。。"
+    })
+    let {
+      name,
+      position,
+      hiredate,
+      leavedate,
+      industry,
+      monthly_salary,
+      job_description
+    } = this.data.company;
+    req.request('/addWorkExperience', {
+      name,
+      position,
+      hiredate,
+      leavedate,
+      industry,
+      monthly_salary,
+      job_description
+    }, 'POST', (res) => {
+      console.log(res)
+      if (res.data.code != 'error') {
+        wx.hideLoading();
+        wx.showToast({
+          title: '添加成功',
+          icon: 'success',
+          success: () => {
+            setTimeout(() => {
+              let pages = getCurrentPages(); //获取当前页面js里面的pages里的所有信息。
+              //prevPage 是获取上一个页面的js里面的pages的所有信息。 -2 是上一个页面，-3是上上个页面以此类推。
+              let prevPage = pages[pages.length - 2]; 
+
+              prevPage.setData({ // 将我们想要传递的参数在这里直接setData。上个页面就会执行这里的操作
+                isBack: true
+              });
+              wx.navigateBack({
+                delta: 1 // 返回上一级页面。
+              });
+            }, 1500);
+          }
+        });
+      } else {
+        wx.showToast({
+          title: '添加失败',
+          icon: 'none'
+        });
+      }
     })
   }
 })
