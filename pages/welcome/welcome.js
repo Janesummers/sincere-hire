@@ -88,6 +88,11 @@ Page({
    */
   onLoad: function (options) {
     // this.init();
+    let height = wx.getSystemInfoSync().windowHeight;
+    this.setData({
+      height
+    })
+
     wx.getSetting({
       success: res => {
         if (res.authSetting['scope.userInfo']) {
@@ -96,11 +101,17 @@ Page({
             title: '已授权',
             success: () => {
               if (wx.getStorageSync('unionid')) {
+                this.setData({
+                  impowerShow: false
+                })
                 req.request('/getUserInfo', null, 'GET', (res) => {
                   let data = res.data.data;
                   let avatarUrl = `${app.globalData.UrlHeadAddress}/qzApi/userAvatar/${data.avatarUrl}`
                   data.avatarUrl = avatarUrl;
                   wx.setStorageSync('userInfo', data);
+                  this.setData({
+                    isUserLogin: false
+                  })
                   if (res.data.data.rule) {
                     // wx.redirectTo({
                     //   url: '../live-resume/live-resume'
@@ -110,53 +121,58 @@ Page({
                     })
                   }
                 })
+              } else {
+                this.setData({
+                  impowerShow: true
+                })
               }
             }
           })
-        }
-        if (!res.authSetting['scope.userInfo'] || !wx.getStorageSync('user') || !wx.getStorageSync('unionid') || !wx.getStorageSync('userInfo')) {
+          return;
+        } else {
+          console.log(111)
           this.setData({
             impowerShow: true
           })
+          return;
         }
+        // if (!wx.getStorageSync('user') || !wx.getStorageSync('unionid') || !wx.getStorageSync('userInfo')) {
+        //   this.setData({
+        //     impowerShow: true
+        //   })
+        //   return;
+        // }
+        // if (wx.getStorageSync('user')) {
+        //   let userInfo = wx.getStorageSync('userInfo');
+        //   if (!userInfo || !userInfo.rule) {
+        //     this.getData();
+        //   } else {
+        //     app.globalData.userInfo = userInfo;
+        //     if (userInfo.rule == 'job_seeker') {
+        //       wx.switchTab({
+        //         url: '../index/index'
+        //       })
+        //       // wx.redirectTo({
+        //       //   url: '../live-resume/live-resume'
+        //       // })
+        //     } else {
+        //       wx.switchTab({
+        //         url: '../message/message'
+        //       })
+        //     }
+        //   }
+        //   return;
+        // }
       }
-    })
-    let height = wx.getSystemInfoSync().windowHeight;
-    this.setData({
-      height
     })
 
-    if (wx.getStorageSync('user')) {
-      let userInfo = wx.getStorageSync('userInfo');
-      if (!userInfo || !userInfo.rule) {
-        this.getData();
-      } else {
-        app.globalData.userInfo = userInfo;
-        if (userInfo.rule == 'job_seeker') {
-          wx.switchTab({
-            url: '../index/index'
-          })
-          // wx.redirectTo({
-          //   url: '../live-resume/live-resume'
-          // })
-        } else {
-          wx.switchTab({
-            url: '../message/message'
-          })
-        }
-      }
-    }
   },
 
   /**
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    if (!wx.getStorageSync('user')) {
-      this.setData({
-        impowerShow: true
-      })
-    }
+    
   },
 
   getUser(e) {
@@ -170,7 +186,17 @@ Page({
       wx.setStorageSync('user', user);
       req.login(() => {
         console.log('用户登录成功');
-        this.getData();
+        let userInfo = wx.getStorageSync('userInfo');
+        if (userInfo && !!userInfo.rule) {
+          wx.switchTab({
+            url: '../index/index'
+          })
+          // wx.redirectTo({
+          //   url: '../live-resume/live-resume'
+          // })
+        } else {
+          this.getData();
+        }
       })
     } else {
       wx.setStorageSync('unionid', '');
@@ -208,58 +234,76 @@ Page({
       school = schools.data.data;
       major = majors.data.data;
       this.setData({
-        isUserLogin: false
+        impowerShow: false
       })
       this.init()
     })
   },
 
   init () {
-    let time = new Date().getFullYear();
-    // let citys = this.data.citys;
-    let {
-      selectCity, 
-      selectBirthday, 
-      birthIndex, 
-      selectEnrollment,
-      enrollmentIndex,
-      selectGraduation,
-      jobTime,
-      jobTimeIndex
-    } = this.data;
-    for (let i = 1950; i <= time; i++) {
-      selectBirthday[0].push(`${i} 年`);
-      selectEnrollment[0].push(`${i} 年`);
-      jobTime[0].push(`${i} 年`);
-    }
-    selectBirthday[0].splice(-16);
-    jobTime[0].push("无工作经验");
-    birthIndex = [selectBirthday[0].length - 1, 0];
-    enrollmentIndex = [selectEnrollment[0].length - 1, 0];
-    jobTimeIndex = [jobTime[0].length - 1, 0];
-    for (let i = 1; i <= 12; i++) {
-      selectBirthday[1].push(i < 10 ? `0${i} 月` : `${i} 月`);
-      selectEnrollment[1].push(i < 10 ? `0${i} 月` : `${i} 月`);
-      selectGraduation[1].push(i < 10 ? `0${i} 月` : `${i} 月`);
-    }
-    for (let i = 0, l = citys.length; i < l; i++) {
-      selectCity[0].push(citys[i].name);
-    }
-    for (let j = 0, l = citys[0].city.length; j < l; j++) {
-      let name = citys[0].city[j].name == '市辖区' ? citys[0].name : citys[0].city[j].name
-      selectCity[1].push(name);
+    let userInfo = wx.getStorageSync('userInfo');
+    console.log(userInfo, userInfo.rule)
+    if (userInfo && !!userInfo.rule) {
+      // wx.switchTab({
+      //   url: '../index/index'
+      // })
+      wx.redirectTo({
+        url: '../live-resume/live-resume'
+      })
+      this.setData({
+        isUserLogin: false
+      })
+    } else {
+      this.setData({
+        isUserLogin: false
+      })
+      let time = new Date().getFullYear();
+      // let citys = this.data.citys;
+      let {
+        selectCity,
+        selectBirthday,
+        birthIndex,
+        selectEnrollment,
+        enrollmentIndex,
+        selectGraduation,
+        jobTime,
+        jobTimeIndex
+      } = this.data;
+      for (let i = 1950; i <= time; i++) {
+        selectBirthday[0].push(`${i} 年`);
+        selectEnrollment[0].push(`${i} 年`);
+        jobTime[0].push(`${i} 年`);
+      }
+      selectBirthday[0].splice(-16);
+      jobTime[0].push("无工作经验");
+      birthIndex = [selectBirthday[0].length - 1, 0];
+      enrollmentIndex = [selectEnrollment[0].length - 1, 0];
+      jobTimeIndex = [jobTime[0].length - 1, 0];
+      for (let i = 1; i <= 12; i++) {
+        selectBirthday[1].push(i < 10 ? `0${i} 月` : `${i} 月`);
+        selectEnrollment[1].push(i < 10 ? `0${i} 月` : `${i} 月`);
+        selectGraduation[1].push(i < 10 ? `0${i} 月` : `${i} 月`);
+      }
+      for (let i = 0, l = citys.length; i < l; i++) {
+        selectCity[0].push(citys[i].name);
+      }
+      for (let j = 0, l = citys[0].city.length; j < l; j++) {
+        let name = citys[0].city[j].name == '市辖区' ? citys[0].name : citys[0].city[j].name
+        selectCity[1].push(name);
+      }
+
+      this.setData({
+        selectCity,
+        selectBirthday,
+        birthIndex,
+        selectEnrollment,
+        enrollmentIndex,
+        selectGraduation,
+        jobTime,
+        jobTimeIndex
+      });
     }
     
-    this.setData({
-      selectCity,
-      selectBirthday,
-      birthIndex,
-      selectEnrollment,
-      enrollmentIndex,
-      selectGraduation,
-      jobTime,
-      jobTimeIndex
-    });
   },
 
   showBox (e) {
