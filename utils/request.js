@@ -17,6 +17,13 @@ try {
   }
 } catch (e) {
 }
+try {
+  var user = wx.getStorageSync('user');
+  if (user) {
+    app.globalData.user = user;
+  }
+} catch (e) {
+}
 function login(loginCallback){
 
   const ep = new EventProxy()
@@ -53,6 +60,7 @@ function login(loginCallback){
   ep.all('code', (code) => {
     console.log(app.globalData.user);
     var user = wx.getStorageSync('user');
+    console.log(user)
     wx.request({
       url: `${app.globalData.UrlHeadAddress}/qzApi/login`,
       method: 'post',
@@ -72,7 +80,18 @@ function login(loginCallback){
         try {
           if (res.data.data[0].unionid) {
             try {
-              wx.setStorageSync('userInfo', res.data.data[0]);
+              let userInfo = res.data.data[0];
+              switch (userInfo.rule) {
+                case 0:
+                  res.data.data[0].rule = 'job_seeker';
+                  break;
+                case 1:
+                  res.data.data[0].rule = 'recruiter';
+                  break;
+                default:
+                  res.data.data[0].rule = '';
+              }
+              wx.setStorageSync('userInfo', userInfo);
             } catch (e) {
             }
           }
