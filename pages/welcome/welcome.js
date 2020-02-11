@@ -1,6 +1,6 @@
 // pages/welcome/welcome.js
 const base64 = require('../../utils/base64').Base64;
-const request = require('../../utils/request');
+const req = require('../../utils/request');
 const EventProxy = require('../../utils/eventproxy');
 let citys = [];
 let school = [];
@@ -42,20 +42,14 @@ Page({
       rule: 0
     },
     recruiter: {
-      name: '陈立权',
-      email: '1752321720@qq.com',
+      name: '',
+      email: '',
       avatarUrl: '',
-      position: '经理',
-      company: '福建探极贸易有限公司',
-      industry: '电子商务',
-      scale: '15-50人',
-      progress: '天使轮',
-      industryArr: ['不限', '移动互联网', '电子商务', '金融', '企业服务', '文化娱乐', '游戏', '招聘', '信息安全', '其他'],
-      industryIndex: 0,
-      scaleArr: ['少于15人', '15-50人', '50-150人', '150-500人', '500-2000人', '2000人以上'],
-      scaleIndex: 0,
-      progressArr: ['未融资', '天使轮', 'A轮', 'B轮', 'C轮', 'D轮及以上', '上市公司', '不需要融资'],
-      progressIndex: 0,
+      position: '',
+      company: '',
+      industry: '',
+      scale: '',
+      progress: '',
       rule: 1
     },
     sexIndex: 0,
@@ -66,7 +60,7 @@ Page({
     identity: ['学生', '职场人士'],
     selectBirthday: [[], []],
     birthIndex: [0, 0],
-    education: ['大专', '本科', '硕士', '博士'],
+    education: ['初中', '高中', '中技', '中专', '大专', '本科', '硕士', 'MBA', 'EMBA', '博士'],
     educationIndex: 0,
     enrollmentIndex: 0,
     selectEnrollment: [[], []],
@@ -80,7 +74,13 @@ Page({
     age: 0,
     status: '',
     jobTime: [[], []],
-    jobTimeIndex: [0, 0]
+    jobTimeIndex: [0, 0],
+    industryArr: ['不限', '移动互联网', '电子商务', '金融', '企业服务', '文化娱乐', '游戏', '招聘', '信息安全', '其他'],
+    industryIndex: 0,
+    scaleArr: ['少于15人', '15-50人', '50-150人', '150-500人', '500-2000人', '2000人以上'],
+    scaleIndex: 0,
+    progressArr: ['未融资', '天使轮', 'A轮', 'B轮', 'C轮', 'D轮及以上', '上市公司', '不需要融资'],
+    progressIndex: 0,
   },
 
   /**
@@ -88,6 +88,39 @@ Page({
    */
   onLoad: function (options) {
     // this.init();
+    wx.getSetting({
+      success: res => {
+        if (res.authSetting['scope.userInfo']) {
+          // 已经授权，可以直接调用 getUserInfo 获取头像昵称，不会弹框
+          wx.showToast({
+            title: '已授权',
+            success: () => {
+              if (wx.getStorageSync('unionid')) {
+                req.request('/getUserInfo', null, 'GET', (res) => {
+                  let data = res.data.data;
+                  let avatarUrl = `${app.globalData.UrlHeadAddress}/qzApi/userAvatar/${data.avatarUrl}`
+                  data.avatarUrl = avatarUrl;
+                  wx.setStorageSync('userInfo', data);
+                  if (res.data.data.rule) {
+                    // wx.redirectTo({
+                    //   url: '../live-resume/live-resume'
+                    // })
+                    wx.switchTab({
+                      url: '../index/index'
+                    })
+                  }
+                })
+              }
+            }
+          })
+        }
+        if (!res.authSetting['scope.userInfo'] || !wx.getStorageSync('user') || !wx.getStorageSync('unionid') || !wx.getStorageSync('userInfo')) {
+          this.setData({
+            impowerShow: true
+          })
+        }
+      }
+    })
     let height = wx.getSystemInfoSync().windowHeight;
     this.setData({
       height
@@ -95,17 +128,17 @@ Page({
 
     if (wx.getStorageSync('user')) {
       let userInfo = wx.getStorageSync('userInfo');
-      if (!userInfo) {
+      if (!userInfo || !userInfo.rule) {
         this.getData();
       } else {
         app.globalData.userInfo = userInfo;
         if (userInfo.rule == 'job_seeker') {
-          // wx.switchTab({
-          //   url: '../index/index'
-          // })
-          wx.redirectTo({
-            url: '../info/info'
+          wx.switchTab({
+            url: '../index/index'
           })
+          // wx.redirectTo({
+          //   url: '../live-resume/live-resume'
+          // })
         } else {
           wx.switchTab({
             url: '../message/message'
@@ -113,13 +146,6 @@ Page({
         }
       }
     }
-  },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-
   },
 
   /**
@@ -133,41 +159,6 @@ Page({
     }
   },
 
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-
-  },
-
   getUser(e) {
     if ((e.detail.data.errMsg).indexOf('ok') != -1) {
       console.log('用户信息获取成功', JSON.parse(e.detail.data.rawData));
@@ -177,7 +168,7 @@ Page({
       let user = e.detail.data;
       app.globalData.user = user;
       wx.setStorageSync('user', user);
-      request.login(() => {
+      req.login(() => {
         console.log('用户登录成功');
         this.getData();
       })
@@ -188,7 +179,7 @@ Page({
 
   getData () {
     const ep = new EventProxy();
-    request.request('/getCity', null, 'GET', (res) => {
+    req.request('/getCity', null, 'GET', (res) => {
       if (res.data.code == 'error') {
         ep.emit('error', '获取城市信息失败');
       } else {
@@ -196,7 +187,7 @@ Page({
       }
     })
 
-    request.request('/getSchool', null, 'GET', (res) => {
+    req.request('/getSchool', null, 'GET', (res) => {
       if (res.data.code == 'error') {
         ep.emit('error', '获取学校信息失败');
       } else {
@@ -204,7 +195,7 @@ Page({
       }
     })
 
-    request.request('/getMajor', null, 'GET', (res) => {
+    req.request('/getMajor', null, 'GET', (res) => {
       if (res.data.code == 'error') {
         ep.emit('error', '获取专业信息失败');
       } else {
@@ -417,7 +408,7 @@ Page({
       title: '载入中...'
     })
     if (e.currentTarget.dataset.rule == 'job_seeker') {
-      request.request('saveJobSeeker', this.data.job_seeker, 'POST', (res) => {
+      req.request('saveJobSeeker', this.data.job_seeker, 'POST', (res) => {
         console.log(res)
         let userInfo = res.data.data;
         userInfo.avatarUrl = this.data.job_seeker.avatarUrl;
@@ -444,7 +435,7 @@ Page({
         })
       })
     } else {
-      request.request('/saveRecruiter', this.data.recruiter, 'POST', (res) => {
+      req.request('/saveRecruiter', this.data.recruiter, 'POST', (res) => {
         console.log(res)
         let userInfo = res.data.data;
         userInfo.avatarUrl = this.data.recruiter.avatarUrl;
@@ -487,7 +478,7 @@ Page({
         let age = 0;
         let selectBirthday = this.data.selectBirthday;
         var year = parseInt(selectBirthday[0][value[0]]);
-        var month = selectBirthday[1][value[1]].replace('月', '').trim();
+        var month = selectBirthday[1][value[1]].replace(' 月', '').trim();
         job_seeker[key] = `${year}.${month}`;
         let date = new Date();
         if (parseInt(month) < date.getMonth() + 1) {
@@ -503,7 +494,7 @@ Page({
         let status = "";
         let selectGraduation = this.data.selectGraduation;
         var year = parseInt(selectGraduation[0][value[0]]);
-        var month = selectGraduation[1][value[1]].replace('月', '').trim();
+        var month = selectGraduation[1][value[1]].replace(' 月', '').trim();
         if (year == new Date().getFullYear()) {
           status = "应届毕业生"
         } else {
@@ -656,22 +647,26 @@ Page({
     let {
       job_seeker, 
       selectEnrollment, 
-      selectGraduation
+      selectGraduation,
+      graduationIndex
     } = this.data;
     let value = e.detail.value;
     let key = e.target.dataset.key;
     let year = parseInt(selectEnrollment[0][value[0]]);
-    let month = selectEnrollment[1][value[1]].replace('月', '').trim();
+    let month = selectEnrollment[1][value[1]].replace(' 月', '').trim();
     job_seeker[key] = `${year}.${month}`;
     let time = new Date().getFullYear() + 5;
 
     for (let i = year; i <= time; i++) {
       selectGraduation[0].push(`${i} 年`)
     }
+    graduationIndex = [0, 0]
+    job_seeker.time_graduation = '';
 
     this.setData({
       job_seeker,
-      selectGraduation
+      selectGraduation,
+      graduationIndex
     })
   },
 

@@ -399,8 +399,8 @@
                   mode="selector" 
                   bindchange="recruiterPut" 
                   data-key="industry" 
-                  range="{{recruiter.industryArr}}" 
-                  value="{{recruiter.industryIndex}}"
+                  range="{{industryArr}}" 
+                  value="{{industryIndex}}"
                 >
                   <view class="{{recruiter.industry == '' ? 'picker' : 'pickerActive'}}">
                     <view wx:if="{{recruiter.industry == ''}}">点击选择行业领域</view>
@@ -416,8 +416,8 @@
                   mode="selector" 
                   bindchange="recruiterPut" 
                   data-key="scale" 
-                  range="{{recruiter.scaleArr}}" 
-                  value="{{recruiter.scaleIndex}}"
+                  range="{{scaleArr}}" 
+                  value="{{scaleIndex}}"
                 >
                   <view class="{{recruiter.scale == '' ? 'picker' : 'pickerActive'}}">
                     <view wx:if="{{recruiter.scale == ''}}">点击选择公司规模</view>
@@ -433,8 +433,8 @@
                   mode="selector" 
                   bindchange="recruiterPut" 
                   data-key="progress" 
-                  range="{{recruiter.progressArr}}" 
-                  value="{{recruiter.progressIndex}}"
+                  range="{{progressArr}}" 
+                  value="{{progressIndex}}"
                 >
                   <view class="{{recruiter.progress == '' ? 'picker' : 'pickerActive'}}">
                     <view wx:if="{{recruiter.progress == ''}}">点击选择发展阶段</view>
