@@ -10,7 +10,9 @@
     "pages/job-list/job-list",
     "pages/msg-detail/msg-detail",
     "pages/live-resume/live-resume",
-    "pages/info/info"
+    "pages/info/info",
+    "pages/add-education/add-education",
+    "pages/add-work-experience/add-work-experience"
   ],
   "window": {
     "backgroundTextStyle": "light",
