@@ -1,4 +1,6 @@
 // pages/me/me.js
+const app = getApp();
+const base64 = require('../../utils/base64').Base64;
 Page({
 
   /**
@@ -87,5 +89,40 @@ Page({
     wx.navigateTo({
       url: options.currentTarget.dataset.path
     })
-  }
+  },
+
+  changeAvatarUrl () {
+    let userInfo = this.data.userInfo;
+    wx.chooseImage({
+      count: 1,
+      sizeType: ['compressed'],
+      success: (res) => {
+        console.log(res)
+        userInfo.avatarUrl = res.tempFilePaths;
+        this.setData({
+          userInfo
+        })
+        console.log(`${app.globalData.UrlHeadAddress}/qzApi/userAvatarUrl`)
+        wx.uploadFile({
+          url: `${app.globalData.UrlHeadAddress}/qzApi/userAvatarUrl`,
+          filePath: res.tempFilePaths[0],
+          name: 'file',
+          header: {
+            'content-type': 'multipart/form-data'
+          },
+          formData: {
+            unionid: base64.encode(app.globalData.unionid)
+          },
+          success: (res) => {
+            let data = JSON.parse(res.data);
+            userInfo.avatarUrl = `${app.globalData.UrlHeadAddress}/qzApi/userAvatar/${data.data.img}`;
+            wx.setStorageSync('userInfo', userInfo)
+            this.setData({
+              userInfo
+            })
+          }
+        })
+      }
+    })
+  },
 })

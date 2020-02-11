@@ -3,7 +3,7 @@
   <view id="me">
     <view class="info">
       <view class="head">
-        <image src="{{userInfo.avatarUrl}}" mode="widthFix"></image>
+        <image src="{{userInfo.avatarUrl}}" mode="widthFix" bindtap="changeAvatarUrl"></image>
       </view>
       <view class="right">
         <view class="top">
