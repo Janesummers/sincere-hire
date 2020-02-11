@@ -1,7 +1,7 @@
 // pages/live-resume/live-resume.js
 const app = getApp();
 const req = require('../../utils/request');
-
+const EventProxy = require('../../utils/eventproxy');
 Page({
 
   /**
@@ -10,7 +10,8 @@ Page({
   data: {
     userInfo: null,
     userEducation: null,
-    isBack: false
+    isBack: false,
+    userWork: null
   },
 
   /**
@@ -36,10 +37,30 @@ Page({
   },
 
   getData () {
-    req.request('/getUserEducation', null, 'POST', (res) => {
-      let education = res.data.data;
+    let ep = new EventProxy();
+
+    req.request('/getUserEducation', null, 'GET', (res) => {
+      if (res.data.code == 'ok') {
+        let education = res.data.data;
+        ep.emit('edu', education);
+      } else {
+        ep.emit('error', res.data.data);
+      }
+    })
+
+    req.request('/getUserWork', null, 'GET', (res) => {
+      if (res.data.code == 'ok') {
+        let work = res.data.data;
+        ep.emit('work_experience', work);
+      } else {
+        ep.emit('error', res.data.data);
+      }
+    })
+
+    ep.all('edu', 'work_experience', (edu, work) => {
       this.setData({
-        userEducation: education,
+        userEducation: edu,
+        userWork: work,
         isBack: false
       })
     })

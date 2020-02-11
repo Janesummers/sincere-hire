@@ -8,20 +8,20 @@
           <view class="" bindtap="toPage" data-path="add-work-experience">添加</view>
         </view>
       </view>
-      <view class="work_experience">
+      <view class="work_experience" wx:for="{{userWork}}" wx:key="id">
         <view class="name">
           <view class="company_name">
             <view class="iconfont icon-gongsixinxi"></view>
-            福建探极贸易有限公司
+            {{item.company_name}}
           </view>
           <view class="iconfont icon-bianji1"></view>
         </view>
-        <view class="time">2018.3 - 2018.6</view>
+        <view class="time">{{item.hiredate}} - {{item.leavedate}}</view>
         <view class="job">
-          <view class="my_job">前端工程师</view>
-          <view class="salary">3000元/月</view>
+          <view class="my_job">{{item.position}}</view>
+          <view class="salary">{{item.salary}}元/月</view>
         </view>
-        <view class="responsibility">只要负责、。。。。f。。。大萨达所大大所大所多撒sad撒多撒多撒多所多</view>
+        <view class="responsibility">{{item.job_description}}</view>
       </view>
     </view>
     <view class="items">
