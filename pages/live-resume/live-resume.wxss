@@ -1,3 +1,8 @@
+page {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
 .container .list {
   width: 100%;
   box-sizing: border-box;
@@ -105,4 +110,55 @@
   font-size: 28rpx;
   line-height: 50rpx;
   color: #797676;
+}
+.container .eidt_text {
+  position: fixed;
+  transition: 0.5s;
+  width: 100%;
+  height: 100%;
+  background: #fff;
+  top: 0;
+  left: 0;
+  box-sizing: border-box;
+  padding: 0 40rpx;
+}
+.container .eidt_text .top {
+  height: 100rpx;
+  line-height: 100rpx;
+  display: flex;
+  justify-content: space-between;
+  font-size: 32rpx;
+  z-index: 100;
+}
+.container .eidt_text .top view {
+  width: 100rpx;
+}
+.container .eidt_text .top view.cancel {
+  color: #888888;
+}
+.container .eidt_text .top view.save {
+  color: #4188f2;
+  text-align: right;
+}
+.container .eidt_text .title {
+  font-size: 46rpx;
+  font-weight: 500;
+  margin-bottom: 60rpx;
+}
+.container .eidt_text .text textarea {
+  width: 100%;
+  height: 360rpx;
+  border-bottom: 1px solid #e6e6e6;
+  font-size: 32rpx;
+}
+.container .eidt_text .text .astrict {
+  font-size: 28rpx;
+  line-height: 100rpx;
+  text-align: right;
+  color: #dbdbdb;
+}
+.container .eidt_text .text .hint {
+  font-size: 28rpx;
+  color: #dbdbdb;
+  line-height: 50rpx;
 }

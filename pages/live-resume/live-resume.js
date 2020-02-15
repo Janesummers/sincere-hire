@@ -11,7 +11,13 @@ Page({
     userInfo: null,
     userEducation: null,
     isBack: false,
-    userWork: null
+    userWork: null,
+    evaluate: '',
+    top: 100,
+    display: 'none',
+    winH: 0,
+    textLen: 0,
+    oldEvaluate: ''
   },
 
   /**
@@ -19,9 +25,15 @@ Page({
    */
   onLoad: function (options) {
     try {
+      let winH = wx.getSystemInfoSync().windowHeight;
       let userInfo = wx.getStorageSync('userInfo');
+      let textLen = userInfo.advantage.length;
       this.setData({
-        userInfo
+        userInfo,
+        evaluate: userInfo.advantage,
+        winH,
+        textLen,
+        oldEvaluate: userInfo.advantage
       });
       this.getData()
     } catch(e) {
@@ -70,6 +82,69 @@ Page({
     let path = e.target.dataset.path;
     wx.navigateTo({
       url: `../${path}/${path}`
+    })
+  },
+
+  evaluateChange (e) {
+    let value = e.detail.value;
+    this.setData({
+      evaluate: value,
+      textLen: value.length
+    })
+  },
+
+  close () {
+    this.setData({
+      top: 100,
+      evaluate: this.data.oldEvaluate
+    }, () => {
+      setTimeout(() => {
+        this.setData({
+          display: 'none'
+        })
+      }, 400);
+    })
+  },
+
+  save () {
+    wx.showLoading({
+      title: '保存中'
+    })
+    let {
+      userInfo,
+      evaluate,
+      oldEvaluate
+    } = this.data;
+    req.request('/saveEvaluate', {
+      text: evaluate
+    }, 'POST', res => {
+      if (res.data.code != 'error') {
+        userInfo.advantage = evaluate;
+        oldEvaluate = evaluate;
+        this.setData({
+          userInfo,
+          oldEvaluate
+        })
+        wx.showToast({
+          title: '保存成功',
+          success: () => {
+            wx.setStorageSync('userInfo', userInfo);
+            this.close();
+          }
+        })
+      } else {
+        wx.showToast({
+          title: '保存失败',
+          icon: 'none'
+        })
+      }
+    })
+  },
+
+  showEdit () {
+    this.setData({
+      display: 'block',
+      top: 0
     })
   }
 })

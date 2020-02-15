@@ -1,4 +1,9 @@
 @mainColor: #64bfba;
+page {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
 .container {
   .list {
     width: 100%;
@@ -103,6 +108,59 @@
         font-size: 28rpx;
         line-height: 50rpx;
         color: #797676;
+      }
+    }
+  }
+  .eidt_text {
+    position: fixed;
+    transition: 0.5s;
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    top: 0;
+    left: 0;
+    box-sizing: border-box;
+    padding: 0 40rpx;
+    .top {
+      height: 100rpx;
+      line-height: 100rpx;
+      display: flex;
+      justify-content: space-between;
+      font-size: 32rpx;
+      z-index: 100;
+      view {
+        width: 100rpx;
+        &.cancel {
+          color: #888888;
+        }
+        &.save {
+          color: #4188f2;
+          text-align: right;
+        }
+      }
+    }
+    .title {
+      font-size: 46rpx;
+      font-weight: 500;
+      margin-bottom: 60rpx;
+    }
+    .text{
+      textarea {
+        width: 100%;
+        height: 360rpx;
+        border-bottom: 1px solid #e6e6e6;
+        font-size: 32rpx;
+      }
+      .astrict {
+        font-size: 28rpx;
+        line-height: 100rpx;
+        text-align: right;
+        color: #dbdbdb;
+      }
+      .hint {
+        font-size: 28rpx;
+        color: #dbdbdb;
+        line-height: 50rpx;
       }
     }
   }

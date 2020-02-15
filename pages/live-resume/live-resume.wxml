@@ -1,4 +1,4 @@
-<view class="container">
+<view class="container" style="overflow: {{top == 0 ? 'hidden' : 'scroll'}}">
   <view class="list">
     <view class="items">
       <view class="top">
@@ -50,11 +50,31 @@
       <view class="top">
         <view class="title">自我评价</view>
         <view class="add">
-          <view class="iconfont icon-bianji1"></view>
+          <view class="iconfont icon-bianji1" bindtap="showEdit"></view>
         </view>
       </view>
       <view class="self_appraisal">
         {{userInfo.advantage}}
+      </view>
+    </view>
+  </view>
+  <view class="eidt_text" style="top: {{top}}%; display: {{display}}; height: {{winH}}px">
+    <view class="top" hover-class="none" hover-stop-propagation="false">
+      <view class="cancel" bindtap="close">取消</view>
+      <view class="save" bindtap="save">保存</view>
+    </view>
+    <view class="title" hover-class="none" hover-stop-propagation="false">
+      自我评价
+    </view>
+    <view class="text" hover-class="none" hover-stop-propagation="false">
+      <textarea value="{{evaluate}}" placeholder="请填写" bindinput="evaluateChange"></textarea>
+      <view class="astrict" hover-class="none" hover-stop-propagation="false">
+        {{textLen}}/500
+      </view>
+      <view class="hint" hover-class="none" hover-stop-propagation="false">
+        建议你对自己做一个简短评价，让用人单位快速了解你，优秀的自我评价可以吸引招聘人员的眼球为你的简历增色不少
+        <view>例:职业优势</view>
+        为保护个人隐私，请不要填写手机号、QQ、微信等联系方式
       </view>
     </view>
   </view>
