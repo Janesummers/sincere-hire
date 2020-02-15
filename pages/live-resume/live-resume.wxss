@@ -137,7 +137,7 @@ page {
   color: #888888;
 }
 .container .eidt_text .top view.save {
-  color: #4188f2;
+  color: #64bfba;
   text-align: right;
 }
 .container .eidt_text .title {
