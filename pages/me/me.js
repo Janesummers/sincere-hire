@@ -86,8 +86,23 @@ Page({
   },
 
   toPage (options) {
+    let url = ''
+    let type = options.currentTarget.dataset.type;
+    if (type) {
+      url = `${options.currentTarget.dataset.path}?type=${type}`
+    } else {
+      url = options.currentTarget.dataset.path;
+    }
     wx.navigateTo({
-      url: options.currentTarget.dataset.path
+      url
+    })
+  },
+
+  toList (e) {
+    console.log(e)
+    let type = e.currentTarget.dataset.type;
+    wx.navigateTo({
+      url: `/pages/job-list/job-list?type=${type}`
     })
   },
 
@@ -115,6 +130,9 @@ Page({
           },
           success: (res) => {
             let data = JSON.parse(res.data);
+            wx.showToast({
+              title: '修改成功'
+            })
             userInfo.avatarUrl = `${app.globalData.UrlHeadAddress}/qzApi/userAvatar/${data.data.img}`;
             wx.setStorageSync('userInfo', userInfo)
             this.setData({
