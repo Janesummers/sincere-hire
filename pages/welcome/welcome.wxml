@@ -449,7 +449,5 @@
     </swiper>
   </view>
 </view>
-<view class="shadowBox" wx:if="{{isUserLogin}}">
-  <text class='loading'></text>载入中
-</view>
+<loading  wx:if="{{isUserLogin}}"/> 
 <impower-shadow wx:if="{{impowerShow}}" bind:getUser="getUser" ></impower-shadow>

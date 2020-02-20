@@ -1,6 +1,6 @@
 // pages/message/message.js
 const base64 = require('../../utils/base64').Base64;
-const request = require('../../utils/request');
+const req = require('../../utils/request');
 const app = getApp();
 Page({
 
@@ -8,21 +8,15 @@ Page({
    * 页面的初始数据
    */
   data: {
-    list: []
+    list: [],
+    isDone: false
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    let unionid = wx.getStorageSync('unionid');
-    request.request('/getMessageList', { id: base64.encode(unionid)}, 'POST', (res) => {
-      console.log(res.data.data)
-      let list = res.data.data;
-      this.setData({
-        list
-      })
-    })
+    this.getData();
   },
 
   /**
@@ -36,48 +30,32 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-
+    this.getData();
   },
 
   toDetail (e) {
     let id = e.currentTarget.dataset.id;
     wx.navigateTo({
       url: `/pages/msg-detail/msg-detail?id=${id}`
+    })
+  },
+
+  getData () {
+    this.setData({
+      isDone: false
+    })
+    let unionid = wx.getStorageSync('unionid');
+    req.request('/getMessageList', { id: base64.encode(unionid)}, 'POST', (res) => {
+      let list = res.data.data;
+      list.forEach(item => {
+        if (item.avatarUrl) {
+          item.avatarUrl = `${app.globalData.UrlHeadAddress}/qzApi/userAvatar/${item.avatarUrl}`
+        }
+      })
+      this.setData({
+        list,
+        isDone: true
+      })
     })
   }
 })

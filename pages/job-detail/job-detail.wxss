@@ -6,11 +6,22 @@ page {
 }
 .container .job_type {
   padding: 30rpx 0;
+  position: relative;
+}
+.container .job_type .iconfont {
+  position: absolute;
+  right: 0;
+  top: 28rpx;
+  font-size: 48rpx;
+}
+.container .job_type .iconfont.icon-shoucang1 {
+  color: #64bfba;
 }
 .container .job_type .job_title {
   font-size: 42rpx;
   font-weight: 500;
   margin-bottom: 10rpx;
+  width: 92%;
 }
 .container .job_type .demand {
   display: flex;

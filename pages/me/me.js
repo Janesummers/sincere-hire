@@ -16,23 +16,29 @@ Page({
   onLoad: function (options) {
     try {
       let userInfo = wx.getStorageSync('userInfo');
-      let birth = userInfo.birthday;
-      birth = birth.match(/[^\.]+/g);
-      let year = parseInt(birth[0]);
-      let month = parseInt(birth[1]);
-      let date = new Date();
-      let age = 0;
-      if (month < date.getMonth() + 1) {
-        age = date.getFullYear() - year
+      
+      if (userInfo.rule == 'job_seeker') {
+        let birth = userInfo.birthday;
+        birth = birth.match(/[^\.]+/g);
+        let year = parseInt(birth[0]);
+        let month = parseInt(birth[1]);
+        let date = new Date();
+        let age = 0;
+        if (month < date.getMonth() + 1) {
+          age = date.getFullYear() - year
+        } else {
+          age = date.getFullYear() - year - 1
+        }
+        userInfo.age = age
       } else {
-        age = date.getFullYear() - year - 1
+
       }
-      userInfo.age = age
+
       this.setData({
         userInfo
       });
     } catch(e) {
-
+      console.log(e)
     }
   },
 
@@ -87,22 +93,17 @@ Page({
 
   toPage (options) {
     let url = ''
-    let type = options.currentTarget.dataset.type;
+    let {
+      type,
+      path
+    } = options.currentTarget.dataset;
     if (type) {
-      url = `${options.currentTarget.dataset.path}?type=${type}`
+      url = `/pages/${path}/${path}?type=${type}`
     } else {
-      url = options.currentTarget.dataset.path;
+      url = `/pages/${path}/${path}`;
     }
     wx.navigateTo({
       url
-    })
-  },
-
-  toList (e) {
-    console.log(e)
-    let type = e.currentTarget.dataset.type;
-    wx.navigateTo({
-      url: `/pages/job-list/job-list?type=${type}`
     })
   },
 

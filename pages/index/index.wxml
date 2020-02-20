@@ -15,8 +15,8 @@
   <view class="card">
     <view class="content">
       <view class="img_box">
-        <image bindtap="toList" src="../../images/entry1.jpg"></image>
-        <image bindtap="toList" src="../../images/entry2.jpg"></image>
+        <image bindtap="toList" data-type="实习" src="../../images/entry1.jpg"></image>
+        <image bindtap="toList" data-type="全职" src="../../images/entry2.jpg"></image>
       </view>
     </view>
   </view>
@@ -24,13 +24,13 @@
   <view class="card">
     <view class="title">最新实习岗位</view>
     <view class="content">
-      <view class="station" wx:for="{{station}}" wx:key="index" bindtap="toJobDetail">
+      <view class="station" wx:for="{{station}}" wx:key="id" bindtap="toJobDetail" data-id="{{item.id}}">
         <view class="left">
           <view class="position">{{item.position}}</view>
           <view class="info">
             <view class="location">{{item.location}}</view>
             <view class="people">招聘人数：{{item.people}}</view>
-            <view class="companyType">{{item.companyType}}</view>
+            <view class="companyType">{{item.company_type}}</view>
           </view>
           <view class="company">{{item.company}}</view>
         </view>
@@ -41,17 +41,17 @@
       </view>
     </view>
   </view>
-  <view class="card">
+  <!-- <view class="card">
     <view class="title">热门学科</view>
     <view class="content">
       <view class="hotSubject">
-        <view class="subject" wx:for="{{hotSubject}}" wx:key="index">
+        <view class="subject" wx:for="{{hotSubject}}" wx:key="index" bindtap="toList" data-type="{{item.text}}">
           <view class="icon iconfont {{item.icon}}"></view>
           <view class="text">{{item.text}}</view>
         </view>
       </view>
     </view>
-  </view>
+  </view> -->
 </view>
 <index-tabbar></index-tabbar>
 <impower-shadow wx:if="{{impowerShow}}" bind:getUser="getUser" ></impower-shadow>

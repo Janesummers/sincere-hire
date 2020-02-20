@@ -135,8 +135,9 @@ function request(action, data, method, reqesutCallback){
 }
 
 function _request(action, data, method, reqesutCallback){
+  let url = `${app.globalData.UrlHeadAddress}/qzApi/${action}?unionid=${app.globalData.unionid}`;
   wx.request({
-    url: `${app.globalData.UrlHeadAddress}/qzApi/${action}?unionid=${app.globalData.unionid}`,
+    url,
     header: {
       "Content-Type": "application/x-www-form-urlencoded"
     },

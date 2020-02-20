@@ -1,18 +1,35 @@
 // pages/job-detail/job-detail.js
+const req = require('../../utils/request');
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-
+    detail: null,
+    tapCollect: true,
+    isCollect: false
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-
+    const eventChannel = this.getOpenerEventChannel();
+    eventChannel.on('job_detail', data => {
+      data = JSON.parse(JSON.stringify(data));
+      data.other_require = data.other_require.split('|');
+      // data.job_type = data.job_type.split('/')[0];
+      this.setData({
+        detail: data
+      });
+    })
+    eventChannel.on('collect', data => {
+      console.log(data)
+      this.setData({
+        isCollect: data
+      })
+    })
   },
 
   /**
@@ -62,5 +79,53 @@ Page({
    */
   onShareAppMessage: function () {
 
+  },
+
+  collect () {
+    let job_id = this.data.detail.id;
+    let collectData = this.data.detail.collect;
+    collectData = collectData ? '1' : '0';
+    this.setData({
+      ["detail.collect"]: !this.data.detail.collect,
+      tapCollect: false
+    })
+    const eventChannel = this.getOpenerEventChannel()
+    if (!this.data.isCollect) {
+      eventChannel.emit('changeCollect', this.data.detail.collect);
+    }
+    req.request('/setCollect', {
+      job_id,
+      collectData
+    }, 'GET', res => {
+      this.setData({
+        tapCollect: true
+      })
+      if (res.data.code == 'ok') {
+        if (this.data.detail.collect) {
+          wx.showToast({
+            title: '收藏成功'
+          })
+        } else {
+          wx.showToast({
+            title: '取消收藏',
+            icon: 'none'
+          })
+        }
+        if (this.data.isCollect) {
+          eventChannel.emit('delCollect');
+        }
+      } else {
+        this.setData({
+          ["detail.collect"]: !this.data.detail.collect
+        })
+        if (!this.data.isCollect) {
+          eventChannel.emit('changeCollect', this.data.detail.collect);
+        }
+        wx.showToast({
+          title: '收藏失败',
+          icon: 'none'
+        })
+      }
+    })
   }
 })

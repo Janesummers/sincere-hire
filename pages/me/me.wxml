@@ -5,45 +5,59 @@
       <view class="head">
         <image src="{{userInfo.avatarUrl}}" mode="widthFix" bindtap="changeAvatarUrl"></image>
       </view>
-      <view class="right">
+      <view class="right {{userInfo.rule == 'recruiter' ? 'f_c' : ''}}">
         <view class="top">
           <view class="name">{{userInfo.name}}</view>
           <!-- <view class="appellation"> / 先生</view> -->
         </view>
-        <view class="middle">
-          <view  class="major item">{{userInfo.major}}</view>
-          <view class="school item">{{userInfo.school}}</view>
-        </view>
-        <view class="bottom">
-          <view class="item">{{userInfo.age}}岁</view>
-          <view class="item">工作0年</view>
-          <view class="item">{{userInfo.city}}</view>
-        </view>
+        <block wx:if="{{userInfo.rule == 'job_seeker'}}">
+          <view class="middle">
+            <view  class="major item">{{userInfo.major}}</view>
+            <view class="school item">{{userInfo.school}}</view>
+          </view>
+          <view class="bottom">
+            <view class="item">{{userInfo.age}}岁</view>
+            <view class="item">工作0年</view>
+            <view class="item">{{userInfo.city}}</view>
+          </view>
+        </block>
       </view>
     </view>
     <view class="list">
-      <view class="item" bindtap="toPage" data-path="/pages/info/info">
+      <view class="item" bindtap="toPage" data-path="info">
         <text class="ico iconfont icon-wenjian"></text>
         <text class="text">个人信息</text>
         <text class="iconfont icon-iconfonti"></text>
       </view>
-      <view class="item" bindtap="toPage" data-path="/pages/live-resume/live-resume">
+      <view class="item" bindtap="toPage" data-path="live-resume" wx:if="{{userInfo.rule == 'job_seeker'}}">
         <text class="ico iconfont icon-wenjian"></text>
         <text class="text">在线简历</text>
         <text class="iconfont icon-iconfonti"></text>
       </view>
     </view>
     <view class="list">
-      <view class="item">
+      <!-- <view class="item">
         <text class="ico iconfont icon-goutongjiaoliu"></text>
         <text class="text">我的面试</text>
         <text class="iconfont icon-iconfonti"></text>
-      </view>
-      <view class="item" bindtap="toPage" data-path="/pages/job-list/job-list">
+      </view> -->
+      <view class="item" bindtap="toPage" data-path="job-list" data-type="收藏"  wx:if="{{userInfo.rule == 'job_seeker'}}">
         <text class="ico iconfont icon-shoucang"></text>
         <text class="text">我的收藏</text>
         <text class="iconfont icon-iconfonti"></text>
       </view>
+      <block wx:if="{{userInfo.rule == 'recruiter'}}">
+        <view class="item" bindtap="toPage" data-path="job-list">
+          <text class="ico iconfont icon-shoucang"></text>
+          <text class="text">发布招聘</text>
+          <text class="iconfont icon-iconfonti"></text>
+        </view>
+        <view class="item" bindtap="toPage" data-path="job-list">
+          <text class="ico iconfont icon-shoucang"></text>
+          <text class="text">已发布招聘</text>
+          <text class="iconfont icon-iconfonti"></text>
+        </view>
+      </block>
     </view>
   </view>
 </view>

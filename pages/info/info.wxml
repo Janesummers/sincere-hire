@@ -22,59 +22,61 @@
         </picker>
       </view>
     </view>
-    <view class="item">
-      <view class="little_title">出生年月</view>
-      <view class="text">
-        <picker 
-          mode="multiSelector"
-          bindchange="changeInfo" 
-          bindcancel="cancelChange"
-          data-key="birth"
-          value="{{birthIndex}}" 
-          range="{{selectBirthday}}"
-        >
-          <view>
-            {{userInfo.birthday}}
-          </view>
-        </picker>
+    <block wx:if="{{userInfo.rule == 'job_seeker'}}">
+      <view class="item">
+        <view class="little_title">出生年月</view>
+        <view class="text">
+          <picker 
+            mode="multiSelector"
+            bindchange="changeInfo" 
+            bindcancel="cancelChange"
+            data-key="birth"
+            value="{{birthIndex}}" 
+            range="{{selectBirthday}}"
+          >
+            <view>
+              {{userInfo.birthday}}
+            </view>
+          </picker>
+        </view>
       </view>
-    </view>
-    <view class="item">
-      <view class="little_title">参加工作时间</view>
-      <view class="text">
-        <picker 
-          mode="multiSelector" 
-          bindchange="changeInfo" 
-          data-key="jobTime" 
-          range="{{jobTime}}" 
-          value="{{jobTimeIndex}}"
-          bindcolumnchange="JobColumnChange"
-          bindcancel="cancelChange"
-        >
-          <view>
-            {{userInfo.jobTime}}
-          </view>
-        </picker>
+      <view class="item">
+        <view class="little_title">参加工作时间</view>
+        <view class="text">
+          <picker 
+            mode="multiSelector" 
+            bindchange="changeInfo" 
+            data-key="jobTime" 
+            range="{{jobTime}}" 
+            value="{{jobTimeIndex}}"
+            bindcolumnchange="JobColumnChange"
+            bindcancel="cancelChange"
+          >
+            <view>
+              {{userInfo.jobTime}}
+            </view>
+          </picker>
+        </view>
       </view>
-    </view>
-    <view class="item">
-      <view class="little_title">现居住城市</view>
-      <view class="text">
-        <picker 
-          mode="multiSelector" 
-          data-key="city"
-          value="{{cityIndex}}" 
-          range="{{selectCity}}"
-          bindchange="cityChange"
-          bindcolumnchange="cityColumnChange"
-          bindcancel="cancelChange"
-        >
-          <view>
-            {{userInfo.city}}
-          </view>
-        </picker>
+      <view class="item">
+        <view class="little_title">现居住城市</view>
+        <view class="text">
+          <picker 
+            mode="multiSelector" 
+            data-key="city"
+            value="{{cityIndex}}" 
+            range="{{selectCity}}"
+            bindchange="cityChange"
+            bindcolumnchange="cityColumnChange"
+            bindcancel="cancelChange"
+          >
+            <view>
+              {{userInfo.city}}
+            </view>
+          </picker>
+        </view>
       </view>
-    </view>
+    </block>
     <view class="item">
       <view class="little_title">电子邮箱</view>
       <view class="text">

@@ -32,7 +32,9 @@ Page({
       this.setData({
         userInfo
       });
-      this.getData();
+      if (userInfo.rule == 'job_seeker') {
+        this.getData();
+      }
     } catch(e) {
 
     }

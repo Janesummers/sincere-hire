@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "index-tabbar": "../../components/custom-tab-bar/custom-tab-bar"
+  },
+  "navigationBarTitleText": "搜索"
+}

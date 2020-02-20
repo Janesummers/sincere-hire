@@ -64,6 +64,12 @@ App({
         "text": "职位"
       },
       {
+        "selectedIconPath": "../../images/search_selected.png",
+        "iconPath": "../../images/search.png",
+        "pagePath": "pages/search/search",
+        "text": "搜索"
+      },
+      {
         "selectedIconPath": "../../images/message_selected.png",
         "iconPath": "../../images/message.png",
         "pagePath": "pages/message/message",

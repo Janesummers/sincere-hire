@@ -1,5 +1,6 @@
 {
   "usingComponents": {
-    "impower-shadow": "../../components/impower-shadow/impower-shadow"
+    "impower-shadow": "../../components/impower-shadow/impower-shadow",
+    "loading": "../../components/loading/loading"
   }
 }

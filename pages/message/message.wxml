@@ -3,7 +3,7 @@
     <view id="messageList">
         <view class="item" bindtap="toDetail" data-id="{{item.unionid}}" wx:for="{{list}}" wx:key="index">
             <view class="imgBox">
-                <image class="" src="../../images/people_man.png" mode="widthFix"></image>
+                <image class="" src="{{item.avatarUrl || '../../images/people_man.png'}}" mode="widthFix"></image>
             </view>
             <view class="info">
                 <view class="top">
@@ -16,4 +16,5 @@
         </view>
     </view>
 </view>
+<loading wx:if="{{!isDone}}"></loading>
 <index-tabbar></index-tabbar>

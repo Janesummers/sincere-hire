@@ -1,7 +1,13 @@
-<view class="container">
+<view class="container" hover-class="none" hover-stop-propagation="false">
+  <view class="search" hover-class="none" hover-stop-propagation="false">
+    <input type="text" placeholder="搜索职位" bindinput="put" bindconfirm="search" value="{{keyWord}}" />
+  </view>
+  <!-- <view class="" hover-class="none" hover-stop-propagation="false">
+    
+  </view> -->
   <view class="list">
     <view class="content">
-      <view class="station" wx:for="{{station}}" wx:key="id" bindtap="toJobDetail" data-id="{{item.id}}">
+      <view class="station" wx:for="{{station}}" wx:key="index" bindtap="toJobDetail" data-id="{{item.id}}">
         <view class="left">
           <view class="position">{{item.position}}</view>
           <view class="info">
@@ -19,3 +25,4 @@
     </view>
   </view>
 </view>
+<index-tabbar></index-tabbar>

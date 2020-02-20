@@ -12,7 +12,9 @@
     "pages/live-resume/live-resume",
     "pages/info/info",
     "pages/add-education/add-education",
-    "pages/add-work-experience/add-work-experience"
+    "pages/add-work-experience/add-work-experience",
+    "pages/search/search",
+    "components/loading/loading"
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -35,10 +37,10 @@
         "text": "职位"
       },
       {
-        "selectedIconPath": "images/company_selected.png",
-        "iconPath": "images/company.png",
-        "pagePath": "pages/company/company",
-        "text": "公司"
+        "selectedIconPath": "images/search_selected.png",
+        "iconPath": "images/search.png",
+        "pagePath": "pages/search/search",
+        "text": "搜索"
       },
       {
         "selectedIconPath": "images/message_selected.png",

@@ -7,10 +7,21 @@ page {
   padding: 0 30rpx;
   .job_type {
     padding: 30rpx 0;
+    position: relative;
+    .iconfont {
+      position: absolute;
+      right: 0;
+      top: 28rpx;
+      font-size: 48rpx;
+      &.icon-shoucang1 {
+        color: @mainColor;
+      }
+    }
     .job_title {
       font-size: 42rpx;
       font-weight: 500;
       margin-bottom: 10rpx;
+      width: 92%;
     }
     .demand {
       display: flex;

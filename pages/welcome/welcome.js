@@ -80,7 +80,7 @@ Page({
     scaleArr: ['少于15人', '15-50人', '50-150人', '150-500人', '500-2000人', '2000人以上'],
     scaleIndex: 0,
     progressArr: ['未融资', '天使轮', 'A轮', 'B轮', 'C轮', 'D轮及以上', '上市公司', '不需要融资'],
-    progressIndex: 0,
+    progressIndex: 0
   },
 
   /**
@@ -97,41 +97,68 @@ Page({
       success: res => {
         if (res.authSetting['scope.userInfo']) {
           // 已经授权，可以直接调用 getUserInfo 获取头像昵称，不会弹框
-          wx.showToast({
-            title: '已授权',
-            icon: 'none',
-            success: () => {
-              if (wx.getStorageSync('unionid')) {
+          // wx.showToast({
+          //   title: '已授权',
+          //   icon: 'none',
+          //   success: () => {
+              
+          //   }
+          // })
+          if (wx.getStorageSync('unionid')) {
+            this.setData({
+              impowerShow: false
+            })
+            req.request('/getUserInfo', null, 'GET', (res) => {
+              let isRole = false;
+              let data = res.data.data;
+              if (data.rule != null) {
+                isRole = true;
+                switch (data.rule) {
+                  case 0:
+                    data.rule = 'job_seeker'
+                    break;
+                  case 1:
+                    data.rule = 'recruiter'
+                    break;
+                }
+              }
+              if (data.avatarUrl) {
+                let avatarUrl = `${app.globalData.UrlHeadAddress}/qzApi/userAvatar/${data.avatarUrl}`
+                data.avatarUrl = avatarUrl;
                 this.setData({
-                  impowerShow: false
+                  ["job_seeker.avatarUrl"]: avatarUrl,
+                  ["recruiter.avatarUrl"]: avatarUrl
                 })
-                req.request('/getUserInfo', null, 'GET', (res) => {
-                  let data = res.data.data;
-                  let avatarUrl = `${app.globalData.UrlHeadAddress}/qzApi/userAvatar/${data.avatarUrl}`
-                  data.avatarUrl = avatarUrl;
-                  wx.setStorageSync('userInfo', data);
-                  this.setData({
-                    isUserLogin: false
-                  })
-                  if (res.data.data.rule) {
-                    // wx.redirectTo({
-                    //   url: '../live-resume/live-resume'
-                    // })
+              }
+              app.globalData.userInfo = data;
+              wx.setStorageSync('userInfo', data);
+              
+              if (isRole) {
+                switch (data.rule) {
+                  case 'job_seeker':
                     wx.switchTab({
                       url: '../index/index'
                     })
-                  }
-                })
+                    break;
+                  case 'recruiter':
+                    wx.switchTab({
+                      url: '../message/message'
+                    })
+                    break;
+                }
               } else {
                 this.setData({
-                  impowerShow: true
+                  isUserLogin: false
                 })
               }
-            }
-          })
+            })
+          } else {
+            this.setData({
+              impowerShow: true
+            })
+          }
           return;
         } else {
-          console.log(111)
           this.setData({
             impowerShow: true
           })
@@ -245,65 +272,68 @@ Page({
     let userInfo = wx.getStorageSync('userInfo');
     console.log(userInfo, userInfo.rule)
     if (userInfo && !!userInfo.rule) {
-      // wx.switchTab({
-      //   url: '../index/index'
-      // })
-      wx.redirectTo({
-        url: '../live-resume/live-resume'
+      console.log(123456789)
+      wx.switchTab({
+        url: '../index/index'
       })
+      // wx.redirectTo({
+      //   url: '../live-resume/live-resume'
+      // })
       this.setData({
         isUserLogin: false
       })
     } else {
-      this.setData({
-        isUserLogin: false
-      })
-      let time = new Date().getFullYear();
-      // let citys = this.data.citys;
-      let {
-        selectCity,
-        selectBirthday,
-        birthIndex,
-        selectEnrollment,
-        enrollmentIndex,
-        selectGraduation,
-        jobTime,
-        jobTimeIndex
-      } = this.data;
-      for (let i = 1950; i <= time; i++) {
-        selectBirthday[0].push(`${i} 年`);
-        selectEnrollment[0].push(`${i} 年`);
-        jobTime[0].push(`${i} 年`);
-      }
-      selectBirthday[0].splice(-16);
-      jobTime[0].push("无工作经验");
-      birthIndex = [selectBirthday[0].length - 1, 0];
-      enrollmentIndex = [selectEnrollment[0].length - 1, 0];
-      jobTimeIndex = [jobTime[0].length - 1, 0];
-      for (let i = 1; i <= 12; i++) {
-        selectBirthday[1].push(i < 10 ? `0${i} 月` : `${i} 月`);
-        selectEnrollment[1].push(i < 10 ? `0${i} 月` : `${i} 月`);
-        selectGraduation[1].push(i < 10 ? `0${i} 月` : `${i} 月`);
-      }
-      for (let i = 0, l = citys.length; i < l; i++) {
-        selectCity[0].push(citys[i].name);
-      }
-      for (let j = 0, l = citys[0].city.length; j < l; j++) {
-        let name = citys[0].city[j].name == '市辖区' ? citys[0].name : citys[0].city[j].name
-        selectCity[1].push(name);
-      }
-
-      this.setData({
-        selectCity,
-        selectBirthday,
-        birthIndex,
-        selectEnrollment,
-        enrollmentIndex,
-        selectGraduation,
-        jobTime,
-        jobTimeIndex
-      });
+      
     }
+
+    this.setData({
+      isUserLogin: false
+    })
+    let time = new Date().getFullYear();
+    // let citys = this.data.citys;
+    let {
+      selectCity,
+      selectBirthday,
+      birthIndex,
+      selectEnrollment,
+      enrollmentIndex,
+      selectGraduation,
+      jobTime,
+      jobTimeIndex
+    } = this.data;
+    for (let i = 1950; i <= time; i++) {
+      selectBirthday[0].push(`${i} 年`);
+      selectEnrollment[0].push(`${i} 年`);
+      jobTime[0].push(`${i} 年`);
+    }
+    selectBirthday[0].splice(-16);
+    jobTime[0].push("无工作经验");
+    birthIndex = [selectBirthday[0].length - 1, 0];
+    enrollmentIndex = [selectEnrollment[0].length - 1, 0];
+    jobTimeIndex = [jobTime[0].length - 1, 0];
+    for (let i = 1; i <= 12; i++) {
+      selectBirthday[1].push(i < 10 ? `0${i} 月` : `${i} 月`);
+      selectEnrollment[1].push(i < 10 ? `0${i} 月` : `${i} 月`);
+      selectGraduation[1].push(i < 10 ? `0${i} 月` : `${i} 月`);
+    }
+    for (let i = 0, l = citys.length; i < l; i++) {
+      selectCity[0].push(citys[i].name);
+    }
+    for (let j = 0, l = citys[0].city.length; j < l; j++) {
+      let name = citys[0].city[j].name == '市辖区' ? citys[0].name : citys[0].city[j].name
+      selectCity[1].push(name);
+    }
+
+    this.setData({
+      selectCity,
+      selectBirthday,
+      birthIndex,
+      selectEnrollment,
+      enrollmentIndex,
+      selectGraduation,
+      jobTime,
+      jobTimeIndex
+    });
     
   },
 
@@ -794,7 +824,7 @@ Page({
     let key = e.target.dataset.key;
     let recruiter = this.data.recruiter;
     if (key == 'industry' || key == 'scale' || key == 'progress') {
-      recruiter[key] = recruiter[`${key}Arr`][value];
+      recruiter[key] = this.data[`${key}Arr`][value];
       recruiter[`${key}Index`] = value;
     } else {
       recruiter[key] = value.concat();
