@@ -1,5 +1,6 @@
 // pages/job-list/job-list.js
 const req = require('../../utils/request');
+const app = getApp();
 Page({
 
   /**
@@ -21,7 +22,7 @@ Page({
     let station = [];
     let t = new Date().getFullYear();
 
-    if (type != "收藏") {
+    if (type != "收藏" && type != "发布") {
       let getCollect = new Promise((resolve, reject) => {
       req.request('/getCollect', null, 'GET', res => {
         if (res.data.code == 'ok') {
@@ -67,7 +68,8 @@ Page({
             edu_level: item.edu_level,
             working_exp: item.working_exp,
             time,
-            collect: false
+            collect: false,
+            publisher_id: item.publisher_id
           })
         })
         if (collect.length > 0) {
@@ -84,42 +86,80 @@ Page({
         })
       })
     } else {
-      this.setData({
-        isCollect: true
-      })
-      req.request('/getUserCollect', null, 'GET', res => {
-        if (res.data.code == 'ok') {
-          console.log(res)
-          let jobList = res.data.data;
-          jobList.forEach(item => {
-            var small_time = item.update_date.match(/[^\s]+/g)[0];
-            var time = small_time.match(/[^-]+/)[0] < t ? small_time : small_time.replace(/[^-]+\-/, '');
-            station.push({
-              id: item.job_id,
-              position: item.job_name,
-              location: item.city,
-              display: item.display,
-              job_type: item.job_type,
-              other_require: item.other_require,
-              people: item.recruit,
-              company_type: item.company_type,
-              company: item.company_name,
-              company_size: item.company_size,
-              price: item.salary,
-              edu_level: item.edu_level,
-              working_exp: item.working_exp,
-              time,
-              collect: true
+      if (type == '发布') {
+        req.request('/getMyRelease', {
+          company_id: app.globalData.userInfo.company_id
+        }, 'GET', res => {
+          if (res.data.code == 'ok') {
+            let jobList = res.data.data;
+            jobList.forEach(item => {
+              var small_time = item.update_date.match(/[^\s]+/g)[0];
+              var time = small_time.match(/[^-]+/)[0] < t ? small_time : small_time.replace(/[^-]+\-/, '');
+              station.push({
+                id: item.job_id,
+                position: item.job_name,
+                location: item.city,
+                display: item.display,
+                job_type: item.job_type,
+                other_require: item.other_require,
+                people: item.recruit,
+                company_type: item.company_type,
+                company: item.company_name,
+                company_size: item.company_size,
+                price: item.salary,
+                edu_level: item.edu_level,
+                working_exp: item.working_exp,
+                time,
+                collect: true,
+                publisher_id: item.publisher_id
+              })
             })
+          } else {
+            console.log('错误')
+          }
+          this.setData({
+            station
           })
-        } else {
-          console.log('错误')
-        }
-        this.setData({
-          station
+          // console.log(res)
         })
-        // console.log(res)
-      })
+      } else {
+        this.setData({
+          isCollect: true
+        })
+        req.request('/getUserCollect', null, 'GET', res => {
+          if (res.data.code == 'ok') {
+            let jobList = res.data.data;
+            jobList.forEach(item => {
+              var small_time = item.update_date.match(/[^\s]+/g)[0];
+              var time = small_time.match(/[^-]+/)[0] < t ? small_time : small_time.replace(/[^-]+\-/, '');
+              station.push({
+                id: item.job_id,
+                position: item.job_name,
+                location: item.city,
+                display: item.display,
+                job_type: item.job_type,
+                other_require: item.other_require,
+                people: item.recruit,
+                company_type: item.company_type,
+                company: item.company_name,
+                company_size: item.company_size,
+                price: item.salary,
+                edu_level: item.edu_level,
+                working_exp: item.working_exp,
+                time,
+                collect: true,
+                publisher_id: item.publisher_id
+              })
+            })
+          } else {
+            console.log('错误')
+          }
+          this.setData({
+            station
+          })
+          // console.log(res)
+        })
+      }
     }
     // req.request('/getPracticeJobs', {
     //   emplType: type,

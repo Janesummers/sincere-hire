@@ -1,5 +1,6 @@
 // pages/job-detail/job-detail.js
 const req = require('../../utils/request');
+const app = getApp()
 Page({
 
   /**
@@ -8,7 +9,8 @@ Page({
   data: {
     detail: null,
     tapCollect: true,
-    isCollect: false
+    isCollect: false,
+    rule: ''
   },
 
   /**
@@ -21,7 +23,8 @@ Page({
       data.other_require = data.other_require.split('|');
       // data.job_type = data.job_type.split('/')[0];
       this.setData({
-        detail: data
+        detail: data,
+        rule: app.globalData.userInfo.rule
       });
     })
     eventChannel.on('collect', data => {

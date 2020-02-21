@@ -14,7 +14,8 @@
     "pages/add-education/add-education",
     "pages/add-work-experience/add-work-experience",
     "pages/search/search",
-    "components/loading/loading"
+    "components/loading/loading",
+    "pages/release-recruit/release-recruit"
   ],
   "window": {
     "backgroundTextStyle": "light",

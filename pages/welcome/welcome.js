@@ -47,9 +47,9 @@ Page({
       avatarUrl: '',
       position: '',
       company: '',
-      industry: '',
       scale: '',
-      progress: '',
+      type: '',
+      sex: '',
       rule: 1
     },
     sexIndex: 0,
@@ -75,12 +75,10 @@ Page({
     status: '',
     jobTime: [[], []],
     jobTimeIndex: [0, 0],
-    industryArr: ['不限', '移动互联网', '电子商务', '金融', '企业服务', '文化娱乐', '游戏', '招聘', '信息安全', '其他'],
-    industryIndex: 0,
+    typeArr: ['民营', '外商独资', '上市公司', '股份制企业', '外商独资', '国企'],
+    typeIndex: 0,
     scaleArr: ['少于15人', '15-50人', '50-150人', '150-500人', '500-2000人', '2000人以上'],
-    scaleIndex: 0,
-    progressArr: ['未融资', '天使轮', 'A轮', 'B轮', 'C轮', 'D轮及以上', '上市公司', '不需要融资'],
-    progressIndex: 0
+    scaleIndex: 0
   },
 
   /**
@@ -109,47 +107,52 @@ Page({
               impowerShow: false
             })
             req.request('/getUserInfo', null, 'GET', (res) => {
-              let isRole = false;
-              let data = res.data.data;
-              if (data.rule != null) {
-                isRole = true;
-                switch (data.rule) {
-                  case 0:
-                    data.rule = 'job_seeker'
-                    break;
-                  case 1:
-                    data.rule = 'recruiter'
-                    break;
+              if (res.statusCode == 200) {
+                let isRole = false;
+                let data = res.data.data;
+                if (data.rule != null) {
+                  isRole = true;
+                  switch (data.rule) {
+                    case 0:
+                      data.rule = 'job_seeker'
+                      break;
+                    case 1:
+                      data.rule = 'recruiter'
+                      break;
+                  }
                 }
-              }
-              if (data.avatarUrl) {
-                let avatarUrl = `${app.globalData.UrlHeadAddress}/qzApi/userAvatar/${data.avatarUrl}`
-                data.avatarUrl = avatarUrl;
-                this.setData({
-                  ["job_seeker.avatarUrl"]: avatarUrl,
-                  ["recruiter.avatarUrl"]: avatarUrl
-                })
-              }
-              app.globalData.userInfo = data;
-              wx.setStorageSync('userInfo', data);
-              
-              if (isRole) {
-                switch (data.rule) {
-                  case 'job_seeker':
-                    wx.switchTab({
-                      url: '../index/index'
-                    })
-                    break;
-                  case 'recruiter':
-                    wx.switchTab({
-                      url: '../message/message'
-                    })
-                    break;
+                if (data.avatarUrl) {
+                  let avatarUrl = `${app.globalData.UrlHeadAddress}/qzApi/userAvatar/${data.avatarUrl}`
+                  data.avatarUrl = avatarUrl;
+                  this.setData({
+                    ["job_seeker.avatarUrl"]: avatarUrl,
+                    ["recruiter.avatarUrl"]: avatarUrl
+                  })
                 }
-              } else {
-                this.setData({
-                  isUserLogin: false
-                })
+                app.globalData.userInfo = data;
+                wx.setStorageSync('userInfo', data);
+                console.log(12323232)
+                if (isRole) {
+                  switch (data.rule) {
+                    case 'job_seeker':
+                      wx.switchTab({
+                        url: '../index/index'
+                      })
+                      break;
+                    case 'recruiter':
+                      wx.switchTab({
+                        url: '../message/message'
+                      })
+                      // wx.redirectTo({
+                      //   url: '../release-recruit/release-recruit'
+                      // })
+                      break;
+                  }
+                } else {
+                  this.setData({
+                    isUserLogin: false
+                  })
+                }
               }
             })
           } else {
@@ -216,9 +219,16 @@ Page({
         console.log('用户登录成功');
         let userInfo = wx.getStorageSync('userInfo');
         if (userInfo && !!userInfo.rule) {
-          wx.switchTab({
-            url: '../index/index'
-          })
+          console.log(userInfo.rule)
+          if (userInfo.rule == 'recruiter') {
+            wx.switchTab({
+              url: '../message/message'
+            })
+          } else {
+            wx.switchTab({
+              url: '../index/index'
+            })
+          }
           // wx.redirectTo({
           //   url: '../live-resume/live-resume'
           // })
@@ -672,14 +682,11 @@ Page({
       case 'company': 
         hint = '请输入公司名称';
         break;
-      case 'industry_field': 
-        hint = '请输入行业领域';
-        break;
       case 'scale': 
-        hint = '请输入公司规模';
+        hint = '请选择公司规模';
         break;
-      case 'progress': 
-        hint = '请输入发展阶段';
+      case 'type': 
+        hint = '请选择公司类型';
         break;
     }
     wx.showToast({
@@ -823,11 +830,18 @@ Page({
     let value = e.detail.value;
     let key = e.target.dataset.key;
     let recruiter = this.data.recruiter;
-    if (key == 'industry' || key == 'scale' || key == 'progress') {
-      recruiter[key] = this.data[`${key}Arr`][value];
-      recruiter[`${key}Index`] = value;
-    } else {
-      recruiter[key] = value.concat();
+    switch (key) {
+      case 'industry':
+      case 'type':
+      case 'scale':
+        recruiter[key] = this.data[`${key}Arr`][value];
+        recruiter[`${key}Index`] = value;
+        break;
+      case 'sex':
+        recruiter.sex = this.data.sex[value];
+        break;
+      default:
+        recruiter[key] = value.concat();
     }
     this.setData({
       recruiter

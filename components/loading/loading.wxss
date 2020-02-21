@@ -12,7 +12,7 @@
   font-size: 28rpx;
   flex-wrap: wrap;
 }
-.loading{
+.shadowBox .loading{
   width: 50rpx;
   height: 50rpx;
   display: inline-block;
@@ -22,7 +22,7 @@
   -webkit-background-size:100%;
   background-size:100%
 }
-.text {
+.shadowBox .text {
   text-align: center;
   width: 100%;
   margin-top: 30rpx;

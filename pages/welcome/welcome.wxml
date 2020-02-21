@@ -329,6 +329,17 @@
               </view>
             </view>
             <view class="item">
+              <view class="little_title">性别</view>
+              <view class="text">
+                <picker mode="selector" bindchange="recruiterPut" data-key="sex" range="{{sex}}" value="{{sexIndex}}">
+                  <view class="{{recruiter.sex == '' ? 'picker' : 'pickerActive'}}">
+                    <view wx:if="{{recruiter.sex == ''}}">点击选择性别</view>
+                    {{recruiter.sex}}
+                  </view>
+                </picker>
+              </view>
+            </view>
+            <view class="item">
               <view class="little_title">接收简历邮箱</view>
               <view class="text">
                 <input 
@@ -374,7 +385,6 @@
           <view class="info">
             <view class="left" hover-class="none" hover-stop-propagation="false">
               <view class="name">{{recruiter.name}}</view>
-              <!-- <view class="school">闽江学院/本科</view> -->
               <view class="profession">{{recruiter.position}}</view>
             </view>
             <view class="right" hover-class="none" hover-stop-propagation="false">
@@ -392,7 +402,7 @@
                 <input type="text" value="{{recruiter.company}}" disabled="{{true}}" />
               </view>
             </view>
-            <view class="item">
+            <!-- <view class="item">
               <view class="little_title">行业领域</view>
               <view class="text">
                 <picker 
@@ -408,7 +418,7 @@
                   </view>
                 </picker>
               </view>
-            </view>
+            </view> -->
             <view class="item">
               <view class="little_title">公司规模</view>
               <view class="text">
@@ -427,18 +437,18 @@
               </view>
             </view>
             <view class="item">
-              <view class="little_title">发展阶段</view>
+              <view class="little_title">公司类型</view>
               <view class="text">
                 <picker 
                   mode="selector" 
                   bindchange="recruiterPut" 
-                  data-key="progress" 
-                  range="{{progressArr}}" 
-                  value="{{progressIndex}}"
+                  data-key="type" 
+                  range="{{typeArr}}" 
+                  value="{{typeIndex}}"
                 >
-                  <view class="{{recruiter.progress == '' ? 'picker' : 'pickerActive'}}">
-                    <view wx:if="{{recruiter.progress == ''}}">点击选择发展阶段</view>
-                    {{recruiter.progress}}
+                  <view class="{{recruiter.type == '' ? 'picker' : 'pickerActive'}}">
+                    <view wx:if="{{recruiter.type == ''}}">点击选择公司类型</view>
+                    {{recruiter.type}}
                   </view>
                 </picker>
               </view>

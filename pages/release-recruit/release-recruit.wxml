@@ -1,0 +1,172 @@
+<view class="container">
+  <view class="list">
+    <view class="item">
+      <view class="little_title">职位名称</view>
+      <view class="text">
+        <input type="text" placeholder="请填写" value="{{jobInfo.job_name}}" placeholder-class="picker" bindinput="setJobInfo" data-key="job_name" />
+      </view>
+    </view>
+    <view class="item">
+      <view class="little_title">职位类型</view>
+      <view class="text">
+        <view class="selectItems">
+          <text 
+            class="items {{item.choose ? 'active' : ''}}" 
+            wx:for="{{job_type}}" 
+            data-key="job_type" 
+            data-item="{{item.text}}"
+            wx:key="index"
+            bindtap="setJobInfo"
+            data-itemIndex="{{index}}"
+          >{{item.text}}</text>
+        </view>
+      </view>
+    </view>
+    <view class="item">
+      <view class="little_title">工作类型</view>
+      <view class="text">
+        <picker 
+          mode="selector" 
+          bindchange="setJobInfo" 
+          data-key="empl_type" 
+          range="{{empl_type}}" 
+          value="{{empl_type_index}}"
+        >
+          <view class="{{jobInfo.empl_type == '' ? 'picker' : 'pickerActive'}}">
+            <view wx:if="{{jobInfo.empl_type == ''}}">点击选择工作类型</view>
+            {{jobInfo.empl_type}}
+          </view>
+        </picker>
+      </view>
+    </view>
+    <view class="item">
+      <view class="little_title">岗位福利（可选）</view>
+      <view class="text">
+        <view class="selectItems">
+          <text 
+            class="items {{item.choose ? 'active' : ''}}" 
+            wx:for="{{welfare}}"
+            data-key="welfare" 
+            data-item="{{item.text}}"
+            wx:key="index"
+            data-itemIndex="{{index}}"
+            bindtap="setJobInfo"
+          >{{item.text}}</text>
+        </view>
+      </view>
+    </view>
+    <view class="item">
+      <view class="little_title">工作城市</view>
+      <view class="text">
+        <picker 
+          mode="region" 
+          data-key="city"
+          bindchange="setJobInfo"
+        >
+          <view class="{{jobInfo.display == '' ? 'picker' : 'pickerActive'}}">
+            <view wx:if="{{jobInfo.display == ''}}">点击选择工作城市</view>
+            {{jobInfo.display}}
+          </view>
+        </picker>
+      </view>
+    </view>
+    <view class="item">
+      <view class="little_title">工作经验</view>
+      <view class="text">
+        <picker 
+          mode="selector" 
+          bindchange="setJobInfo" 
+          data-key="working_exp" 
+          range="{{working_exp}}"
+        >
+          <view class="{{jobInfo.working_exp == '' ? 'picker' : 'pickerActive'}}">
+            <view wx:if="{{jobInfo.working_exp == ''}}">点击选择</view>
+            {{jobInfo.working_exp}}
+          </view>
+        </picker>
+      </view>
+    </view>
+    <view class="item">
+      <view class="little_title">薪资范围</view>
+      <view class="text flex_box">
+        <input type="number" placeholder="最低" value="{{low_salary}}" placeholder-class="picker" bindinput="setJobInfo" data-key="low" class="salary_text" />
+        <view class="block">-</view>
+        <input type="number" placeholder="最高" value="{{high_salary}}" placeholder-class="picker" bindinput="setJobInfo" data-key="high" class="salary_text" />
+      </view>
+    </view>
+    <view class="item">
+      <view class="little_title">技能要求（可选）</view>
+      <view class="text">
+        <view class="selectItems">
+          <text 
+            class="items {{item.choose ? 'active' : ''}}" 
+            wx:for="{{skill}}"
+            data-key="skill" 
+            data-item="{{item.text}}"
+            wx:key="index"
+            bindtap="setJobInfo"
+            data-itemIndex="{{index}}"
+          >{{item.text}}</text>
+        </view>
+      </view>
+    </view>
+    <view class="item">
+      <view class="little_title">工作要求</view>
+      <view class="text">
+        <textarea 
+          class="job_require" 
+          placeholder="如：岗位职责：XXXX" 
+          placeholder-class="picker" 
+          value="{{job_require}}" 
+          bindinput="setJobInfo" 
+          data-key="job_require"
+        ></textarea>
+      </view>
+    </view>
+    <view class="item">
+      <view class="little_title">学历要求</view>
+      <view class="text">
+        <picker 
+          mode="selector" 
+          bindchange="setJobInfo" 
+          data-key="edu" 
+          range="{{edu}}"
+        >
+          <view class="{{jobInfo.edu_level == '' ? 'picker' : 'pickerActive'}}">
+            <view wx:if="{{jobInfo.edu_level == ''}}">点击选择学历</view>
+            {{jobInfo.edu_level}}
+          </view>
+        </picker>
+      </view>
+    </view>
+    <view class="item">
+      <view class="little_title">招聘人数</view>
+      <view class="text">
+        <input 
+          type="number" 
+          placeholder="请填写" 
+          bindinput="setJobInfo" 
+          value="{{jobInfo.recruit}}" 
+          data-key="recruit"
+          placeholder-class="picker"
+        />
+      </view>
+    </view>
+    <view class="item">
+      <view class="little_title">工作地址</view>
+      <view class="text">
+        <input 
+          type="text" 
+          placeholder="请填写" 
+          bindinput="setJobInfo" 
+          value="{{jobInfo.job_address}}" 
+          data-key="job_address"
+          placeholder-class="picker"
+        />
+      </view>
+    </view>
+  </view>
+  <view class="bottom">
+    <view class="btn" bindtap="{{!isCommit ? 'save' : ''}}">保存</view>
+  </view>
+</view>

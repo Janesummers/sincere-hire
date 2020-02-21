@@ -181,7 +181,8 @@ Page({
           edu_level: item.edu_level,
           working_exp: item.working_exp,
           time,
-          collect: false
+          collect: false,
+          publisher_id: item.publisher_id
         })
       })
       if (collect.length > 0) {
