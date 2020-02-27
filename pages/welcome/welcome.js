@@ -215,25 +215,37 @@ Page({
       let user = e.detail.data;
       app.globalData.user = user;
       wx.setStorageSync('user', user);
-      req.login(() => {
-        console.log('用户登录成功');
-        let userInfo = wx.getStorageSync('userInfo');
-        if (userInfo && !!userInfo.rule) {
-          console.log(userInfo.rule)
-          if (userInfo.rule == 'recruiter') {
-            wx.switchTab({
-              url: '../message/message'
-            })
-          } else {
-            wx.switchTab({
-              url: '../index/index'
-            })
-          }
-          // wx.redirectTo({
-          //   url: '../live-resume/live-resume'
-          // })
+      req.login((res) => {
+        console.log(res)
+        if (res == 'Illegal Buffer') {
+          wx.removeStorageSync('user');
+          wx.showToast({
+            title: '网络异常，请重新授权',
+            icon: 'none'
+          })
+          this.setData({
+            impowerShow: true
+          })
         } else {
-          this.getData();
+          console.log('用户登录成功');
+          let userInfo = wx.getStorageSync('userInfo');
+          if (userInfo && !!userInfo.rule) {
+            console.log(userInfo.rule)
+            if (userInfo.rule == 'recruiter') {
+              wx.switchTab({
+                url: '../message/message'
+              })
+            } else {
+              wx.switchTab({
+                url: '../index/index'
+              })
+            }
+            // wx.redirectTo({
+            //   url: '../live-resume/live-resume'
+            // })
+          } else {
+            this.getData();
+          }
         }
       })
     } else {

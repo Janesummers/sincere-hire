@@ -1,6 +1,7 @@
 // pages/job-detail/job-detail.js
 const req = require('../../utils/request');
-const app = getApp()
+const app = getApp();
+const base64 = require('../../utils/base64').Base64;
 Page({
 
   /**
@@ -10,18 +11,32 @@ Page({
     detail: null,
     tapCollect: true,
     isCollect: false,
-    rule: ''
+    rule: '',
+    btnText: '发起聊天',
+    newChat: true
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    var chats = wx.getStorageSync('chat');
+    
     const eventChannel = this.getOpenerEventChannel();
     eventChannel.on('job_detail', data => {
       data = JSON.parse(JSON.stringify(data));
       data.other_require = data.other_require.split('|');
       // data.job_type = data.job_type.split('/')[0];
+      if (chats) {
+        var chatList = Object.keys(chats)
+        if (chatList.includes(base64.encode(data.publisher_id))) {
+          this.setData({
+            btnText: '继续聊天',
+            newChat: false
+          })
+        }
+      }
+      
       this.setData({
         detail: data,
         rule: app.globalData.userInfo.rule
@@ -130,5 +145,43 @@ Page({
         })
       }
     })
+  },
+
+  toChat (e) {
+    wx.showLoading({
+      title: '载入中'
+    })
+    let publisher_id = e.currentTarget.dataset.id;
+    let name = e.currentTarget.dataset.name;
+    console.log(this.data.detail)
+    if (this.data.newChat) {
+      let company = e.currentTarget.dataset.company;
+      req.request('/saveMessageList', {
+        id: publisher_id,
+        name,
+        company,
+        commit_name: app.globalData.userInfo.name
+      }, 'POST', res => {
+        
+        if (res.data.code != 'error') {
+          wx.hideLoading();
+          wx.navigateTo({
+            url: `/pages/msg-detail/msg-detail?id=${publisher_id}&name=${name}`
+          })
+        } else {
+          wx.showToast({
+            title: '异常，请稍后再试!',
+            icon: 'none'
+          })
+        }
+
+      })
+    } else {
+      wx.hideLoading();
+      wx.navigateTo({
+        url: `/pages/msg-detail/msg-detail?id=${publisher_id}&name=${name}`
+      })
+    }
+    
   }
 })

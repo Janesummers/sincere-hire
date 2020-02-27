@@ -14,6 +14,7 @@ page {
   border-radius: 10rpx;
   margin-right: 20rpx;
   overflow: hidden;
+  height: 100rpx;
 }
 .container #messageList .item .imgBox image {
   width: 100%;
@@ -38,7 +39,7 @@ page {
   color: #949494;
 }
 .container #messageList .item .info .message {
-  font-size: 24rpx;
+  font-size: 28rpx;
   overflow: hidden;
   width: 100%;
   text-overflow: ellipsis;
@@ -46,7 +47,7 @@ page {
   color: #949494;
 }
 .container #messageList .item .time {
-  font-size: 20rpx;
+  font-size: 28rpx;
   height: 50rpx;
   line-height: 70rpx;
   color: #cfcdcd;

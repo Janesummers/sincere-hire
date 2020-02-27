@@ -76,7 +76,8 @@ Page({
           working_exp: item.working_exp,
           time,
           collect: false,
-          publisher_id: item.publisher_id
+          publisher_id: item.publisher_id,
+          publisher_name: item.publisher_name
         })
       })
       if (collect.length > 0) {

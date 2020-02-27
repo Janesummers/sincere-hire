@@ -1,5 +1,6 @@
 // pages/msg-detail/msg-detail.js
 const base64 = require('../../utils/base64').Base64;
+const app = getApp();
 Page({
 
   /**
@@ -15,7 +16,9 @@ Page({
     sendText: '',
     other: '',
     otherEncrypt: '',
-    listTop: 50
+    listTop: 50,
+    sendId: '',
+    acceptId: ''
   },
 
   /**
@@ -25,9 +28,18 @@ Page({
     let height = wx.getSystemInfoSync().windowHeight - 55;
     let data = wx.getStorageSync('chat');
     let id = base64.encode(options.id);
+    var unionid = base64.encode(wx.getStorageSync('unionid'));
+    this.setData({
+      sendId: id,
+      acceptId: unionid
+    })
+    wx.setNavigationBarTitle({
+      title: options.name
+    })
+    console.log('进入获取聊天记录：', data[id])
     if (data) {
       this.setData({
-        list: data[id]
+        list: data[id] || []
       })
     }
 
@@ -66,49 +78,93 @@ Page({
    */
   onReady: function () {
     wx.onSocketMessage(data => {
-      // data
-      var chatList = wx.getStorageSync('chat');
-      var unionid = wx.getStorageSync('unionid');
       data = JSON.parse(data.data);
-      let sendId = this.data.otherEncrypt;
-      if (chatList) {
-        chatList[sendId].push({
-          data: data.msg,
-          sendId: sendId,
-          acceptId: base64.encode(unionid),
-          time: new Date(Number(data.all.time))
-        });
-        wx.setStorageSync('chat', chatList);
+      let allData = JSON.parse(`[${data.all}]`);
+      this.saveStorage(allData);
+    })
+  },
+
+  saveStorage (allData) {
+    var chatList = wx.getStorageSync('chat');
+    let dataLen = allData.length;
+    let {
+      sendId,
+      acceptId
+    } = this.data;
+    if (chatList) {
+      
+      if (sendId != allData[dataLen - 1].sendId) { // 如果收到消息时候当前聊天窗口不是接收用户则将数据存到 LocalStorage
+        console.log('不是我的聊天界面')
+        console.log(allData)
+        if (chatList[allData[dataLen - 1].sendId]) { // 如果已有在本地则 push
+          console.log('聊天记录有在本地')
+          chatList[allData[dataLen - 1].sendId].push({
+            data: allData[dataLen - 1].data,
+            sendId: allData[dataLen - 1].sendId,
+            acceptId: allData[dataLen - 1].acceptId,
+            time: allData[dataLen - 1].time
+          });
+          
+        } else { // 不在本地则新增本地数据
+          console.log('聊天记录不在本地')
+          chatList[allData[dataLen - 1].sendId] = allData;
+        }
+        // wx.setStorageSync('chat', chatList);
       } else {
-        let obj = {};
-        obj[sendId] = [JSON.parse(data.all)]
-        wx.setStorageSync('chat', obj);
+        if (chatList[sendId]) {
+          chatList[sendId].push({
+            data: allData[dataLen - 1].data,
+            sendId,
+            acceptId,
+            time: allData[dataLen - 1].time
+          });
+        } else {
+          chatList[sendId] = allData;
+        }
+        this.setList(allData[dataLen - 1]);
       }
 
+      wx.setStorageSync('chat', chatList);
+    } else {
       
-
-      
-      let list = this.data.list;
-      list.push({
-        data: data.msg,
-        sendId: sendId,
-        acceptId: base64.encode(unionid),
-        time: new Date(Number(data.all.time))
-      })
-      if (list.length * 66 > this.data.originHeight) {
-        this.setData({
-          listTop: 0
-        })
+      var obj = {};
+      obj[sendId] = allData;
+      wx.setStorageSync('chat', obj);
+      if (sendId == allData[dataLen - 1].sendId) {
+        this.setList(allData[dataLen - 1]);
       }
+
+    }
+  },
+
+  setList (msg) {
+    
+    let list = this.data.list;
+    let {
+      sendId,
+      acceptId
+    } = this.data;
+    list.push({
+      data: msg.data,
+      sendId,
+      acceptId,
+      time: new Date(Number(msg.time))
+    })
+    if (list.length * 66 > this.data.originHeight) {
       this.setData({
-        list
-      }, () => {
-        this.setData({
-          toLast: `item${this.data.list.length - 1}`
-        })
+        listTop: 0
+      })
+    }
+    this.setData({
+      list
+    }, () => {
+      this.setData({
+        toLast: `item${this.data.list.length - 1}`
       })
     })
   },
+
+
 
   getTime () {
     return new Date().getTime().toString();
@@ -162,23 +218,34 @@ Page({
     })
 
     if (chatList) {
-      chatList[acceptId].push({
-        data: e.detail.value,
-        sendId: base64.encode(unionid),
-        acceptId,
-        time: new Date(Number(time))
-      });
+      if (chatList[acceptId]) {
+        chatList[acceptId].push({
+          data: e.detail.value,
+          sendId: base64.encode(unionid),
+          acceptId,
+          time: time
+        });
+      } else {
+        chatList[acceptId] = [{
+          data: e.detail.value,
+          sendId: base64.encode(unionid),
+          acceptId,
+          time: time
+        }]
+      }
       wx.setStorageSync('chat', chatList);
     } else {
       let obj = {};
       obj[acceptId] = [all]
       wx.setStorageSync('chat', obj);
     }
+    
     let data = JSON.stringify({
       msg: e.detail.value,
       client: base64.encode(unionid),
       to: acceptId,
-      time: all.time
+      time: all.time,
+      name: app.globalData.userInfo.name
     })
     wx.sendSocketMessage({
       data

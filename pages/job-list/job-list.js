@@ -69,7 +69,8 @@ Page({
             working_exp: item.working_exp,
             time,
             collect: false,
-            publisher_id: item.publisher_id
+            publisher_id: item.publisher_id,
+            publisher_name: item.publisher_name
           })
         })
         if (collect.length > 0) {
@@ -111,7 +112,8 @@ Page({
                 working_exp: item.working_exp,
                 time,
                 collect: true,
-                publisher_id: item.publisher_id
+                publisher_id: item.publisher_id,
+                publisher_name: item.publisher_name
               })
             })
           } else {
@@ -148,7 +150,8 @@ Page({
                 working_exp: item.working_exp,
                 time,
                 collect: true,
-                publisher_id: item.publisher_id
+                publisher_id: item.publisher_id,
+                publisher_name: item.publisher_name
               })
             })
           } else {
@@ -161,41 +164,6 @@ Page({
         })
       }
     }
-    // req.request('/getPracticeJobs', {
-    //   emplType: type,
-    //   num: 10,
-    //   page: 1
-    // }, 'POST', res => {
-    //   let station = this.data.station;
-    //   if (res.data.data.length > 0) {
-    //     res.data.data.forEach(item => {
-    //       var small_time = item.update_date.match(/[^\s]+/g)[0];
-    //       var time = small_time.match(/[^-]+/)[0] < t ? small_time : small_time.replace(/[^-]+\-/, '');
-    //       var collect = parseInt(item.collect) != 0 ? true : false;
-    //       station.push({
-    //         id: item.job_id,
-    //         position: item.job_name,
-    //         location: item.city,
-    //         display: item.display,
-    //         job_type: item.job_type,
-    //         other_require: item.other_require,
-    //         people: item.recruit,
-    //         company_type: item.company_type,
-    //         company: item.company_name,
-    //         company_size: item.company_size,
-    //         price: item.salary,
-    //         edu_level: item.edu_level,
-    //         working_exp: item.working_exp,
-    //         time,
-    //         collect
-    //       })
-    //     })
-    //   }
-    //   this.setData({
-    //     station
-    //   })
-    //   // console.log(res)
-    // })
   },
 
   /**

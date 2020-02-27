@@ -2,6 +2,7 @@
 const base64 = require('../../utils/base64').Base64;
 const req = require('../../utils/request');
 const app = getApp();
+const util = require('../../utils/util');
 Page({
 
   /**
@@ -16,7 +17,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    this.getData();
+    // this.getData();
   },
 
   /**
@@ -30,13 +31,76 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
+    wx.onSocketMessage(data => {
+      console.log('message接收到')
+      data = JSON.parse(data.data);
+      let allData = JSON.parse(`[${data.all}]`);
+      
+      var chatList = wx.getStorageSync('chat');
+      let dataLen = allData.length;
+
+      let list = this.data.list;
+
+      let exist = false;
+
+      list.forEach(item => {
+        if (base64.encode(item.target_id) == allData[dataLen - 1].sendId) {
+          exist = true;
+          item.text = allData[dataLen - 1].data;
+          var d = new Date(Number(allData[dataLen - 1].time));
+          item.time = util.formatNumber(d.getHours()) + ":" + util.formatNumber(d.getMinutes());
+        }
+      })
+
+      if (!exist) {
+        var d = new Date(Number(allData[dataLen - 1].time));
+        list.unshift({
+          id: 1,
+          ascription_id: app.globalData.unionid,
+          target_id: base64.decode(allData[dataLen - 1].sendId),
+          target_name: data.sendUser,
+          target_company: null,
+          text: allData[dataLen - 1].data,
+          time: util.formatNumber(d.getHours()) + ":" + util.formatNumber(d.getMinutes())
+        })
+      }
+
+      this.setData({
+        list
+      })
+
+      if (chatList) {
+        
+        if (chatList[allData[dataLen - 1].sendId]) {
+          chatList[allData[dataLen - 1].sendId].push({
+            data: allData[dataLen - 1].data,
+            sendId: allData[dataLen - 1].sendId,
+            acceptId: allData[dataLen - 1].acceptId,
+            time: allData[dataLen - 1].time
+          });
+        } else {
+          chatList[allData[dataLen - 1].sendId] = allData;
+        }
+        
+        wx.setStorageSync('chat', chatList);
+      } else {
+
+        var obj = {};
+        obj[allData[dataLen - 1].sendId] = allData;
+        wx.setStorageSync('chat', obj);
+
+      }
+    })
     this.getData();
   },
 
   toDetail (e) {
-    let id = e.currentTarget.dataset.id;
+    let {
+      id,
+      name
+    } = e.currentTarget.dataset;
     wx.navigateTo({
-      url: `/pages/msg-detail/msg-detail?id=${id}`
+      url: `/pages/msg-detail/msg-detail?id=${id}&name=${name}`
     })
   },
 
@@ -45,13 +109,28 @@ Page({
       isDone: false
     })
     let unionid = wx.getStorageSync('unionid');
-    req.request('/getMessageList', { id: base64.encode(unionid)}, 'POST', (res) => {
+    var chatList = wx.getStorageSync('chat');
+    let keys = [];
+    if (chatList) {
+      keys = Object.keys(chatList);
+    }
+    req.request('/getMessageList', { id: base64.encode(unionid), rule: app.globalData.userInfo.rule}, 'POST', (res) => {
       let list = res.data.data;
       list.forEach(item => {
+        if (keys.includes(base64.encode(item.target_id))) {
+          var data = chatList[base64.encode(item.target_id)];
+          item.text = data[data.length - 1].data;
+          var d = new Date(Number(data[data.length - 1].time));
+          item.time = util.formatNumber(d.getHours()) + ":" + util.formatNumber(d.getMinutes());
+        } else {
+          item.text = ''
+          item.time = ''
+        }
         if (item.avatarUrl) {
           item.avatarUrl = `${app.globalData.UrlHeadAddress}/qzApi/userAvatar/${item.avatarUrl}`
         }
       })
+      
       this.setData({
         list,
         isDone: true

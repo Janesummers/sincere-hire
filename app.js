@@ -34,19 +34,78 @@ App({
     //     }
     //   }
     // })
-    let unionid = wx.getStorageSync('unionid');
-    unionid = base64.encode(unionid);
-    wx.connectSocket({
-      url: 'wss://www.chiens.cn/wss', //wss://www.chiens.cn/wss  ws://192.168.1.104:8085
-      header:{
-        'content-type': 'application/json',
-        'unionid': unionid
+    var unionid = wx.getStorageSync('unionid');
+
+    connectSocket();
+    
+    if (unionid) {
+      console.log('准备开始获取聊天记录')
+      this.globalData.getMessage(unionid);
+    }
+    
+    
+    function connectSocket () {
+      wx.connectSocket({
+        url: 'wss://www.chiens.cn/wss', //wss://www.chiens.cn/wss  ws://192.168.1.104/wss
+        header:{
+          'content-type': 'application/json',
+          'unionid': base64.encode(unionid)
+        },
+        success: (res) => {
+          console.log(res)
+          onSocketOpen();
+        },
+        fail: () => {
+          console.log('连接失败')
+        },
+        complete: () => {
+          console.log('lllll')
+        }
+      })
+      
+    }
+
+    //监听WebSocket连接打开事件。
+    function onSocketOpen() {
+      wx.onSocketOpen(function(res) {
+        console.log('WebSocket连接已打开！');
+      });
+    }
+
+    wx.onSocketClose((res) => {
+      connectSocket();
+    })
+
+    wx.onSocketMessage(data => {
+      console.log('app接收到')
+      data = JSON.parse(data.data);
+      let allData = JSON.parse(`[${data.all}]`);
+      
+      var chatList = wx.getStorageSync('chat');
+      let dataLen = allData.length;
+
+      if (chatList) {
+        
+        if (chatList[allData[dataLen - 1].sendId]) {
+          chatList[allData[dataLen - 1].sendId].push({
+            data: allData[dataLen - 1].data,
+            sendId: allData[dataLen - 1].sendId,
+            acceptId: allData[dataLen - 1].acceptId,
+            time: allData[dataLen - 1].time
+          });
+        } else {
+          chatList[allData[dataLen - 1].sendId] = allData;
+        }
+        
+        wx.setStorageSync('chat', chatList);
+      } else {
+
+        var obj = {};
+        obj[allData[dataLen - 1].sendId] = allData;
+        wx.setStorageSync('chat', obj);
+
       }
     })
-    //监听WebSocket连接打开事件。
-    wx.onSocketOpen(function(res) {
-      console.log('WebSocket连接已打开！');
-    });
 
   },
   globalData: {
@@ -95,6 +154,45 @@ App({
         "pagePath": "pages/me/me",
         "text": "我的"
       }
-    ]
+    ],
+    getMessage() {
+      console.log('开始获取聊天记录')
+      var app = getApp() || this;
+      var unionid = wx.getStorageSync('unionid');
+      var uri = '';
+      if (app.globalData) {
+        uri = app.globalData.UrlHeadAddress;
+      } else {
+        uri = app.UrlHeadAddress;
+      }
+      wx.request({
+        url: `${uri}/qzApi/getMessage`,
+        data: {
+          id: unionid
+        },
+        method: 'POST',
+        header: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        success: res =>{
+          console.log('获取聊天记录成功')
+          let data = res.data.data;
+          if (data.length > 0) {
+            var chatList = wx.getStorageSync('chat');
+            if (chatList) {
+              chatList = JSON.parse(JSON.stringify(data[0]));
+              wx.setStorageSync('chat', chatList);
+            } else {
+              wx.setStorageSync('chat', JSON.parse(JSON.stringify(data[0])));
+            }
+          } else {
+            wx.removeStorageSync('chat');
+          }
+        },
+        fail: () => {
+          console.log('请求失败')
+        }
+      })
+    }
   }
 })

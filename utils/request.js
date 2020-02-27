@@ -76,34 +76,41 @@ function login(loginCallback){
       },
       success(res) {
         console.log(res)
-        let unionid = res.data.data.unionid || res.data.data[0].unionid;
-        try {
-          if (res.data.data[0].unionid) {
-            try {
-              let userInfo = res.data.data[0];
-              switch (userInfo.rule) {
-                case 0:
-                  res.data.data[0].rule = 'job_seeker';
-                  break;
-                case 1:
-                  res.data.data[0].rule = 'recruiter';
-                  break;
-                default:
-                  res.data.data[0].rule = '';
+        if (res.data.code == 'ok') {
+          let unionid = res.data.data.unionid || res.data.data[0].unionid;
+          try {
+            if (res.data.data[0].unionid) {
+              try {
+                let userInfo = res.data.data[0];
+                app.globalData.userInfo = userInfo;
+                switch (userInfo.rule) {
+                  case 0:
+                    res.data.data[0].rule = 'job_seeker';
+                    break;
+                  case 1:
+                    res.data.data[0].rule = 'recruiter';
+                    break;
+                  default:
+                    res.data.data[0].rule = '';
+                }
+                wx.setStorageSync('userInfo', userInfo);
+              } catch (e) {
               }
-              wx.setStorageSync('userInfo', userInfo);
-            } catch (e) {
             }
+          } catch (e) {
           }
-        } catch (e) {
+          app.globalData.unionid = unionid;
+          try {
+            wx.setStorageSync('unionid', unionid);
+          } catch (e) {
+          }
+          console.log('set', wx.getStorageSync('unionid'));
+          ep.emit('unionid', unionid);
+          app.globalData.getMessage();
+        } else {
+          loginCallback('Illegal Buffer');
+          // ep.emit('error', '重复申请引发错误，重新获取');
         }
-        app.globalData.unionid = unionid;
-        try {
-          wx.setStorageSync('unionid', unionid);
-        } catch (e) {
-        }
-        console.log('set', wx.getStorageSync('unionid'));
-        ep.emit('unionid', unionid);
       },
       fail() {
         ep.emit('error', '获取用户信息失败');

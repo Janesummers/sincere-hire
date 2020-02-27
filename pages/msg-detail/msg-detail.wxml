@@ -9,8 +9,7 @@
     <view 
       class="item {{item.sendId === otherEncrypt ? 'left' : 'right'}}" 
       wx:for="{{list}}" 
-      wx:key="{{index}}"
-      
+      wx:key="index"
     >
       <view class="img_box">
         <image src="../../images/people_girl.png" mode="widthFix"></image>
@@ -33,8 +32,8 @@
         bindblur="end"
       />
     </view>
-    <view class="clear" bindtap="clear">
+    <!-- <view class="clear" bindtap="clear">
         清理本地
-      </view>
+      </view> -->
   </view>
 </view>
