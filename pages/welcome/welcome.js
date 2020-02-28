@@ -505,8 +505,8 @@ Page({
       title: '载入中...'
     })
     if (e.currentTarget.dataset.rule == 'job_seeker') {
-      req.request('saveJobSeeker', this.data.job_seeker, 'POST', (res) => {
-        console.log(res)
+      req.request('/saveJobSeeker', this.data.job_seeker, 'POST', (res) => {
+        console.log(res);
         let userInfo = res.data.data;
         userInfo.avatarUrl = this.data.job_seeker.avatarUrl;
         userInfo.rule = 'job_seeker';
