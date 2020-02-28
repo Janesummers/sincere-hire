@@ -34,6 +34,15 @@ Page({
 
       }
 
+      if (!userInfo.avatarUrl) {
+        if (userInfo.sex == '男') {
+          userInfo.avatarUrl = '../../images/people_man.png';
+        } else {
+          userInfo.avatarUrl = '../../images/people_girl.png';
+        }
+        
+      }
+
       this.setData({
         userInfo
       });
