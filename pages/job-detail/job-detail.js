@@ -13,89 +13,92 @@ Page({
     isCollect: false,
     rule: '',
     btnText: '发起聊天',
-    newChat: true
+    newChat: true,
+    isDone: false
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    var chats = wx.getStorageSync('chat');
-    
+    let job_id = options.jobId;
     const eventChannel = this.getOpenerEventChannel();
-    eventChannel.on('job_detail', data => {
-      data = JSON.parse(JSON.stringify(data));
-      data.other_require = data.other_require.split('|');
-      // data.job_type = data.job_type.split('/')[0];
-      if (chats) {
-        var chatList = Object.keys(chats)
-        if (chatList.includes(base64.encode(data.publisher_id))) {
-          this.setData({
-            btnText: '继续聊天',
-            newChat: false
-          })
-        }
-      }
-      
+    eventChannel.on('isCollect', data => {
       this.setData({
-        detail: data,
-        rule: app.globalData.userInfo.rule
-      });
-    })
-    eventChannel.on('collect', data => {
-      console.log(data)
-      this.setData({
-        isCollect: data
+        isCollect: data.isCollect
       })
     })
+    this.getData(job_id);
   },
 
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-
+  getData (job_id) {
+    req.request('/getJobDetail', {
+      job_id
+    }, 'POST', res => {
+      console.log(res);
+      if (res.data.code == 'ok') {
+        if (res.data.data.length > 0) {
+          let detail = this.formatData(res.data.data.concat());
+          this.isChat(detail);
+        }
+      } else {
+        console.error('获取职位详情错误');
+      }
+    })
   },
 
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-
+  isChat (detail) {
+    var chats = wx.getStorageSync('chat');
+    if (chats) {
+      var chatList = Object.keys(chats)
+      if (chatList.includes(base64.encode(detail.publisher_id))) {
+        this.setData({
+          btnText: '继续聊天',
+          newChat: false
+        })
+      }
+    }
+    this.setData({
+      detail,
+      rule: app.globalData.userInfo.rule,
+      isDone: true
+    });
   },
 
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-
+  formatData(data) {
+    let item = data[0];
+    let detail;
+    let t = new Date().getFullYear();
+    var small_time = item.update_date.match(/[^\s]+/g)[0];
+    var time = small_time.match(/[^-]+/)[0] < t ? small_time : small_time.replace(/[^-]+\-/, '');
+    let isCollect = item.col_job_id ? true : false;
+    detail = {
+      id: item.job_id,
+      position: item.job_name,
+      location: item.city,
+      display: item.display,
+      job_type: item.job_type,
+      other_require: item.other_require.split('|'),
+      people: item.recruit,
+      company_type: item.company_type,
+      company: item.company_name,
+      company_size: item.company_size,
+      price: item.salary,
+      edu_level: item.edu_level,
+      working_exp: item.working_exp,
+      time,
+      collect: isCollect,
+      publisher_id: item.publisher_id,
+      publisher_name: item.publisher_name,
+      publisher_position: item.position
+    };
+    return detail;
   },
 
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh: function () {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
 
   },
 
@@ -107,10 +110,7 @@ Page({
       ["detail.collect"]: !this.data.detail.collect,
       tapCollect: false
     })
-    const eventChannel = this.getOpenerEventChannel()
-    if (!this.data.isCollect) {
-      eventChannel.emit('changeCollect', this.data.detail.collect);
-    }
+    const eventChannel = this.getOpenerEventChannel();
     req.request('/setCollect', {
       job_id,
       collectData
@@ -129,6 +129,7 @@ Page({
             icon: 'none'
           })
         }
+
         if (this.data.isCollect) {
           eventChannel.emit('delCollect');
         }
@@ -136,9 +137,6 @@ Page({
         this.setData({
           ["detail.collect"]: !this.data.detail.collect
         })
-        if (!this.data.isCollect) {
-          eventChannel.emit('changeCollect', this.data.detail.collect);
-        }
         wx.showToast({
           title: '收藏失败',
           icon: 'none'

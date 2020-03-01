@@ -54,4 +54,3 @@
   </view> -->
 </view>
 <index-tabbar></index-tabbar>
-<impower-shadow wx:if="{{impowerShow}}" bind:getUser="getUser" ></impower-shadow>

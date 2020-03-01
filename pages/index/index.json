@@ -1,6 +1,5 @@
 {
   "usingComponents": {
-    "impower-shadow": "../../components/impower-shadow/impower-shadow",
     "index-tabbar": "../../components/custom-tab-bar/custom-tab-bar"
   }
 }

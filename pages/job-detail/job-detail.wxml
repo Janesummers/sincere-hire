@@ -70,3 +70,4 @@
       <view class="btn">{{btnText}}</view>
   </view>
 </view>
+<loading wx:if="{{!isDone}}"></loading>

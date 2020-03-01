@@ -101,10 +101,18 @@ Page({
       if (res.data.code == 'ok') {
         if (res.data.data.length > 0) {
           let station = this.formatData(res.data.data.concat());
-          this.setData({
-            station,
-            loadMore: false
-          })
+          if (station.length < 10) {
+            this.setData({
+              station,
+              loadMore: false,
+              isAllDone: true
+            })
+          } else {
+            this.setData({
+              station,
+              loadMore: false
+            })
+          }
         } else {
           this.setData({
             isAllDone: true
@@ -122,60 +130,38 @@ Page({
   },
 
   getData () {
-    let getCollect = new Promise((resolve, reject) => {
-      req.request('/getCollect', null, 'GET', res => {
-        if (res.data.code == 'ok') {
-          resolve(res)
-        } else {
-          reject(res)
-        }
-      })
-    })
-
-    let getJobList = new Promise((resolve, reject) => {
-      req.request('/getPracticeJobs', {
-        emplType: this.data.type
-      }, 'POST', res => {
-        wx.stopPullDownRefresh();
-        if (res.data.code == 'ok') {
-          resolve(res)
-        } else {
-          reject(res)
-        }
-      })
-    })
-
-    let done = Promise.all([getCollect, getJobList]);
-
-    done.then(res => {
-      let collect = res[0].data.data;
-      if (res[1].data.data.length > 0) {
-        let station = this.formatData(res[1].data.data.concat())
-        if (collect.length > 0) {
-          collect.forEach(col => {
-            station.forEach(sat => {
-              if (col.job_id == sat.id) {
-                sat.collect = true;
-              }
+    req.request('/getPracticeJobs', {
+      emplType: this.data.type
+    }, 'POST', res => {
+      wx.stopPullDownRefresh();
+      if (res.data.code == 'ok') {
+        if (res.data.data.length > 0) {
+          let station = this._formatData(res.data.data.concat());
+          if (station.length < 10) {
+            this.setData({
+              station,
+              loadMore: false,
+              isAllDone: true
             })
+          } else {
+            this.setData({
+              station,
+              loadMore: false
+            })
+          }
+        } else {
+          this.setData({
+            isAllDone: true
+          })
+          wx.showToast({
+            title: '已经没有更多啦~',
+            icon: 'none'
           })
         }
-        this.setData({
-          station,
-          loadMore: false
-        })
+        wx.stopPullDownRefresh();
       } else {
-        this.setData({
-          isAllDone: true
-        })
-        wx.showToast({
-          title: '已经没有更多啦~',
-          icon: 'none'
-        })
+        console.error('请求数据失败')
       }
-      wx.stopPullDownRefresh();
-    }).catch(e => {
-      console.error(e)
     })
   },
 
@@ -184,10 +170,18 @@ Page({
       if (res.data.code == 'ok') {
         if (res.data.data.length > 0) {
           let station = this.formatData(res.data.data.concat(), true);
-          this.setData({
-            station,
-            loadMore: false
-          });
+          if (station.length < 10) {
+            this.setData({
+              station,
+              loadMore: false,
+              isAllDone: true
+            })
+          } else {
+            this.setData({
+              station,
+              loadMore: false
+            })
+          }
         } else {
           this.setData({
             isAllDone: true
@@ -234,24 +228,33 @@ Page({
     return station;
   },
 
+  _formatData(data) {
+    let jobList = data;
+    let station = [];
+    let t = new Date().getFullYear();
+    jobList.forEach(item => {
+      var small_time = item.update_date.match(/[^\s]+/g)[0];
+      var time = small_time.match(/[^-]+/)[0] < t ? small_time : small_time.replace(/[^-]+\-/, '');
+      station.push({
+        id: item.job_id,
+        position: item.job_name,
+        location: item.city,
+        job_type: item.job_type,
+        people: item.recruit,
+        company_type: item.company_type,
+        company: item.company_name,
+        price: item.salary,
+        time
+      });
+    });
+    return station;
+  },
+
   toJobDetail (e) {
     let job_id = e.currentTarget.dataset.id;
-    let data = this.data.station.filter(item => item.id == job_id);
     wx.navigateTo({
-      url: '/pages/job-detail/job-detail',
+      url: `/pages/job-detail/job-detail?jobId=${job_id}&isCollect=${this.data.isCollect}`,
       events: {
-        changeCollect: collect => {
-          let station = this.data.station;
-          station.forEach(item => {
-            if (item.id == job_id) {
-              item.collect = collect;
-            }
-          })
-          this.setData({
-            station
-          })
-          console.log("上一页回传", collect)
-        },
         delCollect: () => {
           let station = this.data.station;
           let delIndex = 0;
@@ -266,9 +269,8 @@ Page({
           })
         }
       },
-      success: res => {
-        res.eventChannel.emit('job_detail', data[0])
-        res.eventChannel.emit('collect', this.data.isCollect)
+      success: (res) => {
+        res.eventChannel.emit('isCollect', { isCollect: this.data.isCollect })
       }
     })
   }
