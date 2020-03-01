@@ -8,7 +8,11 @@ Page({
    */
   data: {
     station: [],
-    isCollect: false
+    isCollect: false,
+    type: '',
+    page: 1,
+    isAllDone: false,
+    loadMore: false
   },
 
   /**
@@ -19,60 +23,134 @@ Page({
     wx.setNavigationBarTitle({
       title: type
     })
-    let station = [];
-    let t = new Date().getFullYear();
+    this.setData({
+      type
+    })
 
-    if (type != "收藏" && type != "发布") {
-      let getCollect = new Promise((resolve, reject) => {
+    switch (type) {
+      case '发布':
+        this.getRelease();
+        break;
+      case '收藏':
+        this.setData({
+          isCollect: true
+        })
+        this.getUserCollect();
+        break;
+      default:
+        this.getData()
+    }
+  },
+  
+  /**
+   * 页面相关事件处理函数--监听用户下拉动作
+   */
+  onPullDownRefresh: function () {
+    let type = this.data.type;
+    this.setData({
+      page: 1,
+      isAllDone: false
+    })
+    switch (type) {
+      case '发布':
+        this.getRelease();
+        break;
+      case '收藏':
+        this.setData({
+          isCollect: true
+        })
+        this.getUserCollect();
+        break;
+      default:
+        this.getData()
+    }
+  },
+
+  /**
+   * 页面上拉触底事件的处理函数
+   */
+  onReachBottom: function () {
+    if (!this.data.isAllDone && !this.data.loadMore) {
+      let page = parseInt(this.data.page) + 1;
+      let type = this.data.type;
+      this.setData({
+        page,
+        loadMore: true
+      })
+      switch (type) {
+        case '发布':
+          this.getRelease();
+          break;
+        case '收藏':
+          this.setData({
+            isCollect: true
+          })
+          this.getUserCollect();
+          break;
+        default:
+          this.getData()
+      }
+    }
+  },
+  
+  getRelease () {
+    req.request('/getMyRelease', {
+      company_id: app.globalData.userInfo.company_id,
+      page: this.data.page,
+    }, 'GET', res => {
+      if (res.data.code == 'ok') {
+        if (res.data.data.length > 0) {
+          let station = this.formatData(res.data.data.concat());
+          this.setData({
+            station,
+            loadMore: false
+          })
+        } else {
+          this.setData({
+            isAllDone: true
+          })
+          wx.showToast({
+            title: '已经没有更多啦~',
+            icon: 'none'
+          })
+        }
+        wx.stopPullDownRefresh();
+      } else {
+        console.error('错误')
+      }
+    })
+  },
+
+  getData () {
+    let getCollect = new Promise((resolve, reject) => {
       req.request('/getCollect', null, 'GET', res => {
         if (res.data.code == 'ok') {
           resolve(res)
         } else {
           reject(res)
         }
-        // console.log(res)
-        })
       })
-  
-      let getJobList = new Promise((resolve, reject) => {
-        req.request('/getPracticeJobs', {
-          emplType: type
-        }, 'POST', res => {
-          if (res.data.code == 'ok') {
-            resolve(res)
-          } else {
-            reject(res)
-          }
-          // console.log(res)
-        })
+    })
+
+    let getJobList = new Promise((resolve, reject) => {
+      req.request('/getPracticeJobs', {
+        emplType: this.data.type
+      }, 'POST', res => {
+        wx.stopPullDownRefresh();
+        if (res.data.code == 'ok') {
+          resolve(res)
+        } else {
+          reject(res)
+        }
       })
-      let done = Promise.all([getCollect, getJobList]);
-      done.then(res => {
-        let collect = res[0].data.data;
-        let jobList = res[1].data.data;
-        jobList.forEach(item => {
-          var small_time = item.update_date.match(/[^\s]+/g)[0];
-          var time = small_time.match(/[^-]+/)[0] < t ? small_time : small_time.replace(/[^-]+\-/, '');
-          station.push({
-            id: item.job_id,
-            position: item.job_name,
-            location: item.city,
-            display: item.display,
-            job_type: item.job_type,
-            other_require: item.other_require,
-            people: item.recruit,
-            company_type: item.company_type,
-            company: item.company_name,
-            company_size: item.company_size,
-            price: item.salary,
-            edu_level: item.edu_level,
-            working_exp: item.working_exp,
-            time,
-            collect: false,
-            publisher_id: item.publisher_id,
-            publisher_name: item.publisher_name
-          })
-        })
+    })
+
+    let done = Promise.all([getCollect, getJobList]);
+
+    done.then(res => {
+      let collect = res[0].data.data;
+      if (res[1].data.data.length > 0) {
+        let station = this.formatData(res[1].data.data.concat())
         if (collect.length > 0) {
           collect.forEach(col => {
             station.forEach(sat => {
@@ -83,136 +161,77 @@ Page({
           })
         }
         this.setData({
-          station
-        })
-      })
-    } else {
-      if (type == '发布') {
-        req.request('/getMyRelease', {
-          company_id: app.globalData.userInfo.company_id
-        }, 'GET', res => {
-          if (res.data.code == 'ok') {
-            let jobList = res.data.data;
-            jobList.forEach(item => {
-              var small_time = item.update_date.match(/[^\s]+/g)[0];
-              var time = small_time.match(/[^-]+/)[0] < t ? small_time : small_time.replace(/[^-]+\-/, '');
-              station.push({
-                id: item.job_id,
-                position: item.job_name,
-                location: item.city,
-                display: item.display,
-                job_type: item.job_type,
-                other_require: item.other_require,
-                people: item.recruit,
-                company_type: item.company_type,
-                company: item.company_name,
-                company_size: item.company_size,
-                price: item.salary,
-                edu_level: item.edu_level,
-                working_exp: item.working_exp,
-                time,
-                collect: true,
-                publisher_id: item.publisher_id,
-                publisher_name: item.publisher_name
-              })
-            })
-          } else {
-            console.log('错误')
-          }
-          this.setData({
-            station
-          })
-          // console.log(res)
+          station,
+          loadMore: false
         })
       } else {
         this.setData({
-          isCollect: true
+          isAllDone: true
         })
-        req.request('/getUserCollect', null, 'GET', res => {
-          if (res.data.code == 'ok') {
-            let jobList = res.data.data;
-            jobList.forEach(item => {
-              var small_time = item.update_date.match(/[^\s]+/g)[0];
-              var time = small_time.match(/[^-]+/)[0] < t ? small_time : small_time.replace(/[^-]+\-/, '');
-              station.push({
-                id: item.job_id,
-                position: item.job_name,
-                location: item.city,
-                display: item.display,
-                job_type: item.job_type,
-                other_require: item.other_require,
-                people: item.recruit,
-                company_type: item.company_type,
-                company: item.company_name,
-                company_size: item.company_size,
-                price: item.salary,
-                edu_level: item.edu_level,
-                working_exp: item.working_exp,
-                time,
-                collect: true,
-                publisher_id: item.publisher_id,
-                publisher_name: item.publisher_name
-              })
-            })
-          } else {
-            console.log('错误')
-          }
-          this.setData({
-            station
-          })
-          // console.log(res)
+        wx.showToast({
+          title: '已经没有更多啦~',
+          icon: 'none'
         })
       }
-    }
+      wx.stopPullDownRefresh();
+    }).catch(e => {
+      console.error(e)
+    })
   },
 
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-
+  getUserCollect () {
+    req.request('/getUserCollect', null, 'GET', res => {
+      if (res.data.code == 'ok') {
+        if (res.data.data.length > 0) {
+          let station = this.formatData(res.data.data.concat(), true);
+          this.setData({
+            station,
+            loadMore: false
+          });
+        } else {
+          this.setData({
+            isAllDone: true
+          })
+          wx.showToast({
+            title: '已经没有更多啦~',
+            icon: 'none'
+          })
+        }
+      } else {
+        console.error('错误');
+      }
+      wx.stopPullDownRefresh();
+    })
   },
 
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-
+  formatData(data, isCollect = false) {
+    let jobList = data;
+    let station = [];
+    let t = new Date().getFullYear();
+    jobList.forEach(item => {
+      var small_time = item.update_date.match(/[^\s]+/g)[0];
+      var time = small_time.match(/[^-]+/)[0] < t ? small_time : small_time.replace(/[^-]+\-/, '');
+      station.push({
+        id: item.job_id,
+        position: item.job_name,
+        location: item.city,
+        display: item.display,
+        job_type: item.job_type,
+        other_require: item.other_require,
+        people: item.recruit,
+        company_type: item.company_type,
+        company: item.company_name,
+        company_size: item.company_size,
+        price: item.salary,
+        edu_level: item.edu_level,
+        working_exp: item.working_exp,
+        time,
+        collect: isCollect,
+        publisher_id: item.publisher_id,
+        publisher_name: item.publisher_name
+      });
+    });
+    return station;
   },
 
   toJobDetail (e) {

@@ -18,12 +18,13 @@
     "pages/release-recruit/release-recruit"
   ],
   "window": {
-    "backgroundTextStyle": "light",
-    "navigationBarBackgroundColor": "#64bfba",
+    "backgroundTextStyle": "dark",
+    "navigationBarBackgroundColor": "#49bcc0",
     "navigationBarTitleText": "易优聘",
     "navigationBarTextStyle": "white"
   },
   "style": "v2",
+  "debug": true,
   "sitemapLocation": "sitemap.json",
   "tabBar": {
     "custom": true,

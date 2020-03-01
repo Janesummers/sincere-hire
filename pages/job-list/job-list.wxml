@@ -18,4 +18,5 @@
       </view>
     </view>
   </view>
+  <view wx:if="{{isAllDone}}" class="hint">已经没有更多啦~</view>
 </view>

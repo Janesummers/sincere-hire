@@ -22,7 +22,7 @@ page {
   display: flex;
   align-items: center;
   height: 32rpx;
-  color: #64bfba;
+  color: #49bcc0;
 }
 .container .list .items .top .add .iconfont {
   margin-right: 6rpx;
@@ -49,7 +49,7 @@ page {
 }
 .container .list .items .name > .iconfont {
   font-size: 28rpx;
-  color: #64bfba;
+  color: #49bcc0;
 }
 .container .list .items .name .school_name,
 .container .list .items .name .company_name {
@@ -137,7 +137,7 @@ page {
   color: #888888;
 }
 .container .eidt_text .top view.save {
-  color: #64bfba;
+  color: #49bcc0;
   text-align: right;
 }
 .container .eidt_text .title {

@@ -18,7 +18,9 @@ Page({
     otherEncrypt: '',
     listTop: 50,
     sendId: '',
-    acceptId: ''
+    acceptId: '',
+    sendImg: '',
+    acceptImg: ''
   },
 
   /**
@@ -29,18 +31,37 @@ Page({
     let data = wx.getStorageSync('chat');
     let id = base64.encode(options.id);
     var unionid = base64.encode(wx.getStorageSync('unionid'));
+    console.log(options.sendImg)
     this.setData({
       sendId: id,
-      acceptId: unionid
+      acceptId: unionid,
+      sendImg: options.sendImg ? decodeURIComponent(options.sendImg) : '',
+      acceptImg: options.acceptImg ? decodeURIComponent(options.acceptImg) : ''
     })
     wx.setNavigationBarTitle({
       title: options.name
     })
     console.log('进入获取聊天记录：', data[id])
     if (data) {
-      this.setData({
-        list: data[id] || []
-      })
+      let list = []
+      if (data[id]) {
+        list = data[id];
+        list.forEach(item => {
+          if (item.sendId == this.data.sendId) {
+            item.avatarUrl = this.data.sendImg
+          } else {
+            item.avatarUrl = this.data.acceptImg
+          }
+        })
+        this.setData({
+          list
+        })
+      } else {
+        this.setData({
+          list
+        })
+      }
+      
     }
 
     if (this.data.list.length * 66 > height) {
@@ -148,7 +169,8 @@ Page({
       data: msg.data,
       sendId,
       acceptId,
-      time: new Date(Number(msg.time))
+      time: new Date(Number(msg.time)),
+      avatarUrl: this.data.sendImg
     })
     if (list.length * 66 > this.data.originHeight) {
       this.setData({
@@ -201,68 +223,76 @@ Page({
   },
 
   bindconfirm (e) {
-    let list = this.data.list;
-    let unionid = wx.getStorageSync('unionid');
-    let chatList = wx.getStorageSync('chat');
-    let time = this.getTime();
-    let acceptId = this.data.otherEncrypt;
-    let all = {
-      data: e.detail.value,
-      sendId: base64.encode(unionid),
-      acceptId,
-      time
-    };
+    if (e.detail.value != '') {
+      let list = this.data.list;
+      let unionid = wx.getStorageSync('unionid');
+      let chatList = wx.getStorageSync('chat');
+      let time = this.getTime();
+      let acceptId = this.data.otherEncrypt;
+      let all = {
+        data: e.detail.value,
+        sendId: base64.encode(unionid),
+        acceptId,
+        time
+      };
 
-    this.setData({
-      sendText: ''
-    })
-
-    if (chatList) {
-      if (chatList[acceptId]) {
-        chatList[acceptId].push({
-          data: e.detail.value,
-          sendId: base64.encode(unionid),
-          acceptId,
-          time: time
-        });
-      } else {
-        chatList[acceptId] = [{
-          data: e.detail.value,
-          sendId: base64.encode(unionid),
-          acceptId,
-          time: time
-        }]
-      }
-      wx.setStorageSync('chat', chatList);
-    } else {
-      let obj = {};
-      obj[acceptId] = [all]
-      wx.setStorageSync('chat', obj);
-    }
-    
-    let data = JSON.stringify({
-      msg: e.detail.value,
-      client: base64.encode(unionid),
-      to: acceptId,
-      time: all.time,
-      name: app.globalData.userInfo.name
-    })
-    wx.sendSocketMessage({
-      data
-    })
-    list.push({
-      data: e.detail.value,
-      sendId: base64.encode(unionid),
-      acceptId,
-      time: all.time
-    })
-    this.setData({
-      list
-    }, () => {
       this.setData({
-        toLast: `item${this.data.list.length - 1}`
+        sendText: ''
       })
-    })
+
+      if (chatList) {
+        if (chatList[acceptId]) {
+          chatList[acceptId].push({
+            data: e.detail.value,
+            sendId: base64.encode(unionid),
+            acceptId,
+            time: time
+          });
+        } else {
+          chatList[acceptId] = [{
+            data: e.detail.value,
+            sendId: base64.encode(unionid),
+            acceptId,
+            time: time
+          }]
+        }
+        wx.setStorageSync('chat', chatList);
+      } else {
+        let obj = {};
+        obj[acceptId] = [all]
+        wx.setStorageSync('chat', obj);
+      }
+      
+      let data = JSON.stringify({
+        msg: e.detail.value,
+        client: base64.encode(unionid),
+        to: acceptId,
+        time: all.time,
+        name: app.globalData.userInfo.name || app.globalData.userInfo.nickname
+      })
+      wx.sendSocketMessage({
+        data
+      })
+      list.push({
+        data: e.detail.value,
+        sendId: base64.encode(unionid),
+        acceptId,
+        time: all.time,
+        avatarUrl: this.data.acceptImg
+      })
+      this.setData({
+        list
+      }, () => {
+        this.setData({
+          toLast: `item${this.data.list.length - 1}`
+        })
+      })
+    } else {
+      wx.showToast({
+        title: '请先输入内容',
+        icon: 'none'
+      })
+    }
   },
 
   clear () {

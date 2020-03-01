@@ -7,8 +7,8 @@
       </view>
       <view class="right {{userInfo.rule == 'recruiter' ? 'f_c' : ''}}">
         <view class="top">
-          <view class="name">{{userInfo.name}}</view>
-          <!-- <view class="appellation"> / 先生</view> -->
+          <view class="name">{{userInfo.name || userInfo.nickname}}</view>
+          <view class="appellation">{{userInfo.position || ''}}</view>
         </view>
         <block wx:if="{{userInfo.rule == 'job_seeker'}}">
           <view class="middle">

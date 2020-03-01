@@ -3,7 +3,7 @@
     <view class="item">
       <view class="little_title">姓名</view>
       <view class="text">
-        <input type="text" placeholder="请填写" value="{{userInfo.name}}" />
+        <input type="text" placeholder="请填写" value="{{userInfo.name || userInfo.nickname}}" />
       </view>
     </view>
     <view class="item">

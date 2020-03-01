@@ -15,7 +15,7 @@ page {
   font-size: 48rpx;
 }
 .container .job_type .iconfont.icon-shoucang1 {
-  color: #64bfba;
+  color: #49bcc0;
 }
 .container .job_type .job_title {
   font-size: 42rpx;
@@ -68,7 +68,7 @@ page {
   display: flex;
   justify-content: space-between;
   font-size: 28rpx;
-  color: #64bfba;
+  color: #49bcc0;
 }
 .container .job_type .info .create_time {
   font-size: 24rpx;
@@ -125,7 +125,7 @@ page {
   font-size: 24rpx;
 }
 .container .company_info .info .in_recruit text {
-  color: #64bfba;
+  color: #49bcc0;
   margin: 0 6rpx;
 }
 .container .hit {
@@ -159,7 +159,7 @@ page {
   line-height: 42px;
   color: #fff;
   border-radius: 12rpx;
-  background: #64bfba;
+  background: #49bcc0;
   text-align: center;
   font-size: 28rpx;
 }

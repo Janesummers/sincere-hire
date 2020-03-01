@@ -41,6 +41,10 @@ Page({
           userInfo.avatarUrl = '../../images/people_girl.png';
         }
         
+      } else {
+        if (!(/http|https/.test(userInfo.avatarUrl))) {
+          userInfo.avatarUrl = `${app.globalData.UrlHeadAddress}/qzApi/userAvatar/${userInfo.avatarUrl}`;
+        }
       }
 
       this.setData({

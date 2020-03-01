@@ -49,6 +49,7 @@ Page({
           item.text = allData[dataLen - 1].data;
           var d = new Date(Number(allData[dataLen - 1].time));
           item.time = util.formatNumber(d.getHours()) + ":" + util.formatNumber(d.getMinutes());
+          item.originTime = `${d.toLocaleDateString()} ${d.toTimeString().match(/[^ ]+/)}.${d.getMilliseconds()}`;
         }
       })
 
@@ -61,12 +62,25 @@ Page({
           target_name: data.sendUser,
           target_company: null,
           text: allData[dataLen - 1].data,
-          time: util.formatNumber(d.getHours()) + ":" + util.formatNumber(d.getMinutes())
+          time: util.formatNumber(d.getHours()) + ":" + util.formatNumber(d.getMinutes()),
+          originTime: `${d.toLocaleDateString()} ${d.toTimeString().match(/[^ ]+/)}.${d.getMilliseconds()}`
         })
       }
 
+      let listSort;
+
+      listSort = list.sort((a, b) => {
+        if (a.originTime > b.originTime) {
+          return -1;
+        }
+        if (a.originTime > b.originTime) {
+          return 1;
+        }
+        return 0;
+      })
+
       this.setData({
-        list
+        list: listSort
       })
 
       if (chatList) {
@@ -97,10 +111,13 @@ Page({
   toDetail (e) {
     let {
       id,
-      name
+      name,
+      send
     } = e.currentTarget.dataset;
+    send = send ? encodeURIComponent(send) : '';
+    var accept = app.globalData.userInfo.avatarUrl ? encodeURIComponent(app.globalData.userInfo.avatarUrl) : '';
     wx.navigateTo({
-      url: `/pages/msg-detail/msg-detail?id=${id}&name=${name}`
+      url: `/pages/msg-detail/msg-detail?id=${id}&name=${name}&sendImg=${send}&acceptImg=${accept}`
     })
   },
 
@@ -115,6 +132,7 @@ Page({
       keys = Object.keys(chatList);
     }
     req.request('/getMessageList', { id: base64.encode(unionid), rule: app.globalData.userInfo.rule}, 'POST', (res) => {
+      console.log(res.data.data)
       let list = res.data.data;
       list.forEach(item => {
         if (keys.includes(base64.encode(item.target_id))) {
@@ -122,17 +140,35 @@ Page({
           item.text = data[data.length - 1].data;
           var d = new Date(Number(data[data.length - 1].time));
           item.time = util.formatNumber(d.getHours()) + ":" + util.formatNumber(d.getMinutes());
+          item.originTime = `${d.toLocaleDateString()} ${d.toTimeString().match(/[^ ]+/)}.${d.getMilliseconds()}`;
         } else {
           item.text = ''
           item.time = ''
+          item.originTime = ''
         }
         if (item.avatarUrl) {
           item.avatarUrl = `${app.globalData.UrlHeadAddress}/qzApi/userAvatar/${item.avatarUrl}`
         }
       })
+
+      // console.log(JSON.stringify(list))
+
+      let listSort;
+
+      listSort = list.sort((a, b) => {
+        if (a.originTime > b.originTime) {
+          return -1;
+        }
+        if (a.originTime > b.originTime) {
+          return 1;
+        }
+        return 0;
+      })
+
+      // console.log(JSON.stringify(listSort))
       
       this.setData({
-        list,
+        list: listSort,
         isDone: true
       })
     })

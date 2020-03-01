@@ -27,10 +27,14 @@ page {
   max-width: 80rpx;
   overflow: hidden;
   height: 80rpx;
+  border-radius: 10rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .container .list .item .img_box image {
   width: 100%;
-  border-radius: 16rpx;
+  border-radius: 10rpx;
 }
 .container .list .item .bubble {
   background: #fff;

@@ -74,5 +74,5 @@ page {
   font-size: 24rpx;
 }
 .container #companyList .items .info .job text {
-  color: #64bfba;
+  color: #49bcc0;
 }

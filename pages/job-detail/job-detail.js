@@ -160,9 +160,8 @@ Page({
         id: publisher_id,
         name,
         company,
-        commit_name: app.globalData.userInfo.name
+        commit_name: app.globalData.userInfo.name || app.globalData.userInfo.nickname
       }, 'POST', res => {
-        
         if (res.data.code != 'error') {
           wx.hideLoading();
           wx.navigateTo({
