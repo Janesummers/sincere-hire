@@ -112,7 +112,7 @@ App({
     user: null,
     userInfo: null,
     unionid: null,
-    UrlHeadAddress: 'http://192.168.1.104', //https://www.chiens.cn/qzApi  http://192.168.1.104/
+    UrlHeadAddress: 'https://www.chiens.cn', //https://www.chiens.cn/qzApi  http://192.168.1.104/
     selected: 0,
     openData: {},
     list: [

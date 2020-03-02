@@ -50,6 +50,8 @@ Page({
           var d = new Date(Number(allData[dataLen - 1].time));
           item.time = util.formatNumber(d.getHours()) + ":" + util.formatNumber(d.getMinutes());
           item.originTime = `${d.toLocaleDateString()} ${d.toTimeString().match(/[^ ]+/)}.${d.getMilliseconds()}`;
+          item.num += 1;
+          item.timestamp = Number(allData[data.length - 1].time);
         }
       })
 
@@ -63,17 +65,19 @@ Page({
           target_company: null,
           text: allData[dataLen - 1].data,
           time: util.formatNumber(d.getHours()) + ":" + util.formatNumber(d.getMinutes()),
-          originTime: `${d.toLocaleDateString()} ${d.toTimeString().match(/[^ ]+/)}.${d.getMilliseconds()}`
+          originTime: `${d.toLocaleDateString()} ${d.toTimeString().match(/[^ ]+/)}`,
+          num: 1,
+          timestamp: Number(allData[data.length - 1].time)
         })
       }
 
       let listSort;
 
       listSort = list.sort((a, b) => {
-        if (a.originTime > b.originTime) {
+        if (a.timestamp > b.timestamp) {
           return -1;
         }
-        if (a.originTime > b.originTime) {
+        if (a.timestamp > b.timestamp) {
           return 1;
         }
         return 0;
@@ -140,7 +144,9 @@ Page({
           item.text = data[data.length - 1].data;
           var d = new Date(Number(data[data.length - 1].time));
           item.time = util.formatNumber(d.getHours()) + ":" + util.formatNumber(d.getMinutes());
-          item.originTime = `${d.toLocaleDateString()} ${d.toTimeString().match(/[^ ]+/)}.${d.getMilliseconds()}`;
+          item.originTime = `${d.toLocaleDateString()} ${d.toTimeString().match(/[^ ]+/)}`;
+          item.timestamp = Number(data[data.length - 1].time);
+          item.num = 0;
         } else {
           item.text = ''
           item.time = ''
@@ -156,10 +162,10 @@ Page({
       let listSort;
 
       listSort = list.sort((a, b) => {
-        if (a.originTime > b.originTime) {
+        if (a.timestamp > b.timestamp) {
           return -1;
         }
-        if (a.originTime > b.originTime) {
+        if (a.timestamp > b.timestamp) {
           return 1;
         }
         return 0;

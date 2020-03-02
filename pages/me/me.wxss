@@ -13,10 +13,13 @@ page {
   overflow: hidden;
   border-radius: 16rpx;
   margin-right: 40rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .container #me .info .head image {
   width: 100%;
-  border-radius: 50%;
+  border-radius: 16rpx;
 }
 .container #me .info .right.f_c {
   display: flex;
