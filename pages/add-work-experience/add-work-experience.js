@@ -25,13 +25,43 @@ Page({
     leavedate: [[], []],
     leavedateIndex: [0, 0],
     olderLeavedataIndex: [0, 0],
-    cursorIndex: 1
+    btnText: '保存'
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    const eventChannel = this.getOpenerEventChannel();
+    console.log(eventChannel)
+    this.init();
+    eventChannel.on('work', opt => {
+      let {
+        data,
+        id
+      } = opt; 
+      let company = {
+        name: data[0].company_name,
+        position: data[0].position,
+        hiredate: data[0].hiredate,
+        leavedate: data[0].leavedate,
+        industry: data[0].industry,
+        monthly_salary: data[0].salary,
+        job_description: data[0].job_description
+      }
+      this.setData({
+        company,
+        btnText: '保存修改',
+        word_id: id
+      })
+      wx.setNavigationBarTitle({
+        title: '修改经历'
+      })
+      this.changeInit();
+    })
+  },
+
+  init () {
     let date = new Date();
     let time = date.getFullYear();
     let month = date.getMonth() + 1;
@@ -66,6 +96,62 @@ Page({
       leavedate,
       leavedateIndex,
       olderLeavedataIndex
+    })
+  },
+
+  changeInit () {
+    let {
+      company,
+      leavedateIndex,
+      olderLeavedataIndex,
+      leavedate,
+      hiredate,
+      industry
+    } = this.data;
+
+    let currentYear = new Date().getFullYear();
+    let currentMonth = new Date().getMonth() + 1;
+    let date = company.hiredate.match(/[^.]+/g);
+    let yearIndex = hiredate[0].indexOf(`${date[0]} 年`);
+    let monthIndex = parseInt(date[1]) - 1;
+
+    if (currentYear != parseInt(date[0])) {
+      hiredate[1] = [];
+      for (let i = 1; i <= 12; i++) {
+        hiredate[1].push(i < 10 ? `0${i} 月` : `${i} 月`);
+      }
+    }
+    let hiredateIndex = [yearIndex, monthIndex];
+    let olderHiredateIndex = [yearIndex, monthIndex];
+
+    if (company.leavedate != '至今') {
+      let leave = company.leavedate.match(/[^.]+/g);
+      let yIndex = leavedate[0].indexOf(`${leave[0]} 年`);
+      let mIndex = parseInt(leave[1]) - 1;
+      leavedate[1] = [];
+      if (currentYear != parseInt(leave[0])) {
+        for (let i = 1; i <= 12; i++) {
+          leavedate[1].push(i < 10 ? `0${i} 月` : `${i} 月`);
+        }
+      } else {
+        for (let i = 1; i <= currentMonth; i++) {
+          leavedate[1].push(i < 10 ? `0${i} 月` : `${i} 月`);
+        }
+      }
+      leavedateIndex = [yIndex, mIndex];
+      olderLeavedataIndex = [yIndex, mIndex];
+    }
+
+    let industryIndex = industry.indexOf(company.industry);
+
+    this.setData({
+      hiredate,
+      hiredateIndex,
+      olderHiredateIndex,
+      leavedate,
+      leavedateIndex,
+      olderLeavedataIndex,
+      industryIndex
     })
   },
 
@@ -233,8 +319,7 @@ Page({
       industryIndex,
       leavedate,
       leavedateIndex,
-      olderLeavedataIndex,
-      cursorIndex
+      olderLeavedataIndex
     } = this.data;
     switch (key) {
       case 'industry':
@@ -245,11 +330,15 @@ Page({
         company.monthly_salary = value;
         break;
       case 'leavedate':
-        leavedateIndex = value.concat();
-        olderLeavedataIndex = value.concat();
-        let year = parseInt(leavedate[0][value[0]]);
-        let month = leavedate[1][value[1]].replace(' 月', '');
-        company.leavedate = `${year}.${month}`;
+        if (leavedate[0][value[0]] == '至今') {
+          company.leavedate = leavedate[0][value[0]];
+        } else {
+          leavedateIndex = value.concat();
+          olderLeavedataIndex = value.concat();
+          let year = parseInt(leavedate[0][value[0]]);
+          let month = leavedate[1][value[1]].replace(' 月', '');
+          company.leavedate = `${year}.${month}`;
+        }
         break;
       default:
         company[key] = value;
@@ -262,16 +351,12 @@ Page({
       leavedate,
       leavedateIndex,
       olderLeavedataIndex
-    }, () => {
-      this.setData({
-        cursorIndex
-      })
     })
   },
 
   save () {
     wx.showLoading({
-      title: "保存中。。。"
+      title: "保存中..."
     })
     let {
       name,
@@ -282,7 +367,7 @@ Page({
       monthly_salary,
       job_description
     } = this.data.company;
-    req.request('/addWorkExperience', {
+    this.sendReq('/addWorkExperience', {
       name,
       position,
       hiredate,
@@ -290,13 +375,60 @@ Page({
       industry,
       monthly_salary,
       job_description
-    }, 'POST', (res) => {
-      console.log(res)
+    }, '添加');
+  },
+
+  change () {
+    wx.showLoading({
+      title: "保存修改中..."
+    })
+    let {
+      name,
+      position,
+      hiredate,
+      leavedate,
+      industry,
+      monthly_salary,
+      job_description
+    } = this.data.company;
+    this.sendReq('/changeWorkExperience', {
+      name,
+      position,
+      hiredate,
+      leavedate,
+      industry,
+      monthly_salary,
+      job_description,
+      word_id: this.data.word_id
+    }, '修改');
+  },
+
+  del () {
+    wx.showModal({
+      title: '提示',
+      content: '确定要删除吗？',
+      confirmColor: '#49bcc0',
+      success: (res) => {
+        if (res.confirm) {
+          wx.showLoading({
+            title: "正在处理..."
+          })
+          this.sendReq('/delWorkExperience', {
+            word_id: this.data.word_id
+          }, '删除');
+        }
+      }
+    })
+  },
+
+  sendReq (uri, data, text) {
+    req.request(uri, data, 'POST', (res) => {
       if (res.data.code != 'error') {
         wx.hideLoading();
         wx.showToast({
-          title: '添加成功',
+          title: `${text}成功`,
           icon: 'success',
+          duration: 1000,
           success: () => {
             setTimeout(() => {
               let pages = getCurrentPages(); //获取当前页面js里面的pages里的所有信息。
@@ -309,12 +441,12 @@ Page({
               wx.navigateBack({
                 delta: 1 // 返回上一级页面。
               });
-            }, 1500);
+            }, 1000);
           }
         });
       } else {
         wx.showToast({
-          title: '添加失败',
+          title: `${text}失败`,
           icon: 'none'
         });
       }

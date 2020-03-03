@@ -94,14 +94,6 @@ Page({
     wx.getSetting({
       success: res => {
         if (res.authSetting['scope.userInfo']) {
-          // 已经授权，可以直接调用 getUserInfo 获取头像昵称，不会弹框
-          // wx.showToast({
-          //   title: '已授权',
-          //   icon: 'none',
-          //   success: () => {
-              
-          //   }
-          // })
           if (wx.getStorageSync('unionid')) {
             this.setData({
               impowerShow: false
@@ -131,24 +123,24 @@ Page({
                 }
                 app.globalData.userInfo = data;
                 wx.setStorageSync('userInfo', data);
-                console.log(12323232)
                 if (isRole) {
                   switch (data.rule) {
                     case 'job_seeker':
-                      wx.switchTab({
-                        url: '../index/index'
+                      // wx.switchTab({
+                      //   url: '../index/index'
+                      // })
+                      wx.redirectTo({
+                        url: '../live-resume/live-resume'
                       })
                       break;
                     case 'recruiter':
                       wx.switchTab({
                         url: '../message/message'
                       })
-                      // wx.redirectTo({
-                      //   url: '../release-recruit/release-recruit'
-                      // })
                       break;
                   }
                 } else {
+                  this.getData();
                   this.setData({
                     isUserLogin: false
                   })
@@ -167,33 +159,6 @@ Page({
           })
           return;
         }
-        // if (!wx.getStorageSync('user') || !wx.getStorageSync('unionid') || !wx.getStorageSync('userInfo')) {
-        //   this.setData({
-        //     impowerShow: true
-        //   })
-        //   return;
-        // }
-        // if (wx.getStorageSync('user')) {
-        //   let userInfo = wx.getStorageSync('userInfo');
-        //   if (!userInfo || !userInfo.rule) {
-        //     this.getData();
-        //   } else {
-        //     app.globalData.userInfo = userInfo;
-        //     if (userInfo.rule == 'job_seeker') {
-        //       wx.switchTab({
-        //         url: '../index/index'
-        //       })
-        //       // wx.redirectTo({
-        //       //   url: '../live-resume/live-resume'
-        //       // })
-        //     } else {
-        //       wx.switchTab({
-        //         url: '../message/message'
-        //       })
-        //     }
-        //   }
-        //   return;
-        // }
       }
     })
 
@@ -229,6 +194,7 @@ Page({
         } else {
           console.log('用户登录成功');
           let userInfo = wx.getStorageSync('userInfo');
+          console.log(userInfo.rule)
           if (userInfo && !!userInfo.rule) {
             console.log(userInfo.rule)
             if (userInfo.rule == 'recruiter') {
@@ -240,9 +206,6 @@ Page({
                 url: '../index/index'
               })
             }
-            // wx.redirectTo({
-            //   url: '../live-resume/live-resume'
-            // })
           } else {
             this.getData();
           }
@@ -604,13 +567,17 @@ Page({
         break;
       case 'jobTime':
         let jobTime = this.data.jobTime;
-        var year = jobTime[0][value[0]].replace(' 年', '');
-        var month = jobTime[1][value[1]].replace(' 月', '');
-        
-        job_seeker[key] = `${year}.${month}`;
-        this.setData({
-          jobTimeIndex: value.concat()
-        })
+        if (jobTime[0][value[0]] == '无工作经验') {
+          job_seeker[key] = '无工作经验';
+        } else {
+          var year = jobTime[0][value[0]].replace(' 年', '');
+          var month = jobTime[1][value[1]].replace(' 月', '');
+          
+          job_seeker[key] = `${year}.${month}`;
+          this.setData({
+            jobTimeIndex: value.concat()
+          })
+        }
         break;
       default:
         job_seeker[key] = value.concat();

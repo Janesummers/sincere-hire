@@ -54,7 +54,7 @@ Page({
     let jobList = data;
     let station = [];
     let t = new Date().getFullYear();
-    jobList.forEach(item => {z
+    jobList.forEach(item => {
       var small_time = item.update_date.match(/[^\s]+/g)[0];
       var time = small_time.match(/[^-]+/)[0] < t ? small_time : small_time.replace(/[^-]+\-/, '');
       station.push({

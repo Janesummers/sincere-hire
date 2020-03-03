@@ -57,9 +57,6 @@ App({
         },
         fail: () => {
           console.log('连接失败')
-        },
-        complete: () => {
-          console.log('lllll')
         }
       })
       
@@ -67,14 +64,17 @@ App({
 
     //监听WebSocket连接打开事件。
     function onSocketOpen() {
-      wx.onSocketOpen(function(res) {
+      wx.onSocketOpen(() => {
         console.log('WebSocket连接已打开！');
+        setTimeout(() => {
+          connectSocket();
+        }, 889999);
       });
     }
 
-    wx.onSocketClose((res) => {
-      connectSocket();
-    })
+    // wx.onSocketClose((res) => {
+    //   connectSocket();
+    // })
 
     wx.onSocketMessage(data => {
       console.log('app接收到')

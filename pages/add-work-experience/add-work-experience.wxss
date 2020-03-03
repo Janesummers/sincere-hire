@@ -99,3 +99,24 @@ page {
   text-align: center;
   font-size: 32rpx;
 }
+.container .flex {
+  display: flex;
+  justify-content: space-between;
+}
+.container .flex view {
+  height: 100%;
+  line-height: 42px;
+  border-radius: 12rpx;
+  text-align: center;
+  font-size: 32rpx;
+}
+.container .flex .del {
+  width: 26%;
+  color: #5c5959;
+  background: #eceaea;
+}
+.container .flex .changeBtn {
+  width: 70%;
+  color: #fff;
+  background: #49bcc0;
+}

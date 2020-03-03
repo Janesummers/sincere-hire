@@ -117,10 +117,6 @@ Page({
           this.setData({
             isAllDone: true
           })
-          wx.showToast({
-            title: '已经没有更多啦~',
-            icon: 'none'
-          })
         }
         wx.stopPullDownRefresh();
       } else {
@@ -131,31 +127,35 @@ Page({
 
   getData () {
     req.request('/getPracticeJobs', {
-      emplType: this.data.type
+      emplType: this.data.type,
+      page: this.data.page
     }, 'POST', res => {
       wx.stopPullDownRefresh();
       if (res.data.code == 'ok') {
         if (res.data.data.length > 0) {
-          let station = this._formatData(res.data.data.concat());
-          if (station.length < 10) {
+          let station = this.formatData(res.data.data.concat());
+          if (this.data.page == 1) {
             this.setData({
               station,
-              loadMore: false,
-              isAllDone: true
+              loadMore: false
             })
-          } else {
+            if (station.length < 10) {
+              this.setData({
+                isAllDone: true
+              })
+            }
+          }
+          if (this.data.page > 1) {
+            let data = this.data.station.concat(station);
             this.setData({
-              station,
+              station: data,
               loadMore: false
             })
           }
         } else {
           this.setData({
-            isAllDone: true
-          })
-          wx.showToast({
-            title: '已经没有更多啦~',
-            icon: 'none'
+            isAllDone: true,
+            loadMore: false
           })
         }
         wx.stopPullDownRefresh();
@@ -170,25 +170,28 @@ Page({
       if (res.data.code == 'ok') {
         if (res.data.data.length > 0) {
           let station = this.formatData(res.data.data.concat(), true);
-          if (station.length < 10) {
+          if (this.data.page == 1) {
             this.setData({
               station,
-              loadMore: false,
-              isAllDone: true
+              loadMore: false
             })
-          } else {
+            if (station.length < 10) {
+              this.setData({
+                isAllDone: true
+              })
+            }
+          }
+          if (this.data.page > 1) {
+            let data = this.data.station.concat(station);
             this.setData({
-              station,
+              station: data,
               loadMore: false
             })
           }
         } else {
           this.setData({
-            isAllDone: true
-          })
-          wx.showToast({
-            title: '已经没有更多啦~',
-            icon: 'none'
+            isAllDone: true,
+            loadMore: false
           })
         }
       } else {
@@ -198,37 +201,7 @@ Page({
     })
   },
 
-  formatData(data, isCollect = false) {
-    let jobList = data;
-    let station = [];
-    let t = new Date().getFullYear();
-    jobList.forEach(item => {
-      var small_time = item.update_date.match(/[^\s]+/g)[0];
-      var time = small_time.match(/[^-]+/)[0] < t ? small_time : small_time.replace(/[^-]+\-/, '');
-      station.push({
-        id: item.job_id,
-        position: item.job_name,
-        location: item.city,
-        display: item.display,
-        job_type: item.job_type,
-        other_require: item.other_require,
-        people: item.recruit,
-        company_type: item.company_type,
-        company: item.company_name,
-        company_size: item.company_size,
-        price: item.salary,
-        edu_level: item.edu_level,
-        working_exp: item.working_exp,
-        time,
-        collect: isCollect,
-        publisher_id: item.publisher_id,
-        publisher_name: item.publisher_name
-      });
-    });
-    return station;
-  },
-
-  _formatData(data) {
+  formatData(data) {
     let jobList = data;
     let station = [];
     let t = new Date().getFullYear();

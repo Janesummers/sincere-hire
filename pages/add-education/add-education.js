@@ -26,13 +26,41 @@ Page({
     schoolFilter: [],
     majorFilter: [],
     chooseSchool: true,
-    chooseMajor: true
+    chooseMajor: true,
+    btnText: '保存',
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    this.getBaseData();
+    const eventChannel = this.getOpenerEventChannel();
+    console.log(eventChannel)
+    eventChannel.on('edu', opt => {
+      let {
+        data,
+        id
+      } = opt; 
+      let education = {
+        school: data[0].school,
+        edu: data[0].education,
+        major: data[0].major,
+        time_enrollment: data[0].time_enrollment,
+        time_graduation: data[0].time_graduation
+      }
+      this.setData({
+        education,
+        btnText: '保存修改',
+        edu_id: id
+      })
+      wx.setNavigationBarTitle({
+        title: '修改学历'
+      })
+    })
+  },
+
+  getBaseData () {
     let ep = new EventProxy();
     req.request('/getSchool', null, 'GET', (res) => {
       if (res.data.code == 'error') {
@@ -51,24 +79,27 @@ Page({
     ep.all('school', 'major', (schools, majors) => {
       school = schools.data.data;
       major = majors.data.data;
-      this.setData({
-        isDone: true
-      })
       this.init();
     })
   },
 
   init () {
-    let time = new Date().getFullYear();
+    let time = new Date();
+    let year = time.getFullYear();
     let {
       selectEnrollment,
       selectGraduation,
-      enrollmentIndex
+      enrollmentIndex,
+      graduationIndex
     } = this.data;
-    for (let i = 1950; i <= time; i++) {
+    for (let i = 1950; i <= year; i++) {
       selectEnrollment[0].push(`${i} 年`);
     }
+    for (let i = 1950; i <= year + 6; i++) {
+      selectGraduation[0].push(`${i} 年`);
+    }
     enrollmentIndex = [selectEnrollment[0].length - 1, 0];
+    graduationIndex = [selectGraduation[0].length - 1, 0];
     for (let i = 1; i <= 12; i++) {
       selectEnrollment[1].push(i < 10 ? `0${i} 月` : `${i} 月`);
       selectGraduation[1].push(i < 10 ? `0${i} 月` : `${i} 月`);
@@ -76,7 +107,52 @@ Page({
     this.setData({
       selectEnrollment,
       selectGraduation,
-      enrollmentIndex
+      enrollmentIndex,
+      graduationIndex
+    })
+    if (this.data.btnText == '保存') {
+      this.setData({
+        isDone: true
+      })
+    } else {
+      this.changeInit();
+    }
+  },
+
+  changeInit () {
+    let {
+      education,
+      selectEnrollment,
+      selectGraduation,
+      enrollmentIndex,
+      graduationIndex,
+      edu
+    } = this.data;
+
+    let enrollment = education.time_enrollment.match(/[^.]+/g);
+    let yearIndex = selectEnrollment[0].indexOf(`${enrollment[0]} 年`);
+    let monthIndex = parseInt(enrollment[1]) - 1;
+
+    enrollmentIndex = [yearIndex, monthIndex];
+
+    let graduation = education.time_graduation.match(/[^.]+/g);
+
+    let startYearIndex = selectGraduation[0].indexOf(`${enrollment[0]} 年`);
+    selectGraduation[0] = selectGraduation[0].splice(startYearIndex);
+    let yIndex = selectGraduation[0].indexOf(`${graduation[0]} 年`);
+    let mIndex = parseInt(graduation[1]) - 1;
+    
+    graduationIndex = [yIndex, mIndex];
+
+    let eduIndex = edu.indexOf(education.edu);
+
+    this.setData({
+      selectEnrollment,
+      selectGraduation,
+      enrollmentIndex,
+      graduationIndex,
+      eduIndex,
+      isDone: true
     })
   },
 
@@ -86,9 +162,7 @@ Page({
     let {
       education,
       edu,
-      eduIndex,
-      selectGraduation,
-      graduationIndex
+      eduIndex
     } = this.data;
 
     switch(key) {
@@ -97,15 +171,6 @@ Page({
         eduIndex = value;
         this.setData({
           eduIndex
-        })
-        break;
-      case 'time_graduation':
-        let year = parseInt(selectGraduation[0][value[0]]);
-        let month = selectGraduation[1][value[1]].replace(' 月', '').trim();
-        education[key] = `${year}.${month}`;
-        graduationIndex = value.concat();
-        this.setData({
-          graduationIndex
         })
         break;
     }
@@ -201,7 +266,7 @@ Page({
     let year = parseInt(selectEnrollment[0][value[0]]);
     let month = selectEnrollment[1][value[1]].replace(' 月', '').trim();
     education[key] = `${year}.${month}`;
-    let time = new Date().getFullYear() + 5;
+    let time = year + 6;
     selectGraduation[0] = [];
     for (let i = year; i <= time; i++) {
       selectGraduation[0].push(`${i} 年`)
@@ -300,19 +365,62 @@ Page({
       time_enrollment,
       time_graduation
     } = this.data.education;
-    req.request('/addEducation', {
+    this.sendReq('/addEducation', {
       school,
       edu,
       major,
       time_enrollment,
       time_graduation
-    }, 'POST', (res) => {
-      console.log(res)
+    }, '添加');
+  },
+
+  change () {
+    wx.showLoading({
+      title: "保存修改中..."
+    })
+    let {
+      school,
+      edu,
+      major,
+      time_enrollment,
+      time_graduation
+    } = this.data.education;
+    this.sendReq('/changeEducation', {
+      school,
+      edu,
+      major,
+      time_enrollment,
+      time_graduation,
+      edu_id: this.data.edu_id
+    }, '修改');
+  },
+
+  del () {
+    wx.showModal({
+      title: '提示',
+      content: '确定要删除吗？',
+      confirmColor: '#49bcc0',
+      success: (res) => {
+        if (res.confirm) {
+          wx.showLoading({
+            title: "正在处理..."
+          })
+          this.sendReq('/delEducation', {
+            edu_id: this.data.edu_id
+          }, '删除');
+        }
+      }
+    })
+  },
+
+  sendReq (uri, data, text) {
+    req.request(uri, data, 'POST', (res) => {
       if (res.data.code != 'error') {
         wx.hideLoading();
         wx.showToast({
-          title: '添加成功',
+          title: `${text}成功`,
           icon: 'success',
+          duration: 1000,
           success: () => {
             setTimeout(() => {
               let pages = getCurrentPages(); //获取当前页面js里面的pages里的所有信息。
@@ -325,12 +433,12 @@ Page({
               wx.navigateBack({
                 delta: 1 // 返回上一级页面。
               });
-            }, 1500);
+            }, 1000);
           }
         });
       } else {
         wx.showToast({
-          title: '添加失败',
+          title: `${text}失败`,
           icon: 'none'
         });
       }

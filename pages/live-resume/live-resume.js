@@ -146,5 +146,35 @@ Page({
       display: 'block',
       top: 0
     })
+  },
+
+  changeWorkExperience (e) {
+    let id = e.currentTarget.dataset.id;
+    let userWork = this.data.userWork;
+    let data = userWork.filter(item => item.id == id);
+    wx.navigateTo({
+      url: '../add-work-experience/add-work-experience',
+      success: res => {
+        res.eventChannel.emit('work', {
+          id,
+          data: data.concat()
+        })
+      }
+    })
+  },
+
+  changeEducation (e) {
+    let id = e.currentTarget.dataset.id;
+    let userEdu = this.data.userEducation;
+    let data = userEdu.filter(item => item.id == id);
+    wx.navigateTo({
+      url: '../add-education/add-education',
+      success: res => {
+        res.eventChannel.emit('edu', {
+          id,
+          data: data.concat()
+        })
+      }
+    })
   }
 })

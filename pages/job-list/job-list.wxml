@@ -1,7 +1,7 @@
 <view class="container">
   <view class="list">
     <view class="content">
-      <view class="station" wx:for="{{station}}" wx:key="id" bindtap="toJobDetail" data-id="{{item.id}}">
+      <view class="station" wx:for="{{station}}" wx:key="job_id" bindtap="toJobDetail" data-id="{{item.id}}">
         <view class="left">
           <view class="position">{{item.position}}</view>
           <view class="info">
@@ -19,4 +19,8 @@
     </view>
   </view>
   <view wx:if="{{isAllDone}}" class="hint">已经没有更多啦~</view>
+  <view wx:if="{{loadMore}}" class="load">
+    <text class='loading'></text>
+    <view class="text">载入中</view>
+  </view>
 </view>

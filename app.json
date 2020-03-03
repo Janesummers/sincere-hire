@@ -21,7 +21,8 @@
     "backgroundTextStyle": "dark",
     "navigationBarBackgroundColor": "#49bcc0",
     "navigationBarTitleText": "易优聘",
-    "navigationBarTextStyle": "white"
+    "navigationBarTextStyle": "white",
+    "onReachBottomDistance": 100
   },
   "style": "v2",
   "debug": true,

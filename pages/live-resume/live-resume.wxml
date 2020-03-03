@@ -14,7 +14,7 @@
             <view class="iconfont icon-gongsixinxi"></view>
             {{item.company_name}}
           </view>
-          <view class="iconfont icon-bianji1"></view>
+          <view class="iconfont icon-bianji1" bindtap="changeWorkExperience" data-id="{{item.id}}"></view>
         </view>
         <view class="time">{{item.hiredate}} - {{item.leavedate}}</view>
         <view class="job">
@@ -37,7 +37,7 @@
           <view class="school_name">
             <view class="iconfont icon-xuexiaohuaxiang"></view>{{item.school}}
           </view>
-          <view class="iconfont icon-bianji1"></view>
+          <view class="iconfont icon-bianji1" bindtap="changeEducation" data-id="{{item.id}}"></view>
         </view>
         <view class="time">{{item.time_enrollment}} - {{item.time_graduation}}</view>
         <view class="level">

@@ -90,7 +90,7 @@
         </picker>
       </view>
     </view>
-    <view class="item">
+    <view class="item" wx:if="{{education.time_enrollment != ''}}">
       <view class="little_title">毕业时间</view>
       <view class="text">
         <picker 
@@ -108,8 +108,12 @@
       </view>
     </view>
   </view>
-  <view class="bottom">
-    <view class="btn" bindtap="save">保存</view>
+  <view class="bottom" wx:if="{{btnText == '保存'}}">
+    <view class="btn" bindtap="save">{{btnText}}</view>
+  </view>
+  <view class="bottom flex" wx:else>
+    <view class="del" bindtap="del">删除</view>
+    <view class="changeBtn" bindtap="change">{{btnText}}</view>
   </view>
 </view>
 
