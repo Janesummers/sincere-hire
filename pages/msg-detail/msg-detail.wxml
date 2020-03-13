@@ -1,4 +1,10 @@
 <view class="container">
+  <view wx:if="{{resumeFile || userInfo.rule === 'job_seeker'}}" class="util" bindtap="{{userInfo.rule === 'job_seeker' ? 'sendResume' : 'showResume'}}">
+      <view class="ico">
+        <view class="iconfont icon-wenjian"></view><text class="text">{{userInfo.rule === 'job_seeker' ? '在线简历' : '对方简历'}}</text>
+      </view>
+      <view class="text">{{userInfo.rule === 'job_seeker' ? '发送' : '查看'}}</view>
+    </view>
   <scroll-view 
     class="list" 
     style="height: {{originHeight - 20}}px;top: {{list.length * 55 > keyHeight ? 0 : top}}px;"
@@ -11,10 +17,25 @@
       wx:for="{{list}}" 
       wx:key="index"
     >
-      <view class="img_box">
-        <image src="{{item.avatarUrl || '../../images/people_girl.png'}}"  mode="widthFix"></image>
-      </view>
-      <view class="bubble">{{item.data}}</view>
+      <block wx:if="{{item.type === 'sendFile' && userInfo.rule === 'job_seeker'}}">
+        <view class="hint_text">您的在线简历已发送给对方</view>
+      </block>
+      <block wx:else>
+        <view class="img_box">
+          <image src="{{item.avatarUrl || '../../images/people_girl.png'}}"  mode="widthFix"></image>
+        </view>
+        <view class="bubble">
+          <view wx:if="{{item.type === 'sendFile'}}" class="resume">
+            <view class="ico">
+              <view class="iconfont icon-wenjian"></view><text class="text">{{sendName}}的简历信息</text>
+            </view>
+            <view class="btn" bindtap="showResume" data-id="">查看</view>
+          </view>
+          <view wx:else>
+            {{item.data}}
+          </view>
+        </view>
+      </block>
     </view>
     <view class="line" id="item{{list.length - 1}}"></view>
   </scroll-view>

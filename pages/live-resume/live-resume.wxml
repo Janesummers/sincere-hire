@@ -1,9 +1,9 @@
 <view class="container" style="overflow: {{top == 0 ? 'hidden' : 'scroll'}}">
   <view class="list">
-    <view class="items">
+    <view class="items" wx:if="{{userInfo.rule === 'job_seeker' || userWork.length > 0}}">
       <view class="top">
         <view class="title">工作/实习经历</view>
-        <view class="add">
+        <view class="add" wx:if="{{userInfo.rule === 'job_seeker'}}">
           <view class="iconfont icon-jia"></view>
           <view class="" bindtap="toPage" data-path="add-work-experience">添加</view>
         </view>
@@ -14,7 +14,7 @@
             <view class="iconfont icon-gongsixinxi"></view>
             {{item.company_name}}
           </view>
-          <view class="iconfont icon-bianji1" bindtap="changeWorkExperience" data-id="{{item.id}}"></view>
+          <view wx:if="{{userInfo.rule === 'job_seeker'}}" class="iconfont icon-bianji1" bindtap="changeWorkExperience" data-id="{{item.id}}"></view>
         </view>
         <view class="time">{{item.hiredate}} - {{item.leavedate}}</view>
         <view class="job">
@@ -24,10 +24,10 @@
         <view class="responsibility">{{item.job_description}}</view>
       </view>
     </view>
-    <view class="items">
+    <view class="items" wx:if="{{userInfo.rule === 'job_seeker' || userEducation.length > 0}}">
       <view class="top">
         <view class="title">教育经历</view>
-        <view class="add">
+        <view class="add" wx:if="{{userInfo.rule === 'job_seeker'}}">
           <view class="iconfont icon-jia"></view>
           <view class="" bindtap="toPage" data-path="add-education">添加</view>
         </view>
@@ -37,7 +37,7 @@
           <view class="school_name">
             <view class="iconfont icon-xuexiaohuaxiang"></view>{{item.school}}
           </view>
-          <view class="iconfont icon-bianji1" bindtap="changeEducation" data-id="{{item.id}}"></view>
+          <view wx:if="{{userInfo.rule === 'job_seeker'}}" class="iconfont icon-bianji1" bindtap="changeEducation" data-id="{{item.id}}"></view>
         </view>
         <view class="time">{{item.time_enrollment}} - {{item.time_graduation}}</view>
         <view class="level">
@@ -46,10 +46,10 @@
         </view>
       </view>
     </view>
-    <view class="items">
+    <view class="items" wx:if="{{userInfo.rule === 'job_seeker' || userInfo.advantage}}">
       <view class="top">
         <view class="title">自我评价</view>
-        <view class="add">
+        <view class="add" wx:if="{{userInfo.rule === 'job_seeker'}}">
           <view class="iconfont icon-bianji1" bindtap="showEdit"></view>
         </view>
       </view>

@@ -1,6 +1,7 @@
 // pages/msg-detail/msg-detail.js
 const base64 = require('../../utils/base64').Base64;
 const app = getApp();
+const req = require('../../utils/request');
 Page({
 
   /**
@@ -20,7 +21,8 @@ Page({
     sendId: '',
     acceptId: '',
     sendImg: '',
-    acceptImg: ''
+    acceptImg: '',
+    resumeFile: false
   },
 
   /**
@@ -31,17 +33,20 @@ Page({
     let data = wx.getStorageSync('chat');
     let id = base64.encode(options.id);
     var unionid = base64.encode(wx.getStorageSync('unionid'));
-    console.log(options.sendImg)
+    let userInfo = wx.getStorageSync('userInfo');
+
     this.setData({
       sendId: id,
       acceptId: unionid,
       sendImg: options.sendImg ? decodeURIComponent(options.sendImg) : '',
-      acceptImg: options.acceptImg ? decodeURIComponent(options.acceptImg) : ''
+      acceptImg: options.acceptImg ? decodeURIComponent(options.acceptImg) : '',
+      userInfo,
+      sendName: options.name
     })
     wx.setNavigationBarTitle({
       title: options.name
     })
-    console.log('进入获取聊天记录：', data[id])
+    
     if (data) {
       let list = []
       if (data[id]) {
@@ -51,6 +56,11 @@ Page({
             item.avatarUrl = this.data.sendImg
           } else {
             item.avatarUrl = this.data.acceptImg
+          }
+          if (item.type == 'sendFile') {
+            this.setData({
+              resumeFile: true
+            })
           }
         })
         this.setData({
@@ -108,6 +118,11 @@ Page({
   saveStorage (allData) {
     var chatList = wx.getStorageSync('chat');
     let dataLen = allData.length;
+    if (allData[dataLen - 1].type == 'sendFile') {
+      this.setData({
+        resumeFile: true
+      })
+    }
     let {
       sendId,
       acceptId
@@ -123,7 +138,8 @@ Page({
             data: allData[dataLen - 1].data,
             sendId: allData[dataLen - 1].sendId,
             acceptId: allData[dataLen - 1].acceptId,
-            time: allData[dataLen - 1].time
+            time: allData[dataLen - 1].time,
+            type: allData[dataLen - 1].type
           });
           
         } else { // 不在本地则新增本地数据
@@ -137,7 +153,8 @@ Page({
             data: allData[dataLen - 1].data,
             sendId,
             acceptId,
-            time: allData[dataLen - 1].time
+            time: allData[dataLen - 1].time,
+            type: allData[dataLen - 1].type
           });
         } else {
           chatList[sendId] = allData;
@@ -170,7 +187,8 @@ Page({
       sendId,
       acceptId,
       time: new Date(Number(msg.time)),
-      avatarUrl: this.data.sendImg
+      avatarUrl: this.data.sendImg,
+      type: msg.type
     })
     if (list.length * 66 > this.data.originHeight) {
       this.setData({
@@ -302,6 +320,65 @@ Page({
   adInputChange (e) {
     this.setData({
       sendText: e.detail.value
+    })
+  },
+
+  sendResume () {
+    let unionid = wx.getStorageSync('unionid');
+    let list = this.data.list;
+    let chatList = wx.getStorageSync('chat');
+    let time = this.getTime();
+    let acceptId = this.data.otherEncrypt;
+    let all = {
+      data: '[个人简历]',
+      sendId: base64.encode(unionid),
+      acceptId,
+      time,
+      type: 'sendFile'
+    };
+    if (chatList) {
+      if (chatList[acceptId]) {
+        chatList[acceptId].push(all);
+      } else {
+        chatList[acceptId] = [all]
+      }
+      wx.setStorageSync('chat', chatList);
+    } else {
+      let obj = {};
+      obj[acceptId] = [all]
+      wx.setStorageSync('chat', obj);
+    }
+    list.push({
+      data: '[个人简历]',
+      sendId: base64.encode(unionid),
+      acceptId,
+      time: all.time,
+      avatarUrl: this.data.acceptImg,
+      type: 'sendFile'
+    })
+    this.setData({
+      list
+    }, () => {
+      this.setData({
+        toLast: `item${this.data.list.length - 1}`
+      })
+    })
+    let data = JSON.stringify({
+      msg: '[个人简历]',
+      client: base64.encode(unionid),
+      to: acceptId,
+      time: all.time,
+      name: app.globalData.userInfo.name || app.globalData.userInfo.nickname,
+      type: 'sendFile'
+    })
+    wx.sendSocketMessage({
+      data
+    })
+  },
+
+  showResume () {
+    wx.navigateTo({
+      url: `../live-resume/live-resume?id=${this.data.other}`
     })
   }
 })

@@ -27,17 +27,28 @@ Page({
     try {
       let winH = wx.getSystemInfoSync().windowHeight;
       let userInfo = wx.getStorageSync('userInfo');
-      let textLen = userInfo.advantage.length;
-      this.setData({
-        userInfo,
-        evaluate: userInfo.advantage,
-        winH,
-        textLen,
-        oldEvaluate: userInfo.advantage
-      });
-      this.getData()
+      if (userInfo.rule != 'recruiter') {
+        let textLen = userInfo.advantage.length;
+        this.setData({
+          userInfo,
+          evaluate: userInfo.advantage,
+          winH,
+          textLen,
+          oldEvaluate: userInfo.advantage
+        });
+        this.getData()
+      } else {
+        this.setData({
+          userInfo,
+          evaluate: '',
+          winH,
+          textLen: 0,
+          oldEvaluate: ''
+        });
+        this.getUserResume(options.id);
+      }
     } catch(e) {
-
+      console.error(e)
     }
   },
 
@@ -75,6 +86,18 @@ Page({
         userWork: work,
         isBack: false
       })
+    })
+  },
+
+  getUserResume (id) {
+    req.request('/getUserResume', {
+      uid: id
+    }, 'GET', (res) => {
+      if (res.data.code == 'ok') {
+        console.log(res.data.data)
+      } else {
+        console.error(res.data.data)
+      }
     })
   },
 

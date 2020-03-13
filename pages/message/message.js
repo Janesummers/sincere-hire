@@ -34,8 +34,8 @@ Page({
     wx.onSocketMessage(data => {
       console.log('message接收到')
       data = JSON.parse(data.data);
+
       let allData = JSON.parse(`[${data.all}]`);
-      
       var chatList = wx.getStorageSync('chat');
       let dataLen = allData.length;
 
@@ -44,6 +44,7 @@ Page({
       let exist = false;
 
       list.forEach(item => {
+        console.log(allData[dataLen - 1])
         if (base64.encode(item.target_id) == allData[dataLen - 1].sendId) {
           exist = true;
           item.text = allData[dataLen - 1].data;
@@ -51,7 +52,7 @@ Page({
           item.time = util.formatNumber(d.getHours()) + ":" + util.formatNumber(d.getMinutes());
           item.originTime = `${d.toLocaleDateString()} ${d.toTimeString().match(/[^ ]+/)}.${d.getMilliseconds()}`;
           item.num += 1;
-          item.timestamp = Number(allData[data.length - 1].time);
+          item.timestamp = Number(allData[dataLen - 1].time);
         }
       })
 
@@ -67,7 +68,7 @@ Page({
           time: util.formatNumber(d.getHours()) + ":" + util.formatNumber(d.getMinutes()),
           originTime: `${d.toLocaleDateString()} ${d.toTimeString().match(/[^ ]+/)}`,
           num: 1,
-          timestamp: Number(allData[data.length - 1].time)
+          timestamp: Number(allData[dataLen - 1].time),
         })
       }
 
@@ -94,7 +95,8 @@ Page({
             data: allData[dataLen - 1].data,
             sendId: allData[dataLen - 1].sendId,
             acceptId: allData[dataLen - 1].acceptId,
-            time: allData[dataLen - 1].time
+            time: allData[dataLen - 1].time,
+            type: allData[dataLen - 1].type
           });
         } else {
           chatList[allData[dataLen - 1].sendId] = allData;

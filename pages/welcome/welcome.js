@@ -126,12 +126,12 @@ Page({
                 if (isRole) {
                   switch (data.rule) {
                     case 'job_seeker':
-                      // wx.switchTab({
-                      //   url: '../index/index'
-                      // })
-                      wx.redirectTo({
-                        url: '../live-resume/live-resume'
+                      wx.switchTab({
+                        url: '../index/index'
                       })
+                      // wx.redirectTo({
+                      //   url: '../live-resume/live-resume'
+                      // })
                       break;
                     case 'recruiter':
                       wx.switchTab({
