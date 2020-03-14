@@ -44,7 +44,6 @@ Page({
       let exist = false;
 
       list.forEach(item => {
-        console.log(allData[dataLen - 1])
         if (base64.encode(item.target_id) == allData[dataLen - 1].sendId) {
           exist = true;
           item.text = allData[dataLen - 1].data;
@@ -68,7 +67,7 @@ Page({
           time: util.formatNumber(d.getHours()) + ":" + util.formatNumber(d.getMinutes()),
           originTime: `${d.toLocaleDateString()} ${d.toTimeString().match(/[^ ]+/)}`,
           num: 1,
-          timestamp: Number(allData[dataLen - 1].time),
+          timestamp: Number(allData[dataLen - 1].time)
         })
       }
 
@@ -96,7 +95,8 @@ Page({
             sendId: allData[dataLen - 1].sendId,
             acceptId: allData[dataLen - 1].acceptId,
             time: allData[dataLen - 1].time,
-            type: allData[dataLen - 1].type
+            type: allData[dataLen - 1].type,
+            read: allData[dataLen - 1].read
           });
         } else {
           chatList[allData[dataLen - 1].sendId] = allData;
@@ -120,8 +120,22 @@ Page({
       name,
       send
     } = e.currentTarget.dataset;
+    let chatList = wx.getStorageSync('chat');
+    chatList[base64.encode(id)].forEach(item => {
+      item.read = true;
+    })
+    let unionid = wx.getStorageSync('unionid');
+    wx.setStorageSync('chat', chatList);
     send = send ? encodeURIComponent(send) : '';
     var accept = app.globalData.userInfo.avatarUrl ? encodeURIComponent(app.globalData.userInfo.avatarUrl) : '';
+    let data = JSON.stringify({
+      msg: '系统任务：更新消息为已读',
+      client: base64.encode(unionid),
+      to: base64.encode(id)
+    })
+    wx.sendSocketMessage({
+      data
+    })
     wx.navigateTo({
       url: `/pages/msg-detail/msg-detail?id=${id}&name=${name}&sendImg=${send}&acceptImg=${accept}`
     })
@@ -138,17 +152,22 @@ Page({
       keys = Object.keys(chatList);
     }
     req.request('/getMessageList', { id: base64.encode(unionid), rule: app.globalData.userInfo.rule}, 'POST', (res) => {
-      console.log(res.data.data)
       let list = res.data.data;
       list.forEach(item => {
         if (keys.includes(base64.encode(item.target_id))) {
           var data = chatList[base64.encode(item.target_id)];
+          let num = 0;
+          data.forEach(item => {
+            if (item.read != undefined && !item.read && item.acceptId === base64.encode(unionid)) {
+              num += 1;
+            }
+          })
           item.text = data[data.length - 1].data;
           var d = new Date(Number(data[data.length - 1].time));
           item.time = util.formatNumber(d.getHours()) + ":" + util.formatNumber(d.getMinutes());
           item.originTime = `${d.toLocaleDateString()} ${d.toTimeString().match(/[^ ]+/)}`;
           item.timestamp = Number(data[data.length - 1].time);
-          item.num = 0;
+          item.num = num;
         } else {
           item.text = ''
           item.time = ''

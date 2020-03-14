@@ -139,7 +139,8 @@ Page({
             sendId: allData[dataLen - 1].sendId,
             acceptId: allData[dataLen - 1].acceptId,
             time: allData[dataLen - 1].time,
-            type: allData[dataLen - 1].type
+            type: allData[dataLen - 1].type,
+            read: allData[dataLen - 1].read
           });
           
         } else { // 不在本地则新增本地数据
@@ -154,7 +155,8 @@ Page({
             sendId,
             acceptId,
             time: allData[dataLen - 1].time,
-            type: allData[dataLen - 1].type
+            type: allData[dataLen - 1].type,
+            read: true
           });
         } else {
           chatList[sendId] = allData;
@@ -286,7 +288,8 @@ Page({
         client: base64.encode(unionid),
         to: acceptId,
         time: all.time,
-        name: app.globalData.userInfo.name || app.globalData.userInfo.nickname
+        name: app.globalData.userInfo.name || app.globalData.userInfo.nickname,
+        read: false
       })
       wx.sendSocketMessage({
         data
@@ -369,7 +372,8 @@ Page({
       to: acceptId,
       time: all.time,
       name: app.globalData.userInfo.name || app.globalData.userInfo.nickname,
-      type: 'sendFile'
+      type: 'sendFile',
+      read: false
     })
     wx.sendSocketMessage({
       data

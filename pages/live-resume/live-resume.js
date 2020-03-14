@@ -94,7 +94,18 @@ Page({
       uid: id
     }, 'GET', (res) => {
       if (res.data.code == 'ok') {
-        console.log(res.data.data)
+        let {
+          edu,
+          work,
+          adv
+        } = res.data.data;
+        this.setData({
+          userEducation: edu,
+          userWork: work,
+          evaluate: adv,
+          oldEvaluate: adv,
+          isBack: false
+        })
       } else {
         console.error(res.data.data)
       }

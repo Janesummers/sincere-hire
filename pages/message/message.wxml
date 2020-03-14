@@ -1,20 +1,23 @@
 <!--pages/message/message.wxml-->
 <view class="container">
-    <view id="messageList">
-        <view class="item" bindtap="toDetail" data-id="{{item.target_id}}" data-name="{{item.target_name}}" data-send="{{item.avatarUrl}}" wx:for="{{list}}" wx:key="id">
-            <view class="imgBox">
-                <image class="" src="{{item.avatarUrl || '../../images/people_man.png'}}" mode="widthFix"></image>
-            </view>
-            <view class="info">
-                <view class="top">
-                    <view class="name">{{item.target_name}}</view>
-                    <view class="company">{{item.target_company || ''}}</view>
-                </view>
-                <view class="message">{{item.text}}</view>
-            </view>
-            <view class="time">{{item.time}}</view>
+  <view id="messageList">
+    <view class="item" bindtap="toDetail" data-id="{{item.target_id}}" data-name="{{item.target_name}}" data-send="{{item.avatarUrl}}" wx:for="{{list}}" wx:key="id">
+      <view class="imgBox">
+        <view class="dot" wx:if="{{item.num > 0}}">{{item.num}}</view>
+        <view class="img" hover-class="none" hover-stop-propagation="false">
+          <image class="" src="{{item.avatarUrl || '../../images/people_man.png'}}" mode="widthFix"></image>
         </view>
+      </view>
+      <view class="info">
+        <view class="top">
+          <view class="name">{{item.target_name}}</view>
+          <view class="company">{{item.target_company || ''}}</view>
+        </view>
+        <view class="message">{{item.text}}</view>
+      </view>
+      <view class="time">{{item.time}}</view>
     </view>
+  </view>
 </view>
 <loading wx:if="{{!isDone}}"></loading>
 <index-tabbar></index-tabbar>

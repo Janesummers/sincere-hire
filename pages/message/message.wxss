@@ -10,9 +10,27 @@ page {
   border-bottom: 1px solid #eeeeee;
 }
 .container #messageList .item .imgBox {
+  position: relative;
+  width: 100rpx;
+  height: 100rpx;
+  margin-right: 30rpx;
+}
+.container #messageList .item .imgBox .dot {
+  position: absolute;
+  right: -21rpx;
+  top: -21rpx;
+  width: 42rpx;
+  height: 42rpx;
+  border-radius: 50%;
+  background: #ee2727;
+  color: #fff;
+  text-align: center;
+  font-size: 28rpx;
+  line-height: 42rpx;
+}
+.container #messageList .item .imgBox .img {
   width: 100rpx;
   border-radius: 10rpx;
-  margin-right: 20rpx;
   overflow: hidden;
   height: 100rpx;
   display: flex;
