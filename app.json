@@ -15,7 +15,9 @@
     "pages/add-work-experience/add-work-experience",
     "pages/search/search",
     "components/loading/loading",
-    "pages/release-recruit/release-recruit"
+    "pages/release-recruit/release-recruit",
+    "pages/discover/discover",
+    "pages/discover-detail/discover-detail"
   ],
   "window": {
     "backgroundTextStyle": "dark",
@@ -40,10 +42,10 @@
         "text": "职位"
       },
       {
-        "selectedIconPath": "images/search_selected.png",
-        "iconPath": "images/search.png",
-        "pagePath": "pages/search/search",
-        "text": "搜索"
+        "selectedIconPath": "images/discover_selected.png",
+        "iconPath": "images/discover.png",
+        "pagePath": "pages/discover/discover",
+        "text": "发现"
       },
       {
         "selectedIconPath": "images/message_selected.png",

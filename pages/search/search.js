@@ -7,7 +7,8 @@ Page({
    */
   data: {
     station: [],
-    keyWord: ''
+    keyWord: '',
+    focus: true
   },
 
   /**

@@ -30,9 +30,7 @@ Page({
   },
 
   getData () {
-    req.request('/getPracticeJobs', {
-      emplType: '实习'
-    }, 'POST', res => {
+    req.request('/getPracticeJobs', null, 'POST', res => {
       if (res.data.code == 'ok') {
         if (res.data.data.length > 0) {
           let station = this.formatData(res.data.data.concat());
@@ -89,6 +87,12 @@ Page({
     let type = e.currentTarget.dataset.type;
     wx.navigateTo({
       url: `/pages/job-list/job-list?type=${type}`
+    })
+  },
+
+  toSearch () {
+    wx.navigateTo({
+      url: `/pages/search/search`
     })
   }
 })

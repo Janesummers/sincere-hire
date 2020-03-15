@@ -2,7 +2,7 @@
 const base64 = require('./utils/base64').Base64;
 
 App({
-  onLaunch: function () {
+  onLaunch: function() {
     // 展示本地存储能力
     // var logs = wx.getStorageSync('logs') || []
     // logs.unshift(Date.now())
@@ -36,40 +36,12 @@ App({
     // })
     var unionid = wx.getStorageSync('unionid');
 
-    connectSocket();
-    
+    // connectSocket();
+    // this.globalData
     if (unionid) {
+      this.globalData.connectSocket(unionid);
       console.log('准备开始获取聊天记录')
       this.globalData.getMessage(unionid);
-    }
-    
-    
-    function connectSocket () {
-      wx.connectSocket({
-        url: 'ws://192.168.1.104/wss', //wss://www.chiens.cn/wss  ws://192.168.1.104/wss
-        header:{
-          'content-type': 'application/json',
-          'unionid': base64.encode(unionid)
-        },
-        success: (res) => {
-          console.log(res)
-          onSocketOpen();
-        },
-        fail: () => {
-          console.log('连接失败')
-        }
-      })
-      
-    }
-
-    //监听WebSocket连接打开事件。
-    function onSocketOpen() {
-      wx.onSocketOpen(() => {
-        console.log('WebSocket连接已打开！');
-        setTimeout(() => {
-          connectSocket();
-        }, 889999);
-      });
     }
 
     // wx.onSocketClose((res) => {
@@ -123,10 +95,10 @@ App({
         "text": "职位"
       },
       {
-        "selectedIconPath": "../../images/search_selected.png",
-        "iconPath": "../../images/search.png",
-        "pagePath": "pages/search/search",
-        "text": "搜索"
+        "selectedIconPath": "../../images/discover_selected.png",
+        "iconPath": "../../images/discover.png",
+        "pagePath": "pages/discover/discover",
+        "text": "发现"
       },
       {
         "selectedIconPath": "../../images/message_selected.png",
@@ -193,6 +165,34 @@ App({
           console.log('请求失败')
         }
       })
+    },
+    connectSocket (unionid) {
+      wx.connectSocket({
+        url: 'ws://192.168.1.104/wss', //wss://www.chiens.cn/wss  ws://192.168.1.104/wss
+        header:{
+          'content-type': 'application/json',
+          'unionid': base64.encode(unionid)
+        },
+        success: (res) => {
+          console.log(res)
+          onSocketOpen();
+        },
+        fail: () => {
+          console.log('连接失败')
+        }
+      })
+  
+      //监听WebSocket连接打开事件。
+      function onSocketOpen() {
+        wx.onSocketOpen(() => {
+          console.log('WebSocket连接已打开！');
+          setTimeout(() => {
+            let app = getApp();
+            let unionid = wx.getStorageSync('unionid');
+            app.globalData.connectSocket(unionid);
+          }, 889999);
+        });
+      }
     }
   }
 })

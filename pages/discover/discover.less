@@ -1,0 +1,96 @@
+@mainColor: #49bcc0;
+page {
+  background-color: #f0f3f6;
+  padding-bottom: 48px;
+}
+.container {
+  .top {
+    width: 100%;
+    display: flex;
+    height: 100rpx;
+    background: #fff;
+    box-shadow: 0rpx 5rpx 30rpx rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    .text {
+      width: 50%;
+      font-size: 36rpx;
+      text-align: center;
+      line-height: 100rpx;
+      position: relative;
+      &.active {
+        color: @mainColor;
+        &::after {
+          display: block;
+          width: 50%;
+          position: absolute;
+          left: 50%;
+          bottom: 0;
+          height: 4px;
+          background: @mainColor;
+          border-radius: 4px;
+          content: '';
+          transform: translateX(-50%);
+        }
+      }
+    }
+  }
+  .list {
+    margin-top: 100rpx;
+    -webkit-overflow-scrolling: touch;
+    overflow: hidden;
+    .item {
+      padding: 20rpx;
+      background: #fff;
+      margin-bottom: 20rpx;
+      .title {
+        font-size: 36rpx;
+        margin-bottom: 20rpx;
+      }
+      .small_content {
+        display: -webkit-box;
+        word-break: break-all;
+        text-overflow: ellipsis;
+        font-size: 28rpx;
+        overflow: hidden;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp:2;
+        margin-bottom: 20rpx;
+        color: #949494;
+      }
+      .topic_type {
+        display: flex;
+        flex-wrap: wrap;
+        .topic {
+          font-size: 24rpx;
+          color: @mainColor;
+          background: #c1f0f1;
+          padding: 8rpx 20rpx;
+          border-radius: 8rpx;
+          margin-right: 20rpx;
+          margin-bottom: 14rpx;
+        }
+      }
+      .hot {
+        color: #949494;
+        display: flex;
+        view {
+          margin-right: 40rpx;
+          font-size: 28rpx;
+          display: flex;
+          align-items: center;
+        }
+        .icon-xiaoxixinxihuihuahuida {
+          font-size: 40rpx;
+          margin-right: 8rpx;
+        }
+        .icon-02 {
+          font-size: 30rpx;
+          margin-right: 12rpx;
+        }
+      }
+    }
+  }
+}

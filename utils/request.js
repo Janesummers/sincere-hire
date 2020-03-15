@@ -107,6 +107,7 @@ function login(loginCallback){
           console.log('set', wx.getStorageSync('unionid'));
           ep.emit('unionid', unionid);
           app.globalData.getMessage();
+          app.globalData.connectSocket(unionid);
         } else {
           loginCallback('Illegal Buffer');
           // ep.emit('error', '重复申请引发错误，重新获取');

@@ -1,0 +1,41 @@
+<view class="container">
+  <view class="question">
+    <view class="title">{{data[0].topic_title}}</view>
+    <view class="topic_type" wx:for="{{data[0].topic}}" wx:key="index">
+      <text class="topic">#{{item}}#</text>
+    </view>
+    <view class="content" wx:for="{{data[0].content}}">
+      <view class="item">{{item}}</view>
+    </view>
+    <view class="hot">
+      <view><text class="ico iconfont icon-xiaoxixinxihuihuahuida"></text>{{data[0].answer_num}}</view>
+      <view><text class="ico iconfont icon-02"></text>{{data[0].topic_read}}</view>
+    </view>
+  </view>
+  <view class="answers">
+    <view class="top">
+      全部回答
+    </view>
+    <view class="no_answer" wx:if="{{data[0].answer_num == 0}}">
+      <view class="text">特意为你预留了C位</view>
+      <view class="btn">抢首评</view>
+    </view>
+    <view class="answer_item" wx:else>
+      <view class="user">
+        <view class="head">
+          <image src="../../images/people_man.png" mode="widthFix" />
+        </view>
+        <view class="info">
+          <view class="name">丢失的撒多</view>
+          <view class="identity">闽江学院/学生</view>
+        </view>
+      </view>
+      <view class="content">
+        圣诞节撒娇的垃圾堆里打开点击拉时间了大家立刻打死了
+      </view>
+      <view class="time">
+        2020-01-01 01:01:01
+      </view>
+    </view>
+  </view>
+</view>

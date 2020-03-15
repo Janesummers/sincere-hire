@@ -1,0 +1,140 @@
+@mainColor: #49bcc0;
+page {
+  background-color: #f0f3f6;
+  padding-bottom: 48px;
+}
+.container {
+  .question {
+    padding: 26rpx;
+    background: #fff;
+    margin-bottom: 20rpx;
+    .title {
+      font-size: 36rpx;
+      margin-bottom: 20rpx;
+    }
+    .topic_type {
+      display: flex;
+      flex-wrap: wrap;
+      .topic {
+        font-size: 24rpx;
+        color: @mainColor;
+        background: #c1f0f1;
+        padding: 8rpx 20rpx;
+        border-radius: 8rpx;
+        margin-right: 20rpx;
+        margin-bottom: 14rpx;
+      }
+    }
+    .content {
+      font-size: 32rpx;
+      color: #555;
+      margin-top: 20rpx;
+      line-height: 46rpx;
+      .item {
+        margin-bottom: 8rpx;
+      }
+    }
+    .hot {
+      color: #949494;
+      display: flex;
+      margin: 26rpx 0;
+      view {
+        margin-right: 40rpx;
+        font-size: 28rpx;
+        display: flex;
+        align-items: center;
+      }
+      .icon-xiaoxixinxihuihuahuida {
+        font-size: 40rpx;
+        margin-right: 8rpx;
+      }
+      .icon-02 {
+        font-size: 30rpx;
+        margin-right: 12rpx;
+      }
+    }
+  }
+  .answers {
+    padding: 0 26rpx;
+    background: #fff;
+    overflow: hidden;
+    .top {
+      border-bottom: 1px solid #ebeaea;
+      height: 80rpx;
+      line-height: 80rpx;
+      padding-left: 32rpx;
+      font-size: 32rpx;
+      position: relative;
+      &::before {
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        display: block;
+        content: '';
+        background: @mainColor;
+        width: 7rpx;
+        height: 32rpx;
+      }
+    }
+    .no_answer {
+      background: #f0f3f6;
+      padding: 30rpx;
+      border-radius: 13rpx;
+      margin: 30rpx 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 28rpx;
+      margin-bottom: 20rpx;
+      .btn {
+        background: #49bcc0;
+        color: #fff;
+        padding: 8rpx 26rpx;
+        border-radius: 30rpx;
+      }
+    }
+    .answer_item {
+      padding: 10px 0;
+      border-bottom: 1px solid #ccc;
+      &:last-of-type {
+        border-bottom: none;
+      }
+      .user {
+        margin-bottom: 20rpx;
+        display: flex;
+        .head {
+          width: 80rpx;
+          height: 80rpx;
+          overflow: hidden;
+          border-radius: 60rpx;
+          margin-right: 20rpx;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          image {
+            width: 100%;
+            border-radius: 60rpx;
+          }
+        }
+        .info {
+          font-size: 28rpx;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-around;
+          .identity {
+            font-size: 24rpx;
+            color: #949494;
+          }
+        }
+      }
+      .content {
+        margin-bottom: 20rpx;
+      }
+      .time {
+        font-size: 24rpx;
+        color: #949494;
+      }
+    }
+  }
+}

@@ -3,18 +3,37 @@ page {
   padding-bottom: 48px;
 }
 .container {
-  padding: 20rpx;
   #bannerBox {
     font-size: 20rpx;
+    position: relative;
     overflow: hidden;
-    border-radius: 16rpx;
+    .searchBox {
+      position: absolute;
+      width: 90%;
+      z-index: 1000;
+      background: #fff;
+      left: 50%;
+      transform: translateX(-50%);
+      top: 30rpx;
+      padding: 16rpx 0;
+      align-items: center;
+      display: flex;
+      justify-content: center;
+      color: #949494;
+      font-size: 28rpx;
+      border-radius: 40rpx;
+      box-shadow: 0rpx 10rpx 30rpx rgba(0,0,0,0.2);
+      .ico {
+        font-size: 32rpx;
+        margin-right: 12rpx;
+      }
+    }
     image {
-        width: 100%;
-        height: 400rpx;
-        border-radius: 16rpx;
+      width: 100%;
+      height: 400rpx;
     }
     #banner {
-        height: 400rpx;
+      height: 400rpx;
     }
   }
   .card {
@@ -34,8 +53,8 @@ page {
         display: flex;
         justify-content: space-between;
         image{
-          width: 300rpx;
-          height: 100rpx;
+          width: 340rpx;
+          height: 112rpx;
         }
       }
       .station {
@@ -55,6 +74,10 @@ page {
           width: 80%;
           .position {
             margin-bottom: 16rpx;
+            overflow: hidden;
+            width: 100%;
+            white-space: nowrap;
+            text-overflow: ellipsis;
           }
           .info {
             display: flex;

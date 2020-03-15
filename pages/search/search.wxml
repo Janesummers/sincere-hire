@@ -1,6 +1,6 @@
 <view class="container" hover-class="none" hover-stop-propagation="false">
   <view class="search" hover-class="none" hover-stop-propagation="false">
-    <input type="text" placeholder="搜索职位" bindinput="put" bindconfirm="search" value="{{keyWord}}" />
+    <input type="text" placeholder="搜索职位" bindinput="put" bindconfirm="search" value="{{keyWord}}" focus="{{focus}}" />
   </view>
   <!-- <view class="" hover-class="none" hover-stop-propagation="false">
     
@@ -25,4 +25,3 @@
     </view>
   </view>
 </view>
-<index-tabbar></index-tabbar>

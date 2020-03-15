@@ -34,7 +34,7 @@ Page({
     wx.onSocketMessage(data => {
       console.log('message接收到')
       data = JSON.parse(data.data);
-
+      console.log(data)
       let allData = JSON.parse(`[${data.all}]`);
       var chatList = wx.getStorageSync('chat');
       let dataLen = allData.length;
