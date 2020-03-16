@@ -1,5 +1,6 @@
 // pages/discover/discover.js
 const req = require('../../utils/request');
+const util = require('../../utils/util');
 Page({
 
   /**
@@ -14,7 +15,11 @@ Page({
     loadMore: false,
     selectIndex: 0,
     top: ['热点话题', '疫情动态'],
-    isToDetail: false
+    isToDetail: false,
+    epidemicDta: {},
+    allSmallData: [],
+    isDone: false,
+    showIndex: null
   },
 
   /**
@@ -25,20 +30,36 @@ Page({
   },
 
   onPullDownRefresh: function () {
-    this.setData({
-      page: 1,
-      isAll: false
-    })
-    this.getData()
+    if (this.data.selectIndex == 0) {
+      this.setData({
+        page: 1,
+        isAll: false
+      })
+      this.getData()
+    } else {
+      this.getEpidemic()
+    }
+  },
+
+  showList (e) {
+    let index = e.currentTarget.dataset.index;
+    if (index == this.data.showIndex) {
+      this.setData({
+        showIndex: null
+      })
+    } else {
+      this.setData({
+        showIndex: index
+      })
+    }
   },
 
   getData () {
-    console.log('go')
     this.setData({
       loadMore: true
     })
     wx.showLoading({
-      title: '载入中。。。'
+      title: '载入中'
     })
     req.request('/getHotTopic', {
       page: this.data.page,
@@ -99,37 +120,126 @@ Page({
   },
 
   onShow () {
-    if (!this.data.isToDetail) {
+    if (!this.data.isToDetail && this.data.selectIndex == 0) {
       this.setData({
         page: 1,
         isAll: false,
-        isToDetail: false
+        isToDetail: false,
+        isDone: true
       })
       this.getData();
-    } else {
+    } 
+    if (!this.data.isToDetail && this.data.selectIndex == 1) {
       this.setData({
-        isToDetail: false
+        isDone: false
       })
+      this.getEpidemic();
     }
   },
 
+  getEpidemic () {
+    req.request('/getEpidemic', null, 'GET', res => {
+      console.log(res.data.data)
+      this.setData({
+        epidemicDta: res.data.data.ncov_string_list
+      })
+      console.log(res.data.data.ncov_string_list)
+      this.formatEpidemic();
+    })
+  },
+
+  formatEpidemic () {
+    let data = this.data.epidemicDta;
+    let allSmallData = [];
+    // var keys = Object.keys(data.nation_total);
+    for (let i in data.nation_total) {
+      let order, text;
+      switch (i) {
+        case 'confirmed_total':
+          order = 1;
+          text = '确诊';
+          break;
+        case 'suspected_total':
+          order = 2;
+          text = '疑似';
+          break;
+        case 'deaths_total':
+          order = 3;
+          text = '死亡';
+          break;
+        default:
+          text = '治愈';
+          order = 4;
+      }
+      let type = i.match(/[^\_]+/)[0];
+      let smallData = data.nationwide_incr[`${type}_incr`];
+      allSmallData.push({
+        type,
+        largeData: data.nation_total[i],
+        order,
+        text,
+        smallData
+      })
+    }
+
+    data.update_time = util.formatTime(new Date(data.update_time * 1000)).replace(/\//g, '.');
+    allSmallData = allSmallData.sort((a, b) => {
+      return a.order - b.order;
+    })
+
+    this.setData({
+      allSmallData,
+      epidemicDta: data
+    })
+
+    this.formatAllData()
+  },
+
+  formatAllData () {
+    let data = this.data.epidemicDta;
+    console.log(data.provinces)
+    let provinces = data.provinces;
+    data.provinces = provinces.sort((a, b) => {
+      return b.confirmed_num - a.confirmed_num
+    })
+    this.setData({
+      isDone: true,
+      epidemicDta: data
+    })
+  },
+
   onReachBottom: function () {
-    if (!this.data.isAll && !this.data.loadMore) {
+    if (!this.data.isAll && !this.data.loadMore && this.data.selectIndex == 0) {
       this.getData()
     }
   },
 
   toDetail (e) {
-    let id = e.currentTarget.dataset.id;
-    let data = this.data.hotTopic.filter(item => item.topic_id === id);
+    let {
+      id,
+      idx
+    } = e.currentTarget.dataset;
+    idx = parseInt(idx);
+    let data = this.data.hotTopic.filter(item => item.topic_id === id && item.id === idx);
     wx.navigateTo({
       url: '../discover-detail/discover-detail',
       events: {
         updateContentRead: res => {
           let hotTopic = this.data.hotTopic;
           hotTopic.forEach(item => {
-            if (item.topic_id === id) {
+            if (item.topic_id === id && item.id === idx) {
               item.topic_read = res;
+            }
+          });
+          this.setData({
+            hotTopic
+          })
+        },
+        updateAnswerNum: res => {
+          let hotTopic = this.data.hotTopic;
+          hotTopic.forEach(item => {
+            if (item.topic_id === id && item.id === idx) {
+              item.answer_num = res;
             }
           });
           this.setData({
@@ -148,5 +258,23 @@ Page({
         })
       }
     })
+  },
+
+  changeTab (e) {
+    let selectIndex = parseInt(e.currentTarget.dataset.key);
+    this.setData({
+      selectIndex
+    })
+    if (selectIndex == 0) {
+      this.setData({
+        isDone: true
+      })
+      this.getData();
+    } else {
+      this.setData({
+        isDone: false
+      })
+      this.getEpidemic();
+    }
   }
 })

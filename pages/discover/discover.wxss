@@ -2,6 +2,10 @@ page {
   background-color: #f0f3f6;
   padding-bottom: 48px;
 }
+.shadowBox {
+  height: calc(100% - 195rpx) !important;
+  top: 100rpx !important;
+}
 .container .top {
   width: 100%;
   display: flex;
@@ -35,21 +39,21 @@ page {
   content: '';
   transform: translateX(-50%);
 }
-.container .list {
+.container .topic_list {
   margin-top: 100rpx;
   -webkit-overflow-scrolling: touch;
   overflow: hidden;
 }
-.container .list .item {
+.container .topic_list .item {
   padding: 20rpx;
   background: #fff;
   margin-bottom: 20rpx;
 }
-.container .list .item .title {
+.container .topic_list .item .title {
   font-size: 36rpx;
   margin-bottom: 20rpx;
 }
-.container .list .item .small_content {
+.container .topic_list .item .small_content {
   display: -webkit-box;
   word-break: break-all;
   text-overflow: ellipsis;
@@ -60,11 +64,11 @@ page {
   margin-bottom: 20rpx;
   color: #949494;
 }
-.container .list .item .topic_type {
+.container .topic_list .item .topic_type {
   display: flex;
   flex-wrap: wrap;
 }
-.container .list .item .topic_type .topic {
+.container .topic_list .item .topic_type .topic {
   font-size: 24rpx;
   color: #49bcc0;
   background: #c1f0f1;
@@ -73,21 +77,133 @@ page {
   margin-right: 20rpx;
   margin-bottom: 14rpx;
 }
-.container .list .item .hot {
+.container .topic_list .item .hot {
   color: #949494;
   display: flex;
 }
-.container .list .item .hot view {
+.container .topic_list .item .hot view {
   margin-right: 40rpx;
   font-size: 28rpx;
   display: flex;
   align-items: center;
 }
-.container .list .item .hot .icon-xiaoxixinxihuihuahuida {
+.container .topic_list .item .hot .icon-xiaoxixinxihuihuahuida {
   font-size: 40rpx;
   margin-right: 8rpx;
 }
-.container .list .item .hot .icon-02 {
+.container .topic_list .item .hot .icon-02 {
   font-size: 30rpx;
   margin-right: 12rpx;
+}
+.container .epidemic {
+  margin-top: 100rpx;
+  -webkit-overflow-scrolling: touch;
+  overflow: hidden;
+}
+.container .epidemic .sider_box {
+  background: #fff;
+  padding: 26rpx;
+  margin-bottom: 26rpx;
+  overflow: hidden;
+}
+.container .epidemic .sider_box .title {
+  border-bottom: 1px solid #ebeaea;
+  height: 80rpx;
+  line-height: 80rpx;
+  padding-left: 32rpx;
+  font-size: 32rpx;
+  position: relative;
+}
+.container .epidemic .sider_box .title::before {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  display: block;
+  content: '';
+  background: #49bcc0;
+  width: 7rpx;
+  height: 32rpx;
+}
+.container .epidemic .sider_box .data_box {
+  display: flex;
+}
+.container .epidemic .sider_box .data_box .data_item {
+  flex: 1;
+  text-align: center;
+  margin: 40rpx 0;
+}
+.container .epidemic .sider_box .data_box .data_item:nth-of-type(2) .large,
+.container .epidemic .sider_box .data_box .data_item:nth-of-type(2) .small {
+  color: #e9ad61;
+}
+.container .epidemic .sider_box .data_box .data_item:nth-of-type(3) .large,
+.container .epidemic .sider_box .data_box .data_item:nth-of-type(3) .small {
+  color: #000;
+}
+.container .epidemic .sider_box .data_box .data_item:last-of-type .large,
+.container .epidemic .sider_box .data_box .data_item:last-of-type .small {
+  color: #3f8c81;
+}
+.container .epidemic .sider_box .data_box .data_item .large {
+  font-size: 42rpx;
+  font-weight: 600;
+  color: #d5603b;
+}
+.container .epidemic .sider_box .data_box .data_item .type {
+  font-size: 32rpx;
+  margin: 10rpx 0;
+}
+.container .epidemic .sider_box .data_box .data_item .small {
+  font-size: 24rpx;
+  color: #d5603b;
+}
+.container .epidemic .sider_box .data_box .data_item .small text {
+  color: #949494;
+}
+.container .epidemic .sider_box .data_origin {
+  color: #949494;
+  font-size: 28rpx;
+}
+.container .epidemic .sider_box .data_origin .line {
+  margin: 0 20rpx;
+}
+.container .epidemic .sider_box .grid_box,
+.container .epidemic .sider_box .grid_item,
+.container .epidemic .sider_box .list {
+  display: flex;
+  width: 100%;
+  line-height: 70rpx;
+}
+.container .epidemic .sider_box .grid_box .item,
+.container .epidemic .sider_box .grid_item .item,
+.container .epidemic .sider_box .list .item {
+  flex: 1;
+  text-align: center;
+  font-size: 24rpx;
+}
+.container .epidemic .sider_box .grid_item {
+  background: #f0f3f6;
+  border-radius: 12rpx;
+  margin-bottom: 20rpx;
+  flex-wrap: wrap;
+}
+.container .epidemic .sider_box .grid_item .first {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  line-height: 42rpx;
+}
+.container .epidemic .sider_box .ico {
+  line-height: 60rpx;
+}
+.container .epidemic .sider_box .ico .iconfont {
+  transition: 0.5s;
+  display: block;
+}
+.container .epidemic .sider_box .reversal {
+  transform: rotate(180deg) translateY(-10rpx);
+}
+.container .epidemic .sider_box .list {
+  width: 100%;
 }

@@ -1,6 +1,7 @@
 {
   "usingComponents": {
-    "index-tabbar": "../../components/custom-tab-bar/custom-tab-bar"
+    "index-tabbar": "../../components/custom-tab-bar/custom-tab-bar",
+    "loading": "../../components/loading/loading"
   },
   "enablePullDownRefresh": true,
   "navigationBarTitleText": "发现"

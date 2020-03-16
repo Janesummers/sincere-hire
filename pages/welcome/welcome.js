@@ -129,8 +129,8 @@ Page({
                       wx.switchTab({
                         url: '../index/index'
                       })
-                      // wx.switchTab({
-                      //   url: '../discover/discover'
+                      // wx.redirectTo({
+                      //   url: '../answer/answer'
                       // })
                       break;
                     case 'recruiter':

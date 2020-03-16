@@ -17,7 +17,8 @@
     "components/loading/loading",
     "pages/release-recruit/release-recruit",
     "pages/discover/discover",
-    "pages/discover-detail/discover-detail"
+    "pages/discover-detail/discover-detail",
+    "pages/answer/answer"
   ],
   "window": {
     "backgroundTextStyle": "dark",

@@ -1,13 +1,13 @@
 <view class="container">
   <view class="top">
-    <view wx:for="{{top}}" wx:key="i" class="text {{index === selectIndex ? 'active' : ''}}">{{item}}</view>
+    <view wx:for="{{top}}" wx:key="index" class="text {{index === selectIndex ? 'active' : ''}}" bindtap="changeTab" data-key="{{index}}">{{item}}</view>
   </view>
-  <view class="list">
-    <view class="item" wx:for="{{hotTopic}}" wx:key="topic_id" bindtap="toDetail" data-id="{{item.topic_id}}">
+  <view class="topic_list" wx:if="{{selectIndex == 0}}">
+    <view class="item" wx:for="{{hotTopic}}" wx:key="topic_id" bindtap="toDetail" data-id="{{item.topic_id}}" data-idx="{{item.id}}">
       <view class="title">{{item.topic_title}}</view>
       <view class="small_content">{{item.toppic_content}}</view>
-      <view class="topic_type" wx:for="{{item.topic}}" wx:key="index">
-        <text class="topic">#{{item}}#</text>
+      <view class="topic_type">
+        <text class="topic" wx:for="{{item.topic}}" wx:key="index">#{{item}}#</text>
       </view>
       <view class="hot">
         <view><text class="ico iconfont icon-xiaoxixinxihuihuahuida"></text>{{item.answer_num}}</view>
@@ -15,5 +15,62 @@
       </view>
     </view>
   </view>
+  <view class="epidemic" wx:else>
+    <view class="sider_box">
+      <view class="title">全国疫情实时数据</view>
+      <view class="data_box">
+        <view class="data_item" wx:for="{{allSmallData}}" wx::key="index">
+          <view class="large">{{item.largeData}}</view>
+          <view class="type">{{item.text}}</view>
+          <view class="small">
+            <text>较昨日</text>+{{item.smallData}}
+          </view>
+        </view>
+      </view>
+      <view class="data_origin">截至{{epidemicDta.update_time}}<text class="line">|</text>来源：各地区卫健委</view>
+    </view>
+    <view class="sider_box">
+      <view class="title">国内病例</view>
+      <view class="grid_item" wx:for="{{epidemicDta.provinces}}" wx:key="index" bindtap="showList" data-index="{{index}}">
+        <view class="item">{{item.name}}</view>
+        <view class="item">{{item.confirmed_num}}</view>
+        <view class="item">{{item.deaths_num}}</view>
+        <view class="item">{{item.cures_num}}</view>
+        <view class="item ico"><text class="iconfont icon-xiangxia {{showIndex == index ? 'reversal' : ''}}"></text></view>
+        <view class="grid_box" wx:if="{{showIndex == index}}">
+          <view class="item">地区</view>
+          <view class="item">确诊</view>
+          <view class="item">死亡</view>
+          <view class="item">治愈</view>
+          <view class="item">新增</view>
+        </view>
+        <view class="list" wx:for="{{item.cities}}" wx:for-item="citys" wx:for-index="i" wx:key="i" wx:if="{{showIndex == index}}">
+          <view class="item">{{citys.name}}</view>
+          <view class="item">{{citys.confirmed_num}}</view>
+          <view class="item">{{citys.deaths_num}}</view>
+          <view class="item">{{citys.cures_num}}</view>
+          <view class="item">{{citys.confirmed_num_incr}}</view>
+        </view>
+      </view>
+    </view>
+    <view class="sider_box">
+      <view class="title">海外病例</view>
+      <view class="grid_box">
+        <view class="item">地区</view>
+        <view class="item">确诊</view>
+        <!-- <view class="item">疑似</view> -->
+        <view class="item">死亡</view>
+        <view class="item">治愈</view>
+      </view>
+      <view class="grid_item" wx:for="{{epidemicDta.world}}" wx:key="index">
+        <view class="item">{{item.country}}</view>
+        <view class="item">{{item.confirmed_num}}</view>
+        <!-- <view class="item">{{item.suspected_num}}</view> -->
+        <view class="item">{{item.deaths_num}}</view>
+        <view class="item">{{item.cures_num}}</view>
+      </view>
+    </view>
+  </view>
 </view>
+<loading wx:if="{{!isDone}}"/> 
 <index-tabbar></index-tabbar>

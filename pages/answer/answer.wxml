@@ -1,0 +1,9 @@
+<view class="container">
+  <view class="title">{{title}}</view>
+  <view class="textarea">
+    <textarea placeholder="有想法？赶紧回Ta" value="{{answerText}}" bindinput="answerInput"></textarea>
+  </view>
+  <view class="bottom">
+    <view class="btn" bindtap="commitAnswer">发布</view>
+  </view>
+</view>
