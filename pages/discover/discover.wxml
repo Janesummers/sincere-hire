@@ -31,6 +31,13 @@
     </view>
     <view class="sider_box">
       <view class="title">国内病例</view>
+      <view class="grid_box">
+        <view class="item">地区</view>
+        <view class="item">确诊</view>
+        <view class="item">死亡</view>
+        <view class="item">治愈</view>
+        <view class="item"> </view>
+      </view>
       <view class="grid_item" wx:for="{{epidemicDta.provinces}}" wx:key="index" bindtap="showList" data-index="{{index}}">
         <view class="item">{{item.name}}</view>
         <view class="item">{{item.confirmed_num}}</view>
@@ -49,7 +56,7 @@
           <view class="item">{{citys.confirmed_num}}</view>
           <view class="item">{{citys.deaths_num}}</view>
           <view class="item">{{citys.cures_num}}</view>
-          <view class="item">{{citys.confirmed_num_incr}}</view>
+          <view class="item">{{citys.confirmed_num_incr <= 0 ? 0 : citys.confirmed_num_incr}}</view>
         </view>
       </view>
     </view>
@@ -63,7 +70,7 @@
         <view class="item">治愈</view>
       </view>
       <view class="grid_item" wx:for="{{epidemicDta.world}}" wx:key="index">
-        <view class="item">{{item.country}}</view>
+        <view class="item first">{{item.country}}</view>
         <view class="item">{{item.confirmed_num}}</view>
         <!-- <view class="item">{{item.suspected_num}}</view> -->
         <view class="item">{{item.deaths_num}}</view>

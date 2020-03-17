@@ -7,7 +7,6 @@ Page({
    * 页面的初始数据
    */
   data: {
-    h: 0,
     page: 1,
     num: 10,
     isAll: false,
@@ -20,13 +19,6 @@ Page({
     allSmallData: [],
     isDone: false,
     showIndex: null
-  },
-
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad: function (options) {
-    
   },
 
   onPullDownRefresh: function () {
@@ -97,7 +89,7 @@ Page({
         wx.hideLoading();
         wx.stopPullDownRefresh();
       } else {
-        console.error('请求数据失败')
+        console.error(res.data.data)
       }
     })
   },
@@ -138,6 +130,9 @@ Page({
   },
 
   getEpidemic () {
+    this.setData({
+      isDone: false
+    })
     req.request('/getEpidemic', null, 'GET', res => {
       console.log(res.data.data)
       this.setData({
@@ -202,6 +197,7 @@ Page({
     data.provinces = provinces.sort((a, b) => {
       return b.confirmed_num - a.confirmed_num
     })
+    wx.stopPullDownRefresh();
     this.setData({
       isDone: true,
       epidemicDta: data
