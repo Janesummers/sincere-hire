@@ -5,6 +5,7 @@ page {
   padding: 26rpx;
   background: #fff;
   margin-bottom: 20rpx;
+  position: relative;
 }
 .container .question .title {
   font-size: 36rpx;
@@ -50,6 +51,12 @@ page {
 .container .question .hot .icon-02 {
   font-size: 30rpx;
   margin-right: 12rpx;
+}
+.container .question .attention {
+  position: absolute;
+  right: 26rpx;
+  color: #49bcc0;
+  bottom: 52rpx;
 }
 .container .answers {
   padding: 0 26rpx;

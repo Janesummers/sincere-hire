@@ -14,7 +14,8 @@ Page({
     isBack: false,
     page: 1,
     num: 10,
-    answerData: []
+    answerData: [],
+    isAttention: false
   },
 
   /**
@@ -24,49 +25,64 @@ Page({
     const eventChannel = this.getOpenerEventChannel();
     eventChannel.on('detail', opt => {
       let {
-        data,
-        id,
-        idx
+        data, id, idx
       } = opt;
       this.setData({
-        data,
-        id,
-        idx
+        data, id, idx
       })
 
       if (data[0].answer_num > 0) {
         this.getAnswer();
       }
 
-      req.request('/updateTopicRead', {
-        id,
-        idx
-      }, 'GET', res => {
+      this.updateRead(id, idx, data, eventChannel);
+      this.checkAttention(id, idx, data);
+    })
+  },
+
+  updateRead (id, idx, data, eventChannel) {
+    req.request('/updateTopicRead', {
+      id, idx
+    }, 'GET', res => {
+      if (res.data.code == 'ok') {
         data[0].topic_read = parseInt(data[0].topic_read) + 1;
         eventChannel.emit('updateContentRead', data[0].topic_read);
         // console.log(res)
         this.setData({
           data
         })
-      })
+      } else {
+        console.error(res.data.data)
+      }
+    })
+  },
 
+  checkAttention (id, idx) {
+    req.request('/getOnceAttention', {
+      id, idx
+    }, 'GET', res => {
+      if (res.data.code == 'ok') {
+        if (res.data.data.length > 0) {
+          this.setData({
+            isAttention: true
+          })
+        }
+      } else {
+        console.error(res.data.data)
+      }
     })
   },
 
   toAnswer () {
     let {
-      id,
-      idx,
-      data
+      id, idx, data
     } = this.data;
     let title = data[0].topic_title;
     wx.navigateTo({
       url: '../answer/answer',
       success: res => {
         res.eventChannel.emit('answer', {
-          id,
-          idx,
-          title
+          id, idx, title
         })
       }
     })
@@ -120,38 +136,50 @@ Page({
     return data;
   },
 
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-
+  attention () {
+    let {
+      id,
+      idx
+    } = this.data;
+    req.request('/attentionTopic', {
+      id,
+      idx
+    }, 'GET', res => {
+      if (res.data.code == 'ok') {
+        wx.showToast({
+          title: '关注成功'
+        })
+        this.setData({
+          isAttention: true
+        })
+      } else {
+        wx.showToast({
+          title: '网络错误',
+          icon: 'none'
+        })
+      }
+    })
   },
 
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-
+  cancelAttention () {
+    let {
+      id,
+      idx
+    } = this.data;
+    req.request('/cancelAttention', {
+      id,
+      idx
+    }, 'GET', res => {
+      if (res.data.code == 'ok') {
+        this.setData({
+          isAttention: false
+        })
+      } else {
+        wx.showToast({
+          title: '网络错误',
+          icon: 'none'
+        })
+      }
+    })
   }
 })

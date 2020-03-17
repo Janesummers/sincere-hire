@@ -4,13 +4,14 @@
     <view class="topic_type">
       <text class="topic" wx:for="{{data[0].topic}}" wx:key="index">#{{item}}#</text>
     </view>
-    <view class="content" wx:for="{{data[0].content}}">
+    <view class="content" wx:for="{{data[0].content}}" wx:key="index">
       <view class="item">{{item}}</view>
     </view>
     <view class="hot">
       <view><text class="ico iconfont icon-xiaoxixinxihuihuahuida"></text>{{data[0].answer_num}}</view>
       <view><text class="ico iconfont icon-02"></text>{{data[0].topic_read}}</view>
     </view>
+    <view class="attention" bindtap="{{isAttention ? 'cancelAttention' : 'attention'}}">{{isAttention ? '已关注话题' : '＋ 关注该话题'}}</view>
   </view>
   <view class="answers">
     <view class="top">全部回答</view>
@@ -26,7 +27,7 @@
           </view>
           <view class="info">
             <view class="name">{{item.nickname}}</view>
-            <view class="identity">{{item.identity}}</view>
+            <view class="identity">{{item.identity || item.position}}</view>
           </view>
         </view>
         <view class="content">
