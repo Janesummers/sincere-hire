@@ -1,13 +1,50 @@
 <view class="container">
-  <view wx:if="{{resumeFile || userInfo.rule === 'job_seeker'}}" class="util" bindtap="{{userInfo.rule === 'job_seeker' ? 'sendResume' : 'showResume'}}">
-      <view class="ico">
-        <view class="iconfont icon-wenjian"></view><text class="text">{{userInfo.rule === 'job_seeker' ? '在线简历' : '对方简历'}}</text>
-      </view>
-      <view class="text">{{userInfo.rule === 'job_seeker' ? '发送' : '查看'}}</view>
+  <view wx:if="{{userInfo.rule === 'job_seeker'}}" class="util">
+    <view class="ico">
+      <view class="iconfont icon-wenjian"></view><text class="text">在线简历</text>
     </view>
+    <view class="text" bindtap="sendResume">发送</view>
+  </view>
+  <view wx:else class="util2">
+    <view class="item {{resumeFile ? 'active': ''}}" bindtap="{{resumeFile ? 'showResume': ''}}">
+      <view class="iconfont icon-wenjian"></view>
+      <view class="text">对方简历</view>
+    </view>
+    <view class="item active" bindtap="interview">
+      <view class="iconfont icon-goutongjiaoliu"></view>
+      <view class="text">面试邀请</view>
+    </view>
+  </view>
+  <view class="shadow" wx:if="{{interIsShow}}">
+    <view class="interview">
+      <view class="item">
+        <view class="text">日期：</view>
+        <picker mode="date" value="{{date}}" start="{{inter.startTime}}" end="{{inter.endTime}}" bindchange="bindDateChange">
+          <view class="picker {{inter.date != '' ? 'pickerActive' : ''}}">
+            <view wx:if="{{inter.date == ''}}">点击选择日期</view>
+            {{inter.date}}
+          </view>
+        </picker>
+      </view>
+      <view class="item">
+        <view class="text">时间：</view>
+        <picker mode="time" value="{{time}}" start="09:00" end="21:00" bindchange="bindTimeChange">
+          <view class="picker {{inter.time != '' ? 'pickerActive' : ''}}">
+            <view wx:if="{{inter.time == ''}}">点击选择时间</view>
+            {{inter.time}}
+          </view>
+        </picker>
+      </view>
+      <view class="item">
+        <view class="text">备注：</view>
+        <textarea placeholder="如带上作品" value="{{inter.text}}" bindinput="remarkChange"></textarea>
+      </view>
+      <view class="btn" bindtap="sendInvite">发送邀请</view>
+    </view>
+  </view>
   <scroll-view 
     class="list" 
-    style="height: {{originHeight - 20}}px;top: {{list.length * 55 > keyHeight ? 0 : top}}px;"
+    style="height: {{originHeight - 20}}px;top: {{list.length * 55 > keyHeight ? 0 : top}}px; padding-top: {{userInfo.rule === 'job_seeker' ? '100' : '144'}}rpx;"
     scroll-y="{{true}}" 
     scroll-into-view="{{toLast}}" 
     scroll-with-animation="{{true}}"
@@ -17,25 +54,34 @@
       wx:for="{{list}}" 
       wx:key="index"
     >
-      <block wx:if="{{item.type === 'sendFile' && userInfo.rule === 'job_seeker'}}">
-        <view class="hint_text">您的在线简历已发送给对方</view>
-      </block>
-      <block wx:else>
-        <view class="img_box">
-          <image src="{{item.avatarUrl || '../../images/people_girl.png'}}"  mode="widthFix"></image>
-        </view>
-        <view class="bubble">
-          <view wx:if="{{item.type === 'sendFile'}}" class="resume">
-            <view class="ico">
-              <view class="iconfont icon-wenjian"></view><text class="text">{{sendName}}的简历信息</text>
-            </view>
-            <view class="btn" bindtap="showResume" data-id="">查看</view>
+    <block wx:if="{{item.type === 'sendFile' && userInfo.rule === 'job_seeker'}}">
+      <view class="hint_text">您的在线简历已发送给对方</view>
+    </block>
+    <block wx:elif="{{item.type === 'sendInvite' && userInfo.rule === 'recruiter'}}">
+      <view class="hint_text">您的面试邀请已发送给对方</view>
+    </block>
+    <block wx:else>
+      <view class="img_box">
+        <image src="{{item.avatarUrl || '../../images/people_girl.png'}}"  mode="widthFix"></image>
+      </view>
+      <view class="bubble {{item.type === 'sendFile' || item.type === 'sendInvite' ? 'check' : ''}}">
+        <view wx:if="{{item.type === 'sendFile'}}" class="resume">
+          <view class="ico">
+            <view class="iconfont icon-wenjian"></view><text class="text">{{sendName}}向你发送了Ta的简历，点击进行查看</text>
           </view>
-          <view wx:else>
-            {{item.data}}
-          </view>
+          <view class="btn" bindtap="showResume">立即查看</view>
         </view>
-      </block>
+        <view wx:if="{{item.type === 'sendInvite'}}" class="resume">
+          <view class="ico">
+            <view class="iconfont icon-goutongjiaoliu"></view><text class="text">{{sendName}}向你发出面试邀请，点击进行查看</text>
+          </view>
+          <view class="btn" bindtap="showResume">立即查看</view>
+        </view>
+        <view wx:if="{{!item.type}}">
+          {{item.data}}
+        </view>
+      </view>
+    </block>
     </view>
     <view class="line" id="item{{list.length - 1}}"></view>
   </scroll-view>

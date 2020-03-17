@@ -22,7 +22,15 @@ Page({
     acceptId: '',
     sendImg: '',
     acceptImg: '',
-    resumeFile: false
+    resumeFile: false,
+    inter: {
+      startTime: '',
+      endTime: '',
+      date: '',
+      time: '',
+      text: ''
+    },
+    interIsShow: false
   },
 
   /**
@@ -34,14 +42,18 @@ Page({
     let id = base64.encode(options.id);
     var unionid = base64.encode(wx.getStorageSync('unionid'));
     let userInfo = wx.getStorageSync('userInfo');
-
+    let date = new Date();
+    let startTime = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
+    let endTime = `${date.getFullYear() + 1}-${date.getMonth() + 1}-${date.getDate()}`
     this.setData({
       sendId: id,
       acceptId: unionid,
       sendImg: options.sendImg ? decodeURIComponent(options.sendImg) : '',
       acceptImg: options.acceptImg ? decodeURIComponent(options.acceptImg) : '',
       userInfo,
-      sendName: options.name
+      sendName: options.name,
+      ["inter.startTime"]: startTime,
+      ["inter.endTime"]: endTime
     })
     wx.setNavigationBarTitle({
       title: options.name
@@ -383,6 +395,93 @@ Page({
   showResume () {
     wx.navigateTo({
       url: `../live-resume/live-resume?id=${this.data.other}`
+    })
+  },
+
+  interview () {
+    this.setData({
+      interIsShow: !this.data.interIsShow
+    })
+  },
+
+  bindDateChange (e) {
+    this.setData({
+      ["inter.date"]: e.detail.value
+    })
+  },
+
+  bindTimeChange (e) {
+    this.setData({
+      ["inter.time"]: e.detail.value
+    })
+  },
+
+  remarkChange (e) {
+    this.setData({
+      ["inter.text"]: e.detail.value
+    })
+  },
+
+  sendInvite () {
+    wx.showLoading({
+      title: '发送中'
+    })
+    let unionid = wx.getStorageSync('unionid');
+    let list = this.data.list;
+    let chatList = wx.getStorageSync('chat');
+    let time = this.getTime();
+    let acceptId = this.data.otherEncrypt;
+    let all = {
+      data: '[面试邀请]',
+      sendId: base64.encode(unionid),
+      acceptId,
+      time,
+      type: 'sendInvite'
+    };
+    if (chatList) {
+      if (chatList[acceptId]) {
+        chatList[acceptId].push(all);
+      } else {
+        chatList[acceptId] = [all]
+      }
+      wx.setStorageSync('chat', chatList);
+    } else {
+      let obj = {};
+      obj[acceptId] = [all]
+      wx.setStorageSync('chat', obj);
+    }
+    list.push({
+      data: '[面试邀请]',
+      sendId: base64.encode(unionid),
+      acceptId,
+      time: all.time,
+      avatarUrl: this.data.acceptImg,
+      type: 'sendInvite'
+    })
+    this.setData({
+      list,
+      interIsShow: false
+    }, () => {
+      this.setData({
+        toLast: `item${this.data.list.length - 1}`
+      })
+    })
+    let data = JSON.stringify({
+      msg: '[面试邀请]',
+      client: base64.encode(unionid),
+      to: acceptId,
+      time: all.time,
+      name: app.globalData.userInfo.name || app.globalData.userInfo.nickname,
+      type: 'sendInvite',
+      read: false
+    })
+    wx.sendSocketMessage({
+      data,
+      success: () => {
+        wx.showToast({
+          title: '发送成功'
+        })
+      }
     })
   }
 })
