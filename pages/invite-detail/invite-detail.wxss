@@ -1,0 +1,70 @@
+page {
+  background-color: #f0f3f6;
+}
+.container {
+  padding: 40rpx;
+}
+.container .side_box {
+  background: #fff;
+  border-radius: 20rpx;
+  box-sizing: border-box;
+  padding: 30rpx;
+}
+.container .side_box .top {
+  font-size: 38rpx;
+  line-height: 80rpx;
+  border-bottom: 1px solid #f0f1f4;
+  margin-bottom: 30rpx;
+}
+.container .side_box .who {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  margin-bottom: 30rpx;
+}
+.container .side_box .who .head {
+  width: 80rpx;
+  height: 80rpx;
+  overflow: hidden;
+  border-radius: 16rpx;
+  margin-right: 30rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.container .side_box .who .head image {
+  width: 100%;
+  border-radius: 16rpx;
+}
+.container .side_box .who .name {
+  font-size: 32rpx;
+}
+.container .side_box .item {
+  margin-bottom: 30rpx;
+  font-size: 32rpx;
+}
+.container .side_box .item .type {
+  color: #999;
+  margin-right: 30rpx;
+}
+.container .side_box .bottom {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+.container .side_box .bottom .btn {
+  text-align: center;
+  height: 80rpx;
+  line-height: 80rpx;
+  border-radius: 13rpx;
+}
+.container .side_box .bottom .refuse {
+  width: 34%;
+  background: #f3f3f3;
+  color: #666;
+}
+.container .side_box .bottom .allow {
+  width: 62%;
+  background: #49bcc0;
+  color: #fff;
+}

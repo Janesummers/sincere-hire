@@ -1,0 +1,29 @@
+<view class="container">
+  <view class="side_box">
+    <view class="top">
+      <text class="title">阿打算考大口大口</text>
+    </view>
+    <view class="who">
+      <view class="head">
+        <image src="../../images/people_man.png" mode="widthFix"></image>
+      </view>
+      <view class="name">所得到的撒多</view>
+    </view>
+    <view class="item">
+      <text class="type">时间</text><text class="time">大萨达撒多撒大所多大所多所</text>
+    </view>
+    <view class="item">
+      <text class="type">职位</text><text class="job">大萨达撒奥多撒多撒多</text>
+    </view>
+    <view class="item">
+      <text class="type">地址</text><text class="addr">大萨达大所多多撒多</text>
+    </view>
+    <view class="item">
+      <text class="type">备注</text><text class="remark">大萨达大所多多撒多</text>
+    </view>
+    <view class="bottom">
+      <view class="btn refuse">拒绝面试</view>
+      <view class="btn allow">接受面试</view>
+    </view>
+  </view>
+</view>

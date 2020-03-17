@@ -1,0 +1,61 @@
+@mainColor: #49bcc0;
+page {
+  background-color: #f0f3f6;
+}
+.container {
+  .topic_list {
+    -webkit-overflow-scrolling: touch;
+    overflow: hidden;
+    .item {
+      padding: 20rpx;
+      background: #fff;
+      margin-bottom: 20rpx;
+      .title {
+        font-size: 36rpx;
+        margin-bottom: 20rpx;
+      }
+      .small_content {
+        display: -webkit-box;
+        word-break: break-all;
+        text-overflow: ellipsis;
+        font-size: 28rpx;
+        overflow: hidden;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp:2;
+        margin-bottom: 20rpx;
+        color: #949494;
+      }
+      .topic_type {
+        display: flex;
+        flex-wrap: wrap;
+        .topic {
+          font-size: 24rpx;
+          color: @mainColor;
+          background: #c1f0f1;
+          padding: 8rpx 20rpx;
+          border-radius: 8rpx;
+          margin-right: 20rpx;
+          margin-bottom: 14rpx;
+        }
+      }
+      .hot {
+        color: #949494;
+        display: flex;
+        view {
+          margin-right: 40rpx;
+          font-size: 28rpx;
+          display: flex;
+          align-items: center;
+        }
+        .icon-xiaoxixinxihuihuahuida {
+          font-size: 40rpx;
+          margin-right: 8rpx;
+        }
+        .icon-02 {
+          font-size: 30rpx;
+          margin-right: 12rpx;
+        }
+      }
+    }
+  }
+}

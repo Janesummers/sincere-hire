@@ -1,0 +1,42 @@
+page {
+  background-color: #f0f3f6;
+}
+.container {
+  padding: 26rpx;
+}
+.container .list {
+  overflow: hidden;
+}
+.container .list .item {
+  font-size: 28rpx;
+  background: #fff;
+  padding: 20rpx;
+  border-radius: 20rpx;
+  display: flex;
+  margin-bottom: 30rpx;
+}
+.container .list .item .ico {
+  width: 14%;
+}
+.container .list .item .ico .iconfont {
+  font-size: 56rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+.container .list .item .info {
+  width: 86%;
+}
+.container .list .item .info .top {
+  display: flex;
+  justify-content: space-between;
+  line-height: 60rpx;
+  flex: 1;
+}
+.container .list .item .info .bottom {
+  display: flex;
+  justify-content: space-between;
+  color: #949494;
+  flex: 1;
+}

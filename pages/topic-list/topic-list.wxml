@@ -1,0 +1,15 @@
+<view class="container">
+  <view class="topic_list">
+    <view class="item" wx:for="{{hotTopic}}" wx:key="topic_id" bindtap="toDetail" data-id="{{item.topic_id}}" data-idx="{{item.id}}">
+      <view class="title">{{item.topic_title}}</view>
+      <view class="small_content">{{item.toppic_content}}</view>
+      <view class="topic_type">
+        <text class="topic" wx:for="{{item.topic}}" wx:key="index">#{{item}}#</text>
+      </view>
+      <view class="hot">
+        <view><text class="ico iconfont icon-xiaoxixinxihuihuahuida"></text>{{item.answer_num}}</view>
+        <view><text class="ico iconfont icon-02"></text>{{item.topic_read}}</view>
+      </view>
+    </view>
+  </view>
+</view>

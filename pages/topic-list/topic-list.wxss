@@ -1,0 +1,58 @@
+page {
+  background-color: #f0f3f6;
+}
+.container .topic_list {
+  -webkit-overflow-scrolling: touch;
+  overflow: hidden;
+}
+.container .topic_list .item {
+  padding: 20rpx;
+  background: #fff;
+  margin-bottom: 20rpx;
+}
+.container .topic_list .item .title {
+  font-size: 36rpx;
+  margin-bottom: 20rpx;
+}
+.container .topic_list .item .small_content {
+  display: -webkit-box;
+  word-break: break-all;
+  text-overflow: ellipsis;
+  font-size: 28rpx;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  margin-bottom: 20rpx;
+  color: #949494;
+}
+.container .topic_list .item .topic_type {
+  display: flex;
+  flex-wrap: wrap;
+}
+.container .topic_list .item .topic_type .topic {
+  font-size: 24rpx;
+  color: #49bcc0;
+  background: #c1f0f1;
+  padding: 8rpx 20rpx;
+  border-radius: 8rpx;
+  margin-right: 20rpx;
+  margin-bottom: 14rpx;
+}
+.container .topic_list .item .hot {
+  color: #949494;
+  display: flex;
+}
+.container .topic_list .item .hot view {
+  margin-right: 40rpx;
+  font-size: 28rpx;
+  display: flex;
+  align-items: center;
+}
+.container .topic_list .item .hot .icon-xiaoxixinxihuihuahuida {
+  font-size: 40rpx;
+  margin-right: 8rpx;
+}
+.container .topic_list .item .hot .icon-02 {
+  font-size: 30rpx;
+  margin-right: 12rpx;
+}

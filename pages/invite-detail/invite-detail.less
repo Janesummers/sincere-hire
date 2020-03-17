@@ -1,0 +1,71 @@
+@mainColor: #49bcc0;
+page {
+  background-color: #f0f3f6;
+}
+.container {
+  padding: 40rpx;
+  .side_box {
+    background: #fff;
+    border-radius: 20rpx;
+    box-sizing: border-box;
+    padding: 30rpx;
+    .top {
+      font-size: 38rpx;
+      line-height: 80rpx;
+      border-bottom: 1px solid #f0f1f4;
+      margin-bottom: 30rpx;
+    }
+    .who {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      margin-bottom: 30rpx;
+      .head {
+        width: 80rpx;
+        height: 80rpx;
+        overflow: hidden;
+        border-radius: 16rpx;
+        margin-right: 30rpx;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        image {
+          width: 100%;
+          border-radius: 16rpx;
+        }
+      }
+      .name {
+        font-size: 32rpx;
+      }
+    }
+    .item {
+      margin-bottom: 30rpx;
+      font-size: 32rpx;
+      .type {
+        color: #999;
+        margin-right: 30rpx;
+      }
+    }
+    .bottom {
+      display: flex;
+      width: 100%;
+      justify-content: space-between;
+      .btn {
+        text-align: center;
+        height: 80rpx;
+        line-height: 80rpx;
+        border-radius: 13rpx;
+      }
+      .refuse {
+        width: 34%;
+        background: #f3f3f3;
+        color: #666;
+      }
+      .allow {
+        width: 62%;
+        background: @mainColor;
+        color: #fff;
+      }
+    }
+  }
+}
