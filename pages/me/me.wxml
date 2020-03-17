@@ -25,7 +25,7 @@
     </view>
     <view class="list">
       <view class="item" bindtap="toPage" data-path="info">
-        <text class="ico iconfont icon-wenjian"></text>
+        <text class="ico iconfont icon-jiaoxue"></text>
         <text class="text">个人信息</text>
         <text class="iconfont icon-iconfonti"></text>
       </view>
@@ -36,16 +36,18 @@
       </view>
     </view>
     <view class="list">
-      <!-- <view class="item">
-        <text class="ico iconfont icon-goutongjiaoliu"></text>
-        <text class="text">我的面试</text>
-        <text class="iconfont icon-iconfonti"></text>
-      </view> -->
-      <view class="item" bindtap="toPage" data-path="job-list" data-type="收藏" wx:if="{{userInfo.rule == 'job_seeker'}}">
-        <text class="ico iconfont icon-shoucang"></text>
-        <text class="text">我的收藏</text>
-        <text class="iconfont icon-iconfonti"></text>
-      </view>
+      <block wx:if="{{userInfo.rule == 'job_seeker'}}">
+        <view class="item" bindtap="toPage" data-path="job-list" data-type="收藏">
+          <text class="ico iconfont icon-shoucang"></text>
+          <text class="text">我的收藏</text>
+          <text class="iconfont icon-iconfonti"></text>
+        </view>
+        <view class="item">
+          <text class="ico iconfont icon-goutongjiaoliu"></text>
+          <text class="text">我的面试</text>
+          <text class="iconfont icon-iconfonti"></text>
+        </view>
+      </block>
       <block wx:if="{{userInfo.rule == 'recruiter'}}">
         <view class="item" bindtap="toPage" data-path="release-recruit">
           <text class="ico iconfont icon-shoucang"></text>
@@ -58,6 +60,11 @@
           <text class="iconfont icon-iconfonti"></text>
         </view>
       </block>
+      <view class="item" bindtap="toPage" data-path="topic-list" data-type="话题">
+        <text class="ico iconfont icon-guanzhu"></text>
+        <text class="text">我关注的话题</text>
+        <text class="iconfont icon-iconfonti"></text>
+      </view>
     </view>
   </view>
 </view>
