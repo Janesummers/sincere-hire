@@ -121,6 +121,12 @@ App({
         "text": "消息"
       },
       {
+        "selectedIconPath": "../../images/discover_selected.png",
+        "iconPath": "../../images/discover.png",
+        "pagePath": "pages/discover/discover",
+        "text": "发现"
+      },
+      {
         "selectedIconPath": "../../images/me_selected.png",
         "iconPath": "../../images/me.png",
         "pagePath": "pages/me/me",

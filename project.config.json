@@ -69,6 +69,21 @@
 					"id": -1,
 					"name": "epidemic",
 					"pathName": "pages/discover/discover",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": 2,
+					"name": "message",
+					"pathName": "pages/message/message",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": 3,
+					"name": "pages/invite-list/invite-list",
+					"pathName": "pages/invite-list/invite-list",
+					"query": "",
 					"scene": null
 				}
 			]

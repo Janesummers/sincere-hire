@@ -18,7 +18,10 @@
     "pages/release-recruit/release-recruit",
     "pages/discover/discover",
     "pages/discover-detail/discover-detail",
-    "pages/answer/answer"
+    "pages/answer/answer",
+    "pages/topic-list/topic-list",
+    "pages/invite-list/invite-list",
+    "pages/invite-detail/invite-detail"
   ],
   "window": {
     "backgroundTextStyle": "dark",
