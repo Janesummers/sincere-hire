@@ -1,32 +1,17 @@
 <view class="container">
   <view class="list">
-    <view class="item">
+    <view class="item" wx:for="{{list}}" wx:key="invite_id" bindtap="toDetail" data-id="{{item.invite_id}}">
       <view class="ico">
         <view class="iconfont icon-goutongjiaoliu"></view>
       </view>
       <view class="info">
         <view class="top">
-          <view class="who">手打</view>
-          <view class="status">取消</view>
+          <view class="who">{{item.invite_company}}</view>
+          <view class="status">{{item.status}}</view>
         </view>
         <view class="bottom">
-          <view class="job">面试 大萨达所大</view>
-          <view class="time">3月1日</view>
-        </view>
-      </view>
-    </view>
-     <view class="item">
-      <view class="ico">
-        <view class="iconfont icon-goutongjiaoliu"></view>
-      </view>
-      <view class="info">
-        <view class="top">
-          <view class="who">手打</view>
-          <view class="status">取消</view>
-        </view>
-        <view class="bottom">
-          <view class="job">面试 大萨达所大</view>
-          <view class="time">3月1日</view>
+          <view class="job">面试 {{item.invite_job}}</view>
+          <view class="time">{{item.time}}</view>
         </view>
       </view>
     </view>
