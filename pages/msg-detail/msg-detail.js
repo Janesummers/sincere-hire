@@ -22,7 +22,9 @@ Page({
     acceptId: '',
     sendImg: '',
     acceptImg: '',
+    sendCompany: '',
     resumeFile: false,
+    jobId: '',
     inter: {
       startTime: '',
       endTime: '',
@@ -45,6 +47,7 @@ Page({
     let date = new Date();
     let startTime = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
     let endTime = `${date.getFullYear() + 1}-${date.getMonth() + 1}-${date.getDate()}`
+    console.log(options)
     this.setData({
       sendId: id,
       acceptId: unionid,
@@ -52,6 +55,8 @@ Page({
       acceptImg: options.acceptImg ? decodeURIComponent(options.acceptImg) : '',
       userInfo,
       sendName: options.name,
+      sendCompany: options.company ? decodeURIComponent(options.company) : '',
+      jobId: options.jobId || '',
       ["inter.startTime"]: startTime,
       ["inter.endTime"]: endTime
     })
@@ -436,7 +441,8 @@ Page({
       sendId: base64.encode(unionid),
       acceptId,
       time,
-      type: 'sendInvite'
+      type: 'sendInvite',
+      invite_id: this.randomNumber()
     };
     if (chatList) {
       if (chatList[acceptId]) {
@@ -456,7 +462,8 @@ Page({
       acceptId,
       time: all.time,
       avatarUrl: this.data.acceptImg,
-      type: 'sendInvite'
+      type: 'sendInvite',
+      invite_id: this.randomNumber()
     })
     this.setData({
       list,
@@ -473,6 +480,15 @@ Page({
       time: all.time,
       name: app.globalData.userInfo.name || app.globalData.userInfo.nickname,
       type: 'sendInvite',
+      invite_id: `YQ${this.randomNumber()}`,
+      other: {
+        sendCompany: this.data.sendCompany,
+        interDate: this.data.inter.date,
+        interTime: this.data.inter.time,
+        interText: this.data.inter.text,
+        sendName: this.data.sendName,
+        job_id: this.data.jobId
+      },
       read: false
     })
     wx.sendSocketMessage({
@@ -481,7 +497,46 @@ Page({
         wx.showToast({
           title: '发送成功'
         })
+        this.setData({
+          ["inter.date"]: '',
+          ["inter.time"]: '',
+          ["inter.text"]: ''
+        })
       }
+    })
+  },
+
+  randomNumber () {
+    let d = new Date();
+    return `${d.getFullYear()}${d.getMonth() + 1 <= 9 ? '0' + (d.getMonth() + 1) : d.getMonth() + 1}${d.getDate() <= 9 ? '0' + d.getDate() : d.getDate()}${d.getHours() <= 9 ? '0' + d.getHours() : d.getHours()}${d.getMinutes() <= 9 ? '0' + d.getMinutes() : d.getMinutes()}${d.getSeconds() <= 9 ? '0' + d.getSeconds() : d.getSeconds()}${Math.floor((Math.random() + 1) * 10000)}`;
+  },
+
+  showInvite (e) {
+    let id = e.currentTarget.dataset.id;
+    req.request('/getOnceInvite', {
+      id
+    }, 'POST', res => {
+      let data = res.data.data.concat()[0];
+      data.avatarUrl = data.avatarUrl ? `${app.globalData.UrlHeadAddress}/qzApi/userAvatar/${data.avatarUrl}` : '';
+      switch (data.status) {
+        case 0:
+          data.status = '待接受';
+          break;
+        case 1:
+          data.status = '已拒绝';
+          break;
+        default:
+          data.status = '已过期';
+      }
+      wx.navigateTo({
+        url: '../invite-detail/invite-detail',
+        success: res => {
+          res.eventChannel.emit('detail', {
+            id,
+            data
+          })
+        }
+      })
     })
   }
 })

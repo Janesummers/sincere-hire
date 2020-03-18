@@ -158,6 +158,7 @@ Page({
         id: publisher_id,
         name,
         company,
+        job_id: this.data.detail.id,
         commit_name: app.globalData.userInfo.name || app.globalData.userInfo.nickname
       }, 'POST', res => {
         if (res.data.code != 'error') {

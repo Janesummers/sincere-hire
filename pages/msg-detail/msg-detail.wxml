@@ -60,6 +60,9 @@
     <block wx:elif="{{item.type === 'sendInvite' && userInfo.rule === 'recruiter'}}">
       <view class="hint_text">您的面试邀请已发送给对方</view>
     </block>
+    <block wx:elif="{{item.type === 'allowInvite' && userInfo.rule === 'recruiter'}}">
+      <view class="hint_text">{{item.data}}</view>
+    </block>
     <block wx:else>
       <view class="img_box">
         <image src="{{item.avatarUrl || '../../images/people_girl.png'}}"  mode="widthFix"></image>
@@ -75,7 +78,7 @@
           <view class="ico">
             <view class="iconfont icon-goutongjiaoliu"></view><text class="text">{{sendName}}向你发出面试邀请，点击进行查看</text>
           </view>
-          <view class="btn" bindtap="showResume">立即查看</view>
+          <view class="btn" bindtap="showInvite" data-id="{{item.invite_id}}">立即查看</view>
         </view>
         <view wx:if="{{!item.type}}">
           {{item.data}}

@@ -118,7 +118,9 @@ Page({
     let {
       id,
       name,
-      send
+      send,
+      company,
+      jobid
     } = e.currentTarget.dataset;
     let chatList = wx.getStorageSync('chat');
     chatList[base64.encode(id)].forEach(item => {
@@ -137,7 +139,7 @@ Page({
       data
     })
     wx.navigateTo({
-      url: `/pages/msg-detail/msg-detail?id=${id}&name=${name}&sendImg=${send}&acceptImg=${accept}`
+      url: `/pages/msg-detail/msg-detail?id=${id}&name=${name}&sendImg=${send}&acceptImg=${accept}&company=${encodeURIComponent(company)}&jobId=${jobid}`
     })
   },
 
@@ -173,9 +175,7 @@ Page({
           item.time = ''
           item.originTime = ''
         }
-        if (item.avatarUrl) {
-          item.avatarUrl = `${app.globalData.UrlHeadAddress}/qzApi/userAvatar/${item.avatarUrl}`
-        }
+        item.avatarUrl = item.avatarUrl ? `${app.globalData.UrlHeadAddress}/qzApi/userAvatar/${item.avatarUrl}` : '';
       })
 
       // console.log(JSON.stringify(list))

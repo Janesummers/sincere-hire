@@ -42,7 +42,7 @@
           <text class="text">我的收藏</text>
           <text class="iconfont icon-iconfonti"></text>
         </view>
-        <view class="item">
+        <view class="item" bindtap="toPage" data-path="invite-list">
           <text class="ico iconfont icon-goutongjiaoliu"></text>
           <text class="text">我的面试</text>
           <text class="iconfont icon-iconfonti"></text>
