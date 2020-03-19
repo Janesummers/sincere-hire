@@ -17,13 +17,22 @@ Page({
     display: 'none',
     winH: 0,
     textLen: 0,
-    oldEvaluate: ''
+    oldEvaluate: '',
+    jump: false,
+    isLook: false,
+    isSave: false
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    const eventChannel = this.getOpenerEventChannel();
+    eventChannel.on('jump', opt => {
+      this.setData({
+        jump: opt
+      })
+    })
     try {
       let winH = wx.getSystemInfoSync().windowHeight;
       let userInfo = wx.getStorageSync('userInfo');
@@ -43,7 +52,8 @@ Page({
           evaluate: '',
           winH,
           textLen: 0,
-          oldEvaluate: ''
+          oldEvaluate: '',
+          isLook: true
         });
         this.getUserResume(options.id);
       }
@@ -57,6 +67,95 @@ Page({
     if (isBack) {
       this.getData();
     }
+    if (this.data.jump) {
+      wx.onSocketMessage(data => {
+        console.log('面试详情受到消息')
+        data = JSON.parse(data.data);
+        let allData = JSON.parse(`[${data.all}]`);
+        this.saveStorage(allData);
+      })
+    }
+  },
+
+  saveStorage (allData) {
+    var chatList = wx.getStorageSync('chat');
+    let dataLen = allData.length;
+    if (allData[dataLen - 1].type == 'sendFile') {
+      this.setData({
+        resumeFile: true
+      })
+    }
+    let sendId = base64.encode(this.data.data.invite_user_id);
+    let acceptId = base64.encode(this.data.data.unionid);
+    
+    if (chatList) {
+      if (sendId != allData[dataLen - 1].sendId) { // 如果收到消息时候当前聊天窗口不是接收用户则将数据存到 LocalStorage
+        console.log('不是我的聊天界面')
+        console.log(allData)
+        if (chatList[allData[dataLen - 1].sendId]) { // 如果已有在本地则 push
+          console.log('聊天记录有在本地')
+          chatList[allData[dataLen - 1].sendId].push({
+            data: allData[dataLen - 1].data,
+            sendId: allData[dataLen - 1].sendId,
+            acceptId: allData[dataLen - 1].acceptId,
+            time: allData[dataLen - 1].time,
+            type: allData[dataLen - 1].type,
+            read: allData[dataLen - 1].read,
+            invite_id: allData[dataLen - 1].invite_id
+          });
+          
+        } else { // 不在本地则新增本地数据
+          console.log('聊天记录不在本地')
+          chatList[allData[dataLen - 1].sendId] = allData;
+        }
+        this.setList(allData[dataLen - 1]);
+        // wx.setStorageSync('chat', chatList);
+      } else {
+        if (chatList[sendId]) {
+          chatList[sendId].push({
+            data: allData[dataLen - 1].data,
+            sendId,
+            acceptId,
+            time: allData[dataLen - 1].time,
+            type: allData[dataLen - 1].type,
+            read: allData[dataLen - 1].read,
+            invite_id: allData[dataLen - 1].invite_id
+          });
+        } else {
+          chatList[sendId] = allData;
+        }
+        
+      }
+      this.setList(allData[dataLen - 1]);
+      wx.setStorageSync('chat', chatList);
+    } else {
+      
+      var obj = {};
+      obj[sendId] = allData;
+      wx.setStorageSync('chat', obj);
+      if (sendId == allData[dataLen - 1].sendId) {
+        this.setList(allData[dataLen - 1]);
+      }
+
+    }
+  },
+
+  setList (msg) {
+    let sendId = base64.encode(this.data.data.invite_user_id);
+    let acceptId = base64.encode(this.data.data.unionid);
+    const eventChannel = this.getOpenerEventChannel();
+    let data = {
+      data: msg.data,
+      sendId,
+      acceptId,
+      time: new Date(Number(msg.time)),
+      avatarUrl: this.data.avatarUrl,
+      type: msg.type,
+      invite_id: msg.invite_id
+    };
+    
+    eventChannel.emit('updateMessage', data);
+
   },
 
   getData () {
@@ -128,16 +227,28 @@ Page({
   },
 
   close () {
-    this.setData({
-      top: 100,
-      evaluate: this.data.oldEvaluate
-    }, () => {
-      setTimeout(() => {
-        this.setData({
-          display: 'none'
-        })
-      }, 400);
-    })
+    if (!this.data.isSave) {
+      this.setData({
+        top: 100,
+        evaluate: this.data.oldEvaluate
+      }, () => {
+        setTimeout(() => {
+          this.setData({
+            display: 'none'
+          })
+        }, 400);
+      })
+    } else {
+      this.setData({
+        top: 100
+      }, () => {
+        setTimeout(() => {
+          this.setData({
+            display: 'none'
+          })
+        }, 400);
+      })
+    }
   },
 
   save () {
@@ -157,7 +268,8 @@ Page({
         oldEvaluate = evaluate;
         this.setData({
           userInfo,
-          oldEvaluate
+          oldEvaluate,
+          isSave: true
         })
         wx.showToast({
           title: '保存成功',

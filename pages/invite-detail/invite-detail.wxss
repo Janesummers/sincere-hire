@@ -68,3 +68,8 @@ page {
   background: #49bcc0;
   color: #fff;
 }
+.container .side_box .bottom .default {
+  width: 100%;
+  background: #f3f3f3;
+  color: #333;
+}

@@ -45,14 +45,17 @@ Page({
     var unionid = base64.encode(wx.getStorageSync('unionid'));
     let userInfo = wx.getStorageSync('userInfo');
     let date = new Date();
-    let startTime = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
-    let endTime = `${date.getFullYear() + 1}-${date.getMonth() + 1}-${date.getDate()}`
-    console.log(options)
+    let startTime = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+    let endTime = `${date.getFullYear() + 1}-${date.getMonth() + 1}-${date.getDate()}`;
+    let acceptImg = options.acceptImg ? decodeURIComponent(options.acceptImg) : '';
+    if (acceptImg != '' && !acceptImg.match(/https|http/)) {
+      acceptImg = `${app.globalData.UrlHeadAddress}/qzApi/userAvatar/${acceptImg}`
+    }
     this.setData({
       sendId: id,
       acceptId: unionid,
       sendImg: options.sendImg ? decodeURIComponent(options.sendImg) : '',
-      acceptImg: options.acceptImg ? decodeURIComponent(options.acceptImg) : '',
+      acceptImg,
       userInfo,
       sendName: options.name,
       sendCompany: options.company ? decodeURIComponent(options.company) : '',
@@ -121,10 +124,7 @@ Page({
     })
   },
 
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
+  onShow: function () {
     wx.onSocketMessage(data => {
       data = JSON.parse(data.data);
       let allData = JSON.parse(`[${data.all}]`);
@@ -157,7 +157,8 @@ Page({
             acceptId: allData[dataLen - 1].acceptId,
             time: allData[dataLen - 1].time,
             type: allData[dataLen - 1].type,
-            read: allData[dataLen - 1].read
+            read: allData[dataLen - 1].read,
+            invite_id: allData[dataLen - 1].invite_id
           });
           
         } else { // 不在本地则新增本地数据
@@ -173,8 +174,19 @@ Page({
             acceptId,
             time: allData[dataLen - 1].time,
             type: allData[dataLen - 1].type,
-            read: true
+            read: true,
+            invite_id: allData[dataLen - 1].invite_id
           });
+          let unionid = wx.getStorageSync('unionid');
+          let acceptId = this.data.otherEncrypt;
+          let data = JSON.stringify({
+            msg: '系统任务：更新消息为已读',
+            client: base64.encode(unionid),
+            to: acceptId
+          })
+          wx.sendSocketMessage({
+            data
+          })
         } else {
           chatList[sendId] = allData;
         }
@@ -207,7 +219,8 @@ Page({
       acceptId,
       time: new Date(Number(msg.time)),
       avatarUrl: this.data.sendImg,
-      type: msg.type
+      type: msg.type,
+      invite_id: msg.invite_id
     })
     if (list.length * 66 > this.data.originHeight) {
       this.setData({
@@ -399,7 +412,40 @@ Page({
 
   showResume () {
     wx.navigateTo({
-      url: `../live-resume/live-resume?id=${this.data.other}`
+      url: `../live-resume/live-resume?id=${this.data.other}`,
+      events: {
+        updateMessage: res => {
+          let list = this.data.list;
+          list.push(res);
+          if (list.length * 66 > this.data.originHeight) {
+            this.setData({
+              listTop: 0
+            })
+          }
+          this.setData({
+            list
+          }, () => {
+            this.setData({
+              toLast: `item${this.data.list.length - 1}`
+            })
+          })
+          let unionid = wx.getStorageSync('unionid');
+          let acceptId = this.data.otherEncrypt;
+          let data = JSON.stringify({
+            msg: '系统任务：更新消息为已读',
+            client: base64.encode(unionid),
+            to: acceptId
+          })
+          wx.sendSocketMessage({
+            data
+          })
+        }
+      },
+      success: res => {
+        res.eventChannel.emit('detail', {
+          jump: true
+        })
+      }
     })
   },
 
@@ -512,6 +558,9 @@ Page({
   },
 
   showInvite (e) {
+    wx.showLoading({
+      title: '载入中'
+    })
     let id = e.currentTarget.dataset.id;
     req.request('/getOnceInvite', {
       id
@@ -523,6 +572,9 @@ Page({
           data.status = '待接受';
           break;
         case 1:
+          data.status = '已同意';
+          break;
+        case 2:
           data.status = '已拒绝';
           break;
         default:
@@ -530,10 +582,42 @@ Page({
       }
       wx.navigateTo({
         url: '../invite-detail/invite-detail',
+        events: {
+          updateMessage: res => {
+            console.log(res)
+            let list = this.data.list;
+            list.push(res);
+            if (list.length * 66 > this.data.originHeight) {
+              this.setData({
+                listTop: 0
+              })
+            }
+            this.setData({
+              list
+            }, () => {
+              this.setData({
+                toLast: `item${this.data.list.length - 1}`
+              })
+            })
+            let unionid = wx.getStorageSync('unionid');
+            let acceptId = this.data.otherEncrypt;
+            let data = JSON.stringify({
+              msg: '系统任务：更新消息为已读',
+              client: base64.encode(unionid),
+              to: acceptId
+            })
+            wx.sendSocketMessage({
+              data
+            })
+          }
+        },
         success: res => {
+          wx.hideLoading()
           res.eventChannel.emit('detail', {
             id,
-            data
+            data,
+            avatarUrl: this.data.sendImg,
+            jump: true
           })
         }
       })

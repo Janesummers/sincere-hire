@@ -22,9 +22,12 @@ Page({
         item.avatarUrl = item.avatarUrl ? `${app.globalData.UrlHeadAddress}/qzApi/userAvatar/${item.avatarUrl}` : '';
         switch (item.status) {
           case 0:
-            item.status = '待同意';
+            item.status = '待接受';
             break;
           case 1:
+            item.status = '已同意';
+            break;
+          case 2:
             item.status = '已拒绝';
             break;
           default:
@@ -67,7 +70,8 @@ Page({
       success: res => {
         res.eventChannel.emit('detail', {
           id,
-          data: data[0]
+          data: data[0],
+          jump: false
         })
       }
     })

@@ -54,7 +54,7 @@
         </view>
       </view>
       <view class="self_appraisal">
-        {{userInfo.advantage}}
+        {{isLook ? evaluate : userInfo.advantage}}
       </view>
     </view>
   </view>

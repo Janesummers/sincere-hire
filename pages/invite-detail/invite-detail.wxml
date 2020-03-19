@@ -21,9 +21,12 @@
     <view class="item" wx:if="{{data.invite_remark != ''}}">
       <text class="type">备注</text><text class="remark">{{data.invite_remark}}</text>
     </view>
-    <view class="bottom" wx:if="{{data.status != '已过期'}}">
-      <view class="btn refuse">拒绝面试</view>
-      <view class="btn allow" bindtap="allow">接受面试</view>
+    <view class="bottom">
+      <block wx:if="{{data.status == '待接受'}}">
+        <view class="btn refuse" bindtap="refuse">拒绝面试</view>
+        <view class="btn allow" bindtap="allow">接受面试</view>
+      </block>
+      <view wx:else class="btn default">{{data.status}}</view>
     </view>
   </view>
 </view>

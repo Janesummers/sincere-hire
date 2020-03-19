@@ -60,8 +60,14 @@
     <block wx:elif="{{item.type === 'sendInvite' && userInfo.rule === 'recruiter'}}">
       <view class="hint_text">您的面试邀请已发送给对方</view>
     </block>
-    <block wx:elif="{{item.type === 'allowInvite' && userInfo.rule === 'recruiter'}}">
+    <block wx:elif="{{(item.type === 'allowInvite' || item.type === 'refuseInvite') && userInfo.rule === 'recruiter'}}">
       <view class="hint_text">{{item.data}}</view>
+    </block>
+    <block wx:elif="{{item.type === 'allowInvite' && userInfo.rule === 'job_seeker'}}">
+      <view class="hint_text">您已同意面试邀请，请认真对待每一次机会！</view>
+    </block>
+    <block wx:elif="{{item.type === 'refuseInvite' && userInfo.rule === 'job_seeker'}}">
+      <view class="hint_text">您拒绝了对方的面试邀请</view>
     </block>
     <block wx:else>
       <view class="img_box">
