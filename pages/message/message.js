@@ -14,20 +14,6 @@ Page({
   },
 
   /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad: function (options) {
-    // this.getData();
-  },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-
-  },
-
-  /**
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
@@ -216,7 +202,12 @@ Page({
             item.text = data[data.length - 1].data;
           }
           var d = new Date(Number(data[data.length - 1].time));
-          item.time = util.formatNumber(d.getHours()) + ":" + util.formatNumber(d.getMinutes());
+          var today = new Date();
+          if (d.getFullYear() < today.getFullYear() || d.getMonth() + 1 < today.getMonth() + 1 || d.getDate() < today.getDate()) {
+            item.time = `${d.getFullYear()}/${util.formatNumber(d.getMonth() + 1)}/${util.formatNumber(d.getDate())}`;
+          } else {
+            item.time = `${util.formatNumber(d.getHours())}:${util.formatNumber(d.getMinutes())}`;
+          }
           item.originTime = `${d.toLocaleDateString()} ${d.toTimeString().match(/[^ ]+/)}`;
           item.timestamp = Number(data[data.length - 1].time);
           item.num = num;

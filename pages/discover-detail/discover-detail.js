@@ -31,9 +31,7 @@ Page({
         data, id, idx
       })
 
-      if (data[0].answer_num > 0) {
-        this.getAnswer();
-      }
+      // this.getAnswer();
 
       this.updateRead(id, idx, data, eventChannel);
       this.checkAttention(id, idx, data);
@@ -91,12 +89,13 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    if (this.data.isBack) {
-      this.setData({
-        isBack: false
-      })
-      this.getAnswer();
-    }
+    this.getAnswer();
+    // if (this.data.isBack) {
+    //   this.setData({
+    //     isBack: false
+    //   })
+      
+    // }
   },
 
   getAnswer () {

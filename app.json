@@ -2,8 +2,6 @@
   "pages": [
     "pages/welcome/welcome",
     "pages/index/index",
-    "pages/logs/logs",
-    "pages/company/company",
     "pages/me/me",
     "pages/message/message",
     "pages/job-detail/job-detail",
