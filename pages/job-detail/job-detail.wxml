@@ -26,6 +26,22 @@
       wx:if="{{rule != 'recruiter'}}"
     ></view>
   </view>
+  <view class="job_describe card" wx:if="{{detail.skill_require.length > 0}}">
+    <view class="title">
+        技能要求
+    </view>
+    <view class="other">
+      <text class="items" wx:for="{{detail.skill_require}}" wx:key="index">{{item}}</text>
+    </view>
+  </view>
+  <view class="job_describe card" wx:if="{{detail.welfare_all.length > 0}}">
+    <view class="title">
+        岗位福利
+    </view>
+    <view class="other">
+      <text class="items" wx:for="{{detail.welfare_all}}" wx:key="index">{{item}}</text>
+    </view>
+  </view>
   <view class="job_describe card">
     <view class="title">
         职位描述

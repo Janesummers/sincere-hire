@@ -73,6 +73,7 @@ App({
     UrlHeadAddress: 'http://192.168.1.104', //https://www.chiens.cn/qzApi  http://192.168.1.104/
     selected: 0,
     openData: {},
+    messageDone: false,
     list: [
       {
         "selectedIconPath": "../../images/job_selected.png",
@@ -121,7 +122,7 @@ App({
     ],
     getMessage() {
       console.log('开始获取聊天记录')
-      var app = getApp() || this;
+      let app = getApp() || this;
       var unionid = wx.getStorageSync('unionid');
       var uri = '';
       if (app.globalData) {
@@ -152,6 +153,12 @@ App({
           } else {
             wx.removeStorageSync('chat');
           }
+          if (app.globalData) {
+            app.globalData.messageDone = true;
+          } else {
+            app.messageDone = true;
+          }
+          
         },
         fail: () => {
           console.error('请求失败')

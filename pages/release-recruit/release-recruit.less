@@ -77,4 +77,52 @@
       font-size: 32rpx;
     }
   }
+  .eidt_text {
+    position: fixed;
+    transition: 0.5s;
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    top: 0;
+    left: 0;
+    box-sizing: border-box;
+    padding: 0 40rpx;
+    z-index: 10000;
+    .top {
+      height: 100rpx;
+      line-height: 100rpx;
+      display: flex;
+      justify-content: space-between;
+      font-size: 32rpx;
+      z-index: 100;
+      view {
+        width: 100rpx;
+        &.cancel {
+          color: #888888;
+        }
+        &.save {
+          color: @mainColor;
+          text-align: right;
+        }
+      }
+    }
+    .title {
+      font-size: 46rpx;
+      font-weight: 500;
+      margin-bottom: 60rpx;
+    }
+    .text{
+      textarea {
+        width: 100%;
+        height: 360rpx;
+        border-bottom: 1px solid #e6e6e6;
+        font-size: 32rpx;
+      }
+      .hint {
+        font-size: 28rpx;
+        color: #929191;
+        line-height: 50rpx;
+      }
+    }
+  }
 }

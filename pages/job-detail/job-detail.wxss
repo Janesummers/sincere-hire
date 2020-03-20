@@ -86,6 +86,19 @@ page {
 .container .card:last-of-type {
   border-bottom: 1px solid #ebeaea;
 }
+.container .job_describe .other {
+  display: flex;
+  flex-wrap: wrap;
+}
+.container .job_describe .other .items {
+  font-size: 24rpx;
+  color: #49bcc0;
+  background: #c1f0f1;
+  padding: 8rpx 20rpx;
+  border-radius: 8rpx;
+  margin-right: 20rpx;
+  margin-bottom: 14rpx;
+}
 .container .job_describe .line_text {
   line-height: 52rpx;
   font-size: 26rpx;

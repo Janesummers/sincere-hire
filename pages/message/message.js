@@ -10,17 +10,21 @@ Page({
    */
   data: {
     list: [],
-    isDone: false
+    isDone: false,
+    userInfo: null
   },
 
   /**
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
+    let userInfo = wx.getStorageSync('userInfo');
+    this.setData({
+      userInfo
+    })
     wx.onSocketMessage(data => {
       console.log('message接收到')
       data = JSON.parse(data.data);
-      console.log(data)
       let allData = JSON.parse(`[${data.all}]`);
       var chatList = wx.getStorageSync('chat');
       let dataLen = allData.length;
@@ -172,73 +176,82 @@ Page({
     this.setData({
       isDone: false
     })
-    let unionid = wx.getStorageSync('unionid');
-    var chatList = wx.getStorageSync('chat');
-    let keys = [];
-    if (chatList) {
-      keys = Object.keys(chatList);
-    }
-    req.request('/getMessageList', { id: base64.encode(unionid), rule: app.globalData.userInfo.rule}, 'POST', (res) => {
-      let list = res.data.data;
-      list.forEach(item => {
-        if (keys.includes(base64.encode(item.target_id))) {
-          var data = chatList[base64.encode(item.target_id)];
-          let num = 0;
-          data.forEach(item => {
-            if (item.read != undefined && !item.read && item.acceptId === base64.encode(unionid)) {
-              num += 1;
-            }
-          })
-          if (app.globalData.userInfo.rule == 'job_seeker') {
-            if (data[data.length - 1].data == '对方已同意您的面试邀请') {
-              item.text = '您已同意面试邀请，请认真对待每一次机会！';
-            } 
-            if (data[data.length - 1].data == '对方拒绝了您的面试邀请') {
-              item.text = '您拒绝了对方的面试邀请';
+    if (!app.globalData.messageDone) {
+      let timer = setInterval(() => {
+        this.getData();
+        clearInterval(timer)
+      }, 1000);
+    } else {
+      let unionid = wx.getStorageSync('unionid');
+      var chatList = wx.getStorageSync('chat');
+      let keys = [];
+      if (chatList) {
+        keys = Object.keys(chatList);
+      }
+      req.request('/getMessageList', { id: base64.encode(unionid), rule: app.globalData.userInfo.rule}, 'POST', (res) => {
+        let list = res.data.data;
+        list.forEach(item => {
+          console.log(keys, item.target_id, base64.encode(item.target_id))
+          if (keys.includes(base64.encode(item.target_id))) {
+            var data = chatList[base64.encode(item.target_id)];
+            let num = 0;
+            data.forEach(item => {
+              if (item.read != undefined && !item.read && item.acceptId === base64.encode(unionid)) {
+                num += 1;
+              }
+            })
+            if (app.globalData.userInfo.rule == 'job_seeker') {
+              if (data[data.length - 1].data == '对方已同意您的面试邀请') {
+                item.text = '您已同意面试邀请，请认真对待每一次机会！';
+              } 
+              if (data[data.length - 1].data == '对方拒绝了您的面试邀请') {
+                item.text = '您拒绝了对方的面试邀请';
+              } else {
+                item.text = data[data.length - 1].data;
+              }
             } else {
               item.text = data[data.length - 1].data;
             }
+            var d = new Date(Number(data[data.length - 1].time));
+            var today = new Date();
+            if (d.getFullYear() < today.getFullYear() || d.getMonth() + 1 < today.getMonth() + 1 || d.getDate() < today.getDate()) {
+              item.time = `${d.getFullYear()}/${util.formatNumber(d.getMonth() + 1)}/${util.formatNumber(d.getDate())}`;
+            } else {
+              item.time = `${util.formatNumber(d.getHours())}:${util.formatNumber(d.getMinutes())}`;
+            }
+            item.originTime = `${d.toLocaleDateString()} ${d.toTimeString().match(/[^ ]+/)}`;
+            item.timestamp = Number(data[data.length - 1].time);
+            item.num = num;
           } else {
-            item.text = data[data.length - 1].data;
+            item.text = ''
+            item.time = ''
+            item.originTime = ''
           }
-          var d = new Date(Number(data[data.length - 1].time));
-          var today = new Date();
-          if (d.getFullYear() < today.getFullYear() || d.getMonth() + 1 < today.getMonth() + 1 || d.getDate() < today.getDate()) {
-            item.time = `${d.getFullYear()}/${util.formatNumber(d.getMonth() + 1)}/${util.formatNumber(d.getDate())}`;
-          } else {
-            item.time = `${util.formatNumber(d.getHours())}:${util.formatNumber(d.getMinutes())}`;
+          item.avatarUrl = item.avatarUrl ? `${app.globalData.UrlHeadAddress}/qzApi/userAvatar/${item.avatarUrl}` : '';
+        })
+  
+        // console.log(JSON.stringify(list))
+  
+        let listSort;
+  
+        listSort = list.sort((a, b) => {
+          if (a.timestamp > b.timestamp) {
+            return -1;
           }
-          item.originTime = `${d.toLocaleDateString()} ${d.toTimeString().match(/[^ ]+/)}`;
-          item.timestamp = Number(data[data.length - 1].time);
-          item.num = num;
-        } else {
-          item.text = ''
-          item.time = ''
-          item.originTime = ''
-        }
-        item.avatarUrl = item.avatarUrl ? `${app.globalData.UrlHeadAddress}/qzApi/userAvatar/${item.avatarUrl}` : '';
+          if (a.timestamp > b.timestamp) {
+            return 1;
+          }
+          return 0;
+        })
+  
+        // console.log(JSON.stringify(listSort))
+        
+        this.setData({
+          list: listSort,
+          isDone: true
+        })
       })
-
-      // console.log(JSON.stringify(list))
-
-      let listSort;
-
-      listSort = list.sort((a, b) => {
-        if (a.timestamp > b.timestamp) {
-          return -1;
-        }
-        if (a.timestamp > b.timestamp) {
-          return 1;
-        }
-        return 0;
-      })
-
-      // console.log(JSON.stringify(listSort))
-      
-      this.setData({
-        list: listSort,
-        isDone: true
-      })
-    })
+    }
+    
   }
 })

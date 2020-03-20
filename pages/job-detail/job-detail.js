@@ -79,6 +79,8 @@ Page({
       display: item.display,
       job_type: item.job_type,
       other_require: item.other_require.split('|'),
+      skill_require: item.skill_require ? item.skill_require.split('|') : [],
+      welfare_all: item.welfare_all ? item.welfare_all.split('|') : [],
       people: item.recruit,
       company_type: item.company_type,
       company: item.company_name,

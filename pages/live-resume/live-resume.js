@@ -240,7 +240,9 @@ Page({
       })
     } else {
       this.setData({
-        top: 100
+        top: 100,
+        isSave: false,
+        oldEvaluate: this.data.evaluate
       }, () => {
         setTimeout(() => {
           this.setData({

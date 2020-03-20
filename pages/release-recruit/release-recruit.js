@@ -31,14 +31,84 @@ Page({
     high_salary: '',
     skill: [{"choose":false,"text":"Css"},{"choose":false,"text":"Javascript"},{"choose":false,"text":"html"},{"choose":false,"text":"C语言开发"},{"choose":false,"text":"VUE"},{"choose":false,"text":"数据分析"},{"choose":false,"text":"办公表格"},{"choose":false,"text":"数据库"},{"choose":false,"text":"MySQL"},{"choose":false,"text":"WINFORM"},{"choose":false,"text":"ASP"},{"choose":false,"text":"C#/.NET"},{"choose":false,"text":"IT支持"},{"choose":false,"text":"运维开发"},{"choose":false,"text":"财务报表"},{"choose":false,"text":"office"},{"choose":false,"text":"报税"},{"choose":false,"text":"初级会计师"},{"choose":false,"text":"记账"},{"choose":false,"text":"审计"}],
     job_require: '',
-    isCommit: false
+    isCommit: false,
+    top: 100,
+    display: 'none',
+    winH: 0,
+    isSave: false,
+    custom: ''
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    let winH = wx.getSystemInfoSync().windowHeight;
+    this.setData({
+      winH
+    })
+  },
+
+  close () {
+    if (this.data.isSave) {
+      this.setData({
+        top: 100,
+        custom: '',
+        isSave: false
+      }, () => {
+        setTimeout(() => {
+          this.setData({
+            display: 'none'
+          })
+        }, 400);
+      })
+    } else {
+      this.setData({
+        top: 100
+      }, () => {
+        setTimeout(() => {
+          this.setData({
+            display: 'none'
+          })
+        }, 400);
+      })
+    }
+  },
+
+  add () {
+    let custom = this.data.custom;
+    if (custom && custom != "") {
+      let data = custom.match(/[^,|，]+/g);
+      let skill = this.data.skill;
+      let jobInfo = this.data.jobInfo;
+      data.forEach(item => {
+        skill.push({
+          "choose": true,
+          "text": item
+        })
+        jobInfo.skill.push(item)
+      })
+      this.setData({
+        skill,
+        jobInfo,
+        isSave: true
+      })
+      this.close()
+    }
     
+  },
+
+  showEdit () {
+    this.setData({
+      display: 'block',
+      top: 0
+    })
+  },
+
+  customChange (e) {
+    this.setData({
+      custom: e.detail.value
+    })
   },
 
   setJobInfo (e) {

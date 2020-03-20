@@ -11,7 +11,7 @@
       <view class="info">
         <view class="top">
           <view class="name">{{item.target_name}}</view>
-          <view class="company" wx:if="{{app.globalData.userInfo.rule === 'job_seeker'}}">{{item.target_company || ''}}</view>
+          <view class="company" wx:if="{{userInfo.rule === 'job_seeker'}}">{{item.target_company || ''}}</view>
         </view>
         <view class="message">{{item.text}}</view>
       </view>

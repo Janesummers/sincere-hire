@@ -107,6 +107,10 @@
             bindtap="setJobInfo"
             data-itemIndex="{{index}}"
           >{{item.text}}</text>
+          <text 
+            class="items" 
+            bindtap="showEdit"
+          >+ 自定义</text>
         </view>
       </view>
     </view>
@@ -163,6 +167,22 @@
           data-key="job_address"
           placeholder-class="picker"
         />
+      </view>
+    </view>
+  </view>
+  <view class="eidt_text" style="top: {{top}}%; display: {{display}}; height: {{winH}}px">
+    <view class="top" hover-class="none" hover-stop-propagation="false">
+      <view class="cancel" bindtap="close">取消</view>
+      <view class="save" bindtap="add">添加</view>
+    </view>
+    <view class="title" hover-class="none" hover-stop-propagation="false">
+      自定义技能要求
+    </view>
+    <view class="text" hover-class="none" hover-stop-propagation="false">
+      <textarea value="{{custom}}" placeholder="请填写" bindinput="customChange"></textarea>
+      <view class="hint" hover-class="none" hover-stop-propagation="false">
+        两个技能之间用逗号隔开
+        <view>例:css,vue</view>
       </view>
     </view>
   </view>
