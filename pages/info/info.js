@@ -170,6 +170,13 @@ Page({
     let {userInfo, selectBirthday, jobTime, sex} = this.data;
 
     switch(key) {
+      case 'name': 
+        if (userInfo.name) {
+          userInfo.name = value;
+        } else {
+          userInfo.nickname = value;
+        }
+        break;
       case 'sex':
         this.setData({
           sexIndex: value,
@@ -299,7 +306,10 @@ Page({
       title: '提交中...'
     })
     let userInfo = this.data.userInfo;
-    let {name, sex, birthday, jobTime, city, email} = userInfo;
+    let {name, nickname, sex, birthday, jobTime, city, email} = userInfo;
+    if (!name || name == '') {
+      name = nickname;
+    }
     req.request('/saveUserInfo', {name, sex, birthday, jobTime, city, email}, 'POST', (res) => {
       let {
         sexIndex,

@@ -166,7 +166,7 @@ Page({
         if (res.data.code != 'error') {
           wx.hideLoading();
           wx.navigateTo({
-            url: `/pages/msg-detail/msg-detail?id=${publisher_id}&name=${name}`
+            url: `/pages/msg-detail/msg-detail?id=${publisher_id}&name=${name}&company=${encodeURIComponent(this.data.detail.company)}&jobId=${this.data.detail.id}&newChat=${true}`
           })
         } else {
           wx.showToast({
@@ -179,7 +179,7 @@ Page({
     } else {
       wx.hideLoading();
       wx.navigateTo({
-        url: `/pages/msg-detail/msg-detail?id=${publisher_id}&name=${name}`
+        url: `/pages/msg-detail/msg-detail?id=${publisher_id}&name=${name}&company=${encodeURIComponent(this.data.detail.company)}&jobId=${this.data.detail.id}`
       })
     }
     

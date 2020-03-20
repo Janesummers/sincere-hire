@@ -7,13 +7,22 @@ Page({
    * 页面的初始数据
    */
   data: {
-    userInfo: null
+    userInfo: null,
+    jobTime: 0
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    this.init()
+  },
+
+  onShow () {
+    this.init();
+  },
+
+  init () {
     try {
       let userInfo = wx.getStorageSync('userInfo');
       
@@ -30,8 +39,18 @@ Page({
           age = date.getFullYear() - year - 1
         }
         userInfo.age = age
-      } else {
-
+        let jobTime = userInfo.jobTime;
+        if (jobTime != "无工作经验") {
+          let n = 0;
+          jobTime = parseInt(jobTime.match(/[^\.]+/)[0]);
+          let t = date.getFullYear() - jobTime;
+          if (t > 0) {
+            n = t;
+          }
+          this.setData({
+            jobTime: n
+          })
+        }
       }
 
       if (!userInfo.avatarUrl) {

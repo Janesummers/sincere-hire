@@ -63,6 +63,27 @@ Page({
       ["inter.startTime"]: startTime,
       ["inter.endTime"]: endTime
     })
+    if (options.newChat) {
+      req.request('/getAvar', {
+        id: options.id
+      }, 'GET', res => {
+        let data = res.data.data;
+        let sendImg = '';
+        let acceptImg = '';
+        data.forEach(item =>{
+          if (item.unionid == options.id) {
+            sendImg = `${app.globalData.UrlHeadAddress}/qzApi/userAvatar/${item.avatarUrl}`
+          } else {
+            acceptImg = `${app.globalData.UrlHeadAddress}/qzApi/userAvatar/${item.avatarUrl}`
+          }
+        })
+        this.setData({
+          sendImg,
+          acceptImg
+        })
+      })
+    }
+    
     wx.setNavigationBarTitle({
       title: options.name
     })
