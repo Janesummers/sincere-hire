@@ -12,8 +12,10 @@ App({
     }
 
     wx.onSocketError((res) => {
-      var unionid = wx.getStorageSync('unionid');
-      this.globalData.connectSocket(unionid);
+      setTimeout(() => {
+        var unionid = wx.getStorageSync('unionid');
+        this.globalData.connectSocket(unionid);
+      }, 10000);
     })
 
     wx.onSocketMessage(data => {
