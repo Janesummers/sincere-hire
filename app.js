@@ -70,7 +70,7 @@ App({
     user: null,
     userInfo: null,
     unionid: null,
-    UrlHeadAddress: 'http://192.168.1.104', //https://www.chiens.cn/qzApi  http://192.168.1.104/
+    UrlHeadAddress: 'http://192.168.0.101', //https://www.chiens.cn/qzApi  http://192.168.1.101/
     selected: 0,
     openData: {},
     messageDone: false,
@@ -167,7 +167,7 @@ App({
     },
     connectSocket (unionid) {
       wx.connectSocket({
-        url: 'ws://192.168.1.104/wss', //wss://www.chiens.cn/wss  ws://192.168.1.104/wss
+        url: 'ws://192.168.0.101/wss', //wss://www.chiens.cn/wss  ws://192.168.1.104/wss
         header:{
           'content-type': 'application/json',
           'unionid': base64.encode(unionid)

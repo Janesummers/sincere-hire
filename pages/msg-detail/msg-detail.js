@@ -72,9 +72,9 @@ Page({
         let acceptImg = '';
         data.forEach(item =>{
           if (item.unionid == options.id) {
-            sendImg = `${app.globalData.UrlHeadAddress}/qzApi/userAvatar/${item.avatarUrl}`
+            sendImg = item.avatarUrl ? `${app.globalData.UrlHeadAddress}/qzApi/userAvatar/${item.avatarUrl}` : ''
           } else {
-            acceptImg = `${app.globalData.UrlHeadAddress}/qzApi/userAvatar/${item.avatarUrl}`
+            acceptImg = item.avatarUrl ? `${app.globalData.UrlHeadAddress}/qzApi/userAvatar/${item.avatarUrl}` : ''
           }
         })
         this.setData({
