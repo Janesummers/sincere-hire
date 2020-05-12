@@ -189,6 +189,7 @@ Page({
         keys = Object.keys(chatList);
       }
       req.request('/getMessageList', { id: base64.encode(unionid), rule: app.globalData.userInfo.rule}, 'POST', (res) => {
+        console.log(res)
         let list = res.data.data;
         list.forEach(item => {
           console.log(keys, item.target_id, base64.encode(item.target_id))

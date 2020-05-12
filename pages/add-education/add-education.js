@@ -280,6 +280,24 @@ Page({
     })
   },
 
+  graduationChange (e) {
+    let {
+      education,
+      selectGraduation,
+      graduationIndex
+    } = this.data;
+    let value = e.detail.value;
+    let key = e.target.dataset.key;
+    let year = parseInt(selectGraduation[0][value[0]]);
+    let month = selectGraduation[1][value[1]].replace(' 月', '').trim();
+    education[key] = `${year}.${month}`;
+    graduationIndex = value;
+    this.setData({
+      education,
+      graduationIndex
+    })
+  },
+
   checkNotPut (check) {
     let noNull = false;
     let key = Object.keys(check);

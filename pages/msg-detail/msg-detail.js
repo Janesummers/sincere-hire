@@ -39,8 +39,36 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    wx.setNavigationBarTitle({
+      title: options.name
+    })
     let height = wx.getSystemInfoSync().windowHeight - 55;
     let data = wx.getStorageSync('chat');
+
+    this.init(options);
+
+    if (options.newChat) {
+      this.isNewChat(options, height);
+    }
+    
+    if (data) {
+      this.initChatData(options, height, data);
+    }
+
+    this.setData({
+      height,
+      originHeight: height,
+      other: options.id
+    }, () => {
+      this.setData({
+        toLast: `item${this.data.list.length - 1}`
+      })
+    })
+    
+    this.keyBoardChange();
+  },
+
+  init (options) {
     let id = base64.encode(options.id);
     var unionid = base64.encode(wx.getStorageSync('unionid'));
     let userInfo = wx.getStorageSync('userInfo');
@@ -57,81 +85,65 @@ Page({
       sendImg: options.sendImg ? decodeURIComponent(options.sendImg) : '',
       acceptImg,
       userInfo,
+      otherEncrypt: id,
       sendName: options.name,
       sendCompany: options.company ? decodeURIComponent(options.company) : '',
       jobId: options.jobId || '',
       ["inter.startTime"]: startTime,
       ["inter.endTime"]: endTime
     })
-    if (options.newChat) {
-      req.request('/getAvar', {
-        id: options.id
-      }, 'GET', res => {
-        let data = res.data.data;
-        let sendImg = '';
-        let acceptImg = '';
-        data.forEach(item =>{
-          if (item.unionid == options.id) {
-            sendImg = item.avatarUrl ? `${app.globalData.UrlHeadAddress}/qzApi/userAvatar/${item.avatarUrl}` : ''
-          } else {
-            acceptImg = item.avatarUrl ? `${app.globalData.UrlHeadAddress}/qzApi/userAvatar/${item.avatarUrl}` : ''
-          }
-        })
-        this.setData({
-          sendImg,
-          acceptImg
-        })
+  },
+
+  isNewChat (options) {
+    req.request('/getAvar', {
+      id: options.id
+    }, 'GET', res => {
+      let data = res.data.data;
+      let sendImg = '';
+      let acceptImg = '';
+      data.forEach(item =>{
+        if (item.unionid == options.id) {
+          sendImg = item.avatarUrl ? `${app.globalData.UrlHeadAddress}/qzApi/userAvatar/${item.avatarUrl}` : ''
+        } else {
+          acceptImg = item.avatarUrl ? `${app.globalData.UrlHeadAddress}/qzApi/userAvatar/${item.avatarUrl}` : ''
+        }
+      })
+      this.setData({
+        sendImg,
+        acceptImg
+      })
+    })
+  },
+
+  initChatData (options, height, data) {
+    let list = [];
+    let id = base64.encode(options.id);
+    if (data[id]) {
+      list = data[id];
+      list.forEach(item => {
+        if (item.sendId == this.data.sendId) {
+          item.avatarUrl = this.data.sendImg
+        } else {
+          item.avatarUrl = this.data.acceptImg
+        }
+        if (item.type == 'sendFile') {
+          this.setData({
+            resumeFile: true
+          })
+        }
       })
     }
-    
-    wx.setNavigationBarTitle({
-      title: options.name
-    })
-    
-    if (data) {
-      let list = []
-      if (data[id]) {
-        list = data[id];
-        list.forEach(item => {
-          if (item.sendId == this.data.sendId) {
-            item.avatarUrl = this.data.sendImg
-          } else {
-            item.avatarUrl = this.data.acceptImg
-          }
-          if (item.type == 'sendFile') {
-            this.setData({
-              resumeFile: true
-            })
-          }
-        })
-        this.setData({
-          list
-        })
-      } else {
-        this.setData({
-          list
-        })
-      }
-      
-    }
-
-    if (this.data.list.length * 66 > height) {
+    if (list.length * 66 > height) {
       this.setData({
         listTop: 0
       })
     }
-
     this.setData({
-      height,
-      originHeight: height,
-      other: options.id,
-      otherEncrypt: id
-    }, () => {
-      this.setData({
-        toLast: `item${this.data.list.length - 1}`
-      })
+      list
     })
-    
+  },
+
+  keyBoardChange () {
     wx.onKeyboardHeightChange(res => {
       if (res.height != 0 && res.height > parseInt(this.data.keyHeight)) {
         let height = parseInt(this.data.height);

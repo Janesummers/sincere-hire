@@ -151,7 +151,6 @@ function _request(action, data, method, reqesutCallback){
     },
     method,
     success: function (res) {
-      console.log(res)
       reqesutCallback(res)
     },
     data,

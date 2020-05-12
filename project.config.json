@@ -25,7 +25,7 @@
 		}
 	},
 	"compileType": "miniprogram",
-	"libVersion": "2.10.2",
+	"libVersion": "2.11.0",
 	"appid": "wx2bca6a5670f63aee",
 	"projectname": "%E8%AF%9A%E8%81%98",
 	"debugOptions": {
@@ -83,6 +83,13 @@
 					"id": 3,
 					"name": "pages/invite-list/invite-list",
 					"pathName": "pages/invite-list/invite-list",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": 4,
+					"name": "pages/me/me",
+					"pathName": "pages/me/me",
 					"query": "",
 					"scene": null
 				}

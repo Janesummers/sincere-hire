@@ -95,7 +95,7 @@
       <view class="text">
         <picker 
           mode="multiSelector"
-          bindchange="changeData" 
+          bindchange="graduationChange" 
           data-key="time_graduation"
           value="{{graduationIndex}}" 
           range="{{selectGraduation}}"

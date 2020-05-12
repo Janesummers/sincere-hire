@@ -71,7 +71,7 @@
     </block>
     <block wx:else>
       <view class="img_box">
-        <image src="{{item.avatarUrl || '../../images/people_girl.png'}}"  mode="widthFix"></image>
+        <image src="{{item.avatarUrl || '../../images/people_man.png'}}"  mode="widthFix"></image>
       </view>
       <view class="bubble {{item.type === 'sendFile' || item.type === 'sendInvite' ? 'check' : ''}}">
         <view wx:if="{{item.type === 'sendFile'}}" class="resume">
