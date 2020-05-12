@@ -39,10 +39,10 @@ Component({
     },
     getMsgNum () {
       let num = app.globalData.msgNum;
-      if (num == 0) {
+      if (num <= 0) {
         this.setData({
           isNew: false,
-          msgNum: num
+          msgNum: 0
         })
       } else {
         this.setData({
