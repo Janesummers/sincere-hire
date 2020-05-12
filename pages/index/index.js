@@ -1,5 +1,6 @@
 //index.js
 const req = require('../../utils/request');
+const app = getApp();
 Page({
 
   /**
@@ -73,6 +74,52 @@ Page({
     wx.setNavigationBarTitle({
       title: '易优聘'
     })
+    this.selectComponent("#tabbar").getMsgNum();
+    wx.onSocketMessage(data => {
+      console.log('index接收到')
+      app.globalData.msgNum = parseInt(app.globalData.msgNum) + 1;
+      this.selectComponent("#tabbar").getMsgNum();
+      data = JSON.parse(data.data);
+      let allData = JSON.parse(`[${data.all}]`);
+      var chatList = wx.getStorageSync('chat');
+      let dataLen = allData.length;
+      if (chatList) {
+        if (chatList[allData[dataLen - 1].sendId]) {
+          let text = '';
+          if (app.globalData.userInfo.rule == 'job_seeker') {
+            if (allData[dataLen - 1].data == '对方已同意您的面试邀请') {
+              text = '您已同意面试邀请，请认真对待每一次机会！';
+            } 
+            if (allData[dataLen - 1].data == '对方拒绝了您的面试邀请') {
+              text = '您拒绝了对方的面试邀请';
+            } else {
+              text = allData[dataLen - 1].data;
+            }
+          } else {
+            text = allData[dataLen - 1].data;
+          }
+          chatList[allData[dataLen - 1].sendId].push({
+            data: text,
+            sendId: allData[dataLen - 1].sendId,
+            acceptId: allData[dataLen - 1].acceptId,
+            time: allData[dataLen - 1].time,
+            type: allData[dataLen - 1].type,
+            read: allData[dataLen - 1].read,
+            invite_id: allData[dataLen - 1].invite_id
+          });
+        } else {
+          chatList[allData[dataLen - 1].sendId] = allData;
+        }
+        
+        wx.setStorageSync('chat', chatList);
+      } else {
+
+        var obj = {};
+        obj[allData[dataLen - 1].sendId] = allData;
+        wx.setStorageSync('chat', obj);
+
+      }
+    });
   },
 
   toJobDetail (e) {

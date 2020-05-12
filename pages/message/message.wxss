@@ -22,7 +22,7 @@ page {
   width: 42rpx;
   height: 42rpx;
   border-radius: 50%;
-  background: #ee2727;
+  background: #eb5445;
   color: #fff;
   text-align: center;
   font-size: 28rpx;

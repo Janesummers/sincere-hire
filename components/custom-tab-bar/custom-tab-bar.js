@@ -6,17 +6,20 @@ Component({
     selectedColor: "#515151",
     list: [],
     isNew: false,
-    msgNum: 0
+    msgNum: 0,
+    rule: 0
   },
   attached() {
     let userInfo = app.globalData.userInfo || wx.getStorageSync('userInfo');
     if (userInfo.rule == 'job_seeker') {
       this.setData({
+        rule: 0,
         list: app.globalData.list,
         selected: app.globalData.selected
       })
     } else {
       this.setData({
+        rule: 1,
         list: app.globalData.list2,
         selected: app.globalData.selected
       })

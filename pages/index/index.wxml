@@ -56,4 +56,4 @@
     </view>
   </view> -->
 </view>
-<index-tabbar></index-tabbar>
+<index-tabbar id="tabbar"></index-tabbar>
