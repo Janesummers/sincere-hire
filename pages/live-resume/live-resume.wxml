@@ -1,5 +1,15 @@
 <view class="container" style="overflow: {{top == 0 ? 'hidden' : 'scroll'}}">
   <view class="list">
+    <view class="items" wx:if="{{userInfo.rule !== 'job_seeker'}}">
+      <view class="infoText">
+        <view class="username">{{user.nickname}}</view>
+      </view>
+      <view class="infoText">
+        <view class="textItem">{{user.sex}}</view>
+        <view class="textItem">{{user.birthday}}</view>
+        <view class="textItem">{{user.email}}</view>
+      </view>
+    </view>
     <view class="items" wx:if="{{userInfo.rule === 'job_seeker' || userWork.length > 0}}">
       <view class="top">
         <view class="title">工作/实习经历</view>
@@ -46,7 +56,7 @@
         </view>
       </view>
     </view>
-    <view class="items" wx:if="{{userInfo.rule === 'job_seeker' || userInfo.advantage}}">
+    <view class="items" wx:if="{{userInfo.advantage || evaluate}}">
       <view class="top">
         <view class="title">自我评价</view>
         <view class="add" wx:if="{{userInfo.rule === 'job_seeker'}}">

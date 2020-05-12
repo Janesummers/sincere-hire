@@ -4,7 +4,9 @@ Component({
     selected: 0,
     color: "#CCCCCC",
     selectedColor: "#515151",
-    list: []
+    list: [],
+    isNew: false,
+    msgNum: 0
   },
   attached() {
     let userInfo = app.globalData.userInfo || wx.getStorageSync('userInfo');
@@ -31,6 +33,20 @@ Component({
       wx.switchTab({
         url: `/${url}`
       })
+    },
+    getMsgNum () {
+      let num = app.globalData.msgNum;
+      if (num == 0) {
+        this.setData({
+          isNew: false,
+          msgNum: num
+        })
+      } else {
+        this.setData({
+          isNew: true,
+          msgNum: num
+        })
+      }
     }
   }
 })

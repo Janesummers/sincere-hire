@@ -26,6 +26,7 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  position: relative;
 }
 
 .tab-bar-item cover-image {
@@ -35,4 +36,19 @@
 
 .tab-bar-item cover-view {
   font-size: 10px;
+}
+
+.tab-bar-item .red-dot {
+  background: rgb(228, 57, 5);
+  border-radius: 50%;
+  width: 40rpx;
+  height: 40rpx;
+  position: absolute;
+  top: 0;
+  right: 50%;
+  text-align: center;
+  line-height: 40rpx;
+  color: #fff;
+  transform: translateX(120%);
+  font-size: 20rpx;
 }

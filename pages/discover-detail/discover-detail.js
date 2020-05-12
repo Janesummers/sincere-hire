@@ -15,7 +15,9 @@ Page({
     page: 1,
     num: 10,
     answerData: [],
-    isAttention: false
+    isAttention: false,
+    isNew: false,
+    msgNum: 0
   },
 
   /**
@@ -127,10 +129,11 @@ Page({
     data.forEach(item => {
       let t = Number(item.time);
       let date = new Date(t);
-      // 2020-01-01 01:01:01
       let time = util.formatTime(date);
       item.time = time.replace(/\//g, '-');
-      item.avatarUrl = `${app.globalData.UrlHeadAddress}/qzApi/userAvatar/${item.avatarUrl}`;
+      if (item.avatarUrl) {
+        item.avatarUrl = `${app.globalData.UrlHeadAddress}/qzApi/userAvatar/${item.avatarUrl}`;
+      }
     })
     return data;
   },

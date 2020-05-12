@@ -20,7 +20,8 @@ Page({
     oldEvaluate: '',
     jump: false,
     isLook: false,
-    isSave: false
+    isSave: false,
+    user: null
   },
 
   /**
@@ -196,14 +197,27 @@ Page({
         let {
           edu,
           work,
-          adv
+          adv,
+          userInfo
         } = res.data.data;
+        let age = 0;
+        let birth = userInfo[0].birthday.split('.');
+        var year = parseInt(birth[0]);
+        var month = parseInt(birth[1]);
+        let date = new Date();
+        if (parseInt(month) < date.getMonth() + 1) {
+          age = new Date().getFullYear() - year;
+        } else {
+          age = new Date().getFullYear() - year - 1;
+        }
+        userInfo[0].birthday = `${age}岁`;
         this.setData({
           userEducation: edu,
           userWork: work,
           evaluate: adv,
           oldEvaluate: adv,
-          isBack: false
+          isBack: false,
+          user: userInfo[0]
         })
       } else {
         console.error(res.data.data)

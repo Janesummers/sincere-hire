@@ -20,4 +20,4 @@
   </view>
 </view>
 <loading wx:if="{{!isDone}}"></loading>
-<index-tabbar></index-tabbar>
+<index-tabbar id="tabbar" bind:myevent="onGetCode"></index-tabbar>

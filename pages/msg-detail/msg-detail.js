@@ -159,6 +159,7 @@ Page({
 
   onShow: function () {
     wx.onSocketMessage(data => {
+      app.globalData.msgNum = parseInt(app.globalData.msgNum) + 1;
       data = JSON.parse(data.data);
       let allData = JSON.parse(`[${data.all}]`);
       this.saveStorage(allData);

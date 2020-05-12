@@ -25,7 +25,7 @@ App({
       var app = getApp() || this;
       var chatList = wx.getStorageSync('chat');
       let dataLen = allData.length;
-
+      app.globalData.msgNum = parseInt(app.globalData.msgNum) + 1;
       if (chatList) {
         
         if (chatList[allData[dataLen - 1].sendId]) {
@@ -74,6 +74,8 @@ App({
     selected: 0,
     openData: {},
     messageDone: false,
+    msgNum: 0,
+    tabbar: null,
     list: [
       {
         "selectedIconPath": "../../images/job_selected.png",
@@ -143,13 +145,20 @@ App({
           console.log('获取聊天记录成功')
           let data = res.data.data;
           if (data.length > 0) {
-            var chatList = wx.getStorageSync('chat');
-            if (chatList) {
-              chatList = JSON.parse(JSON.stringify(data[0]));
-              wx.setStorageSync('chat', chatList);
-            } else {
-              wx.setStorageSync('chat', JSON.parse(JSON.stringify(data[0])));
-            }
+            data = JSON.parse(JSON.stringify(data[0]));
+            let keys = Object.keys(data);
+            keys.forEach(item => {
+              data[item].forEach(item => {
+                if (item.read != undefined && !item.read && item.acceptId === base64.encode(unionid)) {
+                  if (app.globalData) {
+                    app.globalData.msgNum = parseInt(app.globalData.msgNum) + 1;
+                  } else {
+                    app.msgNum = parseInt(app.msgNum) + 1;
+                  }
+                }
+              })
+            })
+            wx.setStorageSync('chat', data);
           } else {
             wx.removeStorageSync('chat');
           }

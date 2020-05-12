@@ -30,6 +30,45 @@ page {
   height: 32rpx;
   line-height: 32rpx;
 }
+.container .list .items .little_title {
+  font-size: 24rpx;
+  margin-bottom: 10rpx;
+  color: #2b2b2b;
+}
+.container .list .items .infoText {
+  display: flex;
+  font-size: 32rpx;
+}
+.container .list .items .infoText .textItem {
+  color: #666;
+  padding: 0 20rpx;
+  position: relative;
+}
+.container .list .items .infoText .textItem:first-of-type {
+  padding-left: 0;
+}
+.container .list .items .infoText .textItem::before {
+  content: "";
+  display: block;
+  width: 4rpx;
+  height: 70%;
+  background: #666;
+  right: 0;
+  top: 50%;
+  position: absolute;
+  transform: translateY(-50%);
+}
+.container .list .items .infoText .textItem:last-of-type::before {
+  display: none;
+}
+.container .list .items .username {
+  font-size: 50rpx;
+  margin: 20rpx 0;
+}
+.container .list .items .text {
+  font-size: 32rpx;
+  font-weight: 500;
+}
 .container .list .items .title {
   font-size: 36rpx;
   font-weight: 500;

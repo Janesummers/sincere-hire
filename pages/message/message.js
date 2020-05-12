@@ -14,16 +14,23 @@ Page({
     userInfo: null
   },
 
+  onReady () {
+    app.globalData.tabbar = this.selectComponent("#tabbar");
+    app.globalData.tabbarF = this;
+  },
+
   /**
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
+    this.selectComponent("#tabbar").getMsgNum();
     let userInfo = wx.getStorageSync('userInfo');
     this.setData({
       userInfo
     })
     wx.onSocketMessage(data => {
       console.log('message接收到')
+      app.globalData.msgNum = parseInt(app.globalData.msgNum) + 1;
       data = JSON.parse(data.data);
       let allData = JSON.parse(`[${data.all}]`);
       var chatList = wx.getStorageSync('chat');
@@ -32,7 +39,7 @@ Page({
       let list = this.data.list;
 
       let exist = false;
-
+      app.globalData.tabbar.getMsgNum();
       list.forEach(item => {
         if (base64.encode(item.target_id) == allData[dataLen - 1].sendId) {
           exist = true;
@@ -152,9 +159,14 @@ Page({
       jobid
     } = e.currentTarget.dataset;
     let chatList = wx.getStorageSync('chat');
+    let num = 0;
     chatList[base64.encode(id)].forEach(item => {
+      if (!item.read) {
+        num += 1
+      }
       item.read = true;
     })
+    
     let unionid = wx.getStorageSync('unionid');
     wx.setStorageSync('chat', chatList);
     send = send ? encodeURIComponent(send) : '';
@@ -167,6 +179,8 @@ Page({
     wx.sendSocketMessage({
       data
     })
+    app.globalData.msgNum -= num;
+    this.selectComponent("#tabbar").getMsgNum();
     wx.navigateTo({
       url: `/pages/msg-detail/msg-detail?id=${id}&name=${name}&sendImg=${send}&acceptImg=${accept}&company=${encodeURIComponent(company)}&jobId=${jobid}`
     })
@@ -244,15 +258,13 @@ Page({
           }
           return 0;
         })
-  
-        // console.log(JSON.stringify(listSort))
         
+        // this.selectComponent("#tabbar").getMsgNum();
         this.setData({
           list: listSort,
           isDone: true
         })
       })
     }
-    
   }
 })

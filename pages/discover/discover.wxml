@@ -80,4 +80,4 @@
   </view>
 </view>
 <loading wx:if="{{!isDone}}"/> 
-<index-tabbar></index-tabbar>
+<index-tabbar id="tabbar"></index-tabbar>
