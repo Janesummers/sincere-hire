@@ -39,6 +39,9 @@ Page({
       if (res.data.code == 'ok') {
         if (res.data.data.length > 0) {
           let detail = this.formatData(res.data.data.concat());
+          wx.setNavigationBarTitle({
+            title: detail.position,
+          })
           this.isChat(detail);
         }
       } else {

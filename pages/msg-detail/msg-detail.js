@@ -145,21 +145,22 @@ Page({
 
   keyBoardChange () {
     wx.onKeyboardHeightChange(res => {
-      if (res.height != 0 && res.height > parseInt(this.data.keyHeight)) {
-        let height = parseInt(this.data.height);
-        height = height - parseInt(res.height) - 55
-        this.setData({
-          height,
-          keyHeight: res.height,
-          top: res.height
-        })
+      if (!this.data.interIsShow) {
+        if (res.height != 0 && res.height > parseInt(this.data.keyHeight)) {
+          let height = parseInt(this.data.height);
+          height = height - parseInt(res.height) - 55
+          this.setData({
+            height,
+            keyHeight: res.height,
+            top: res.height
+          })
+        }
       }
     })
   },
 
   onShow: function () {
     wx.onSocketMessage(data => {
-      app.globalData.msgNum = parseInt(app.globalData.msgNum) + 1;
       data = JSON.parse(data.data);
       let allData = JSON.parse(`[${data.all}]`);
       this.saveStorage(allData);
@@ -181,10 +182,11 @@ Page({
     if (chatList) {
       
       if (sendId != allData[dataLen - 1].sendId) { // 如果收到消息时候当前聊天窗口不是接收用户则将数据存到 LocalStorage
-        console.log('不是我的聊天界面')
-        console.log(allData)
+        // console.log('不是我的聊天界面')
+        // console.log(allData)
+        app.globalData.msgNum = parseInt(app.globalData.msgNum) + 1; // 更新未读消息数
         if (chatList[allData[dataLen - 1].sendId]) { // 如果已有在本地则 push
-          console.log('聊天记录有在本地')
+          // console.log('聊天记录有在本地')
           chatList[allData[dataLen - 1].sendId].push({
             data: allData[dataLen - 1].data,
             sendId: allData[dataLen - 1].sendId,
@@ -274,23 +276,6 @@ Page({
 
   getTime () {
     return new Date().getTime().toString();
-  },
-
-  test () {
-    let top = this.data.keyHeight
-    let height = parseInt(this.data.height);
-    height = height - parseInt(top)
-    this.setData({
-      height,
-      top,
-      toLast: 'item'
-    }, () => {
-      setTimeout(() => {
-        this.setData({
-          toLast: `item${this.data.list.length - 1}`
-        })
-      }, 100);
-    })
   },
 
   end () {

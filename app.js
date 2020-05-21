@@ -22,7 +22,7 @@ App({
     user: null,
     userInfo: null,
     unionid: null,
-    UrlHeadAddress: 'http://192.168.0.100', //https://www.chiens.cn/qzApi  http://192.168.1.101/
+    UrlHeadAddress: 'http://localhost',
     selected: 0,
     openData: {},
     messageDone: false,
@@ -128,7 +128,7 @@ App({
     },
     connectSocket (unionid) {
       wx.connectSocket({
-        url: 'ws://192.168.0.100/wss', //wss://www.chiens.cn/wss  ws://192.168.1.104/wss
+        url: 'ws://localhost/wss',
         header:{
           'content-type': 'application/json',
           'unionid': base64.encode(unionid)

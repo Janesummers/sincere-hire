@@ -142,7 +142,7 @@ Page({
         this.setData({
           userInfo
         })
-        console.log(`${app.globalData.UrlHeadAddress}/qzApi/userAvatarUrl`)
+        // console.log(`${app.globalData.UrlHeadAddress}/qzApi/userAvatarUrl`)
         wx.uploadFile({
           url: `${app.globalData.UrlHeadAddress}/qzApi/userAvatarUrl`,
           filePath: res.tempFilePaths[0],

@@ -17,6 +17,7 @@
   </view>
   <view class="shadow" wx:if="{{interIsShow}}">
     <view class="interview">
+      <view class="close" bindtap="interview">×</view>
       <view class="item">
         <view class="text">日期：</view>
         <picker mode="date" value="{{date}}" start="{{inter.startTime}}" end="{{inter.endTime}}" bindchange="bindDateChange">
